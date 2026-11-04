@@ -18,15 +18,27 @@ pub fn basis_size(@context.FormalContext) -> Int32
 
 pub fn canonical_basis(@context.FormalContext) -> Array[Implication]
 
+pub fn canonical_basis_incremental(@context.FormalContext) -> DgRun
+
+pub fn canonical_basis_incremental_only(@context.FormalContext) -> Array[Implication]
+
 pub fn check_basis_agreement(@context.FormalContext, Array[Implication]) -> @galois.Check
 
 pub fn check_basis_completeness(@context.FormalContext, Array[Implication]) -> @galois.Check
+
+pub fn check_basis_lectic(Array[Implication]) -> @galois.Check
 
 pub fn check_basis_nonredundant(@context.FormalContext, Array[Implication]) -> @galois.Check
 
 pub fn check_covers(@context.FormalContext) -> @galois.Check
 
+pub fn check_incremental_agrees_naive(@context.FormalContext) -> @galois.Check
+
 pub fn check_nextclosure(@context.FormalContext) -> @galois.Check
+
+pub fn check_theory_equivalent(@context.FormalContext, Array[Implication]) -> @galois.Check
+
+pub fn check_theory_irredundant(@context.FormalContext, Array[Implication]) -> @galois.Check
 
 pub fn closed_stmt_count(@context.FormalContext) -> Int32
 
@@ -34,13 +46,25 @@ pub fn concept_count(@context.FormalContext) -> Int32
 
 pub fn concept_of(@context.FormalContext, @bitset.BitSet) -> Concept
 
+pub fn dg_report(@context.FormalContext) -> @galois.Report
+
+pub fn dg_stats_line(@context.FormalContext) -> String
+
 pub fn hasse_edge_count(@context.FormalContext) -> Int32
+
+pub fn lectic_less(@bitset.BitSet, @bitset.BitSet) -> Bool
+
+pub fn naive_candidate_count(Int32) -> Int64
 
 pub fn next_closed_stmts(@context.FormalContext, @bitset.BitSet) -> @bitset.BitSet?
 
 pub fn pseudo_intents(@context.FormalContext) -> Array[Implication]
 
+pub fn render_basis(@context.FormalContext, Array[Implication]) -> String
+
 pub fn render_implication(@context.FormalContext, Implication) -> String
+
+pub fn theory_closed_sets(Int32, Array[Implication], Int32) -> Array[@bitset.BitSet]
 
 pub fn upper_covers_stmts(@context.FormalContext, @bitset.BitSet) -> Array[@bitset.BitSet]
 
@@ -53,6 +77,19 @@ pub struct Concept {
 }
 pub fn Concept::extent(Self) -> @bitset.BitSet
 pub fn Concept::intent(Self) -> @bitset.BitSet
+
+pub struct DgRun {
+  basis : Array[Implication]
+  steps : Int32
+  jumps : Int32
+  closure_calls : Int32
+  pc_iterations : Int32
+}
+pub fn DgRun::basis(Self) -> Array[Implication]
+pub fn DgRun::closure_calls(Self) -> Int32
+pub fn DgRun::jumps(Self) -> Int32
+pub fn DgRun::pc_iterations(Self) -> Int32
+pub fn DgRun::steps(Self) -> Int32
 
 pub struct Implication {
   premise : @bitset.BitSet

@@ -12,15 +12,23 @@ pub fn cyclotomic_context() -> @context.FormalContext
 
 pub fn divisibility_context() -> @context.FormalContext
 
+pub fn divisor_context(Int32) -> @context.FormalContext
+
 pub fn interval_summary(Int32) -> String
 
 pub fn lookup(String) -> Registered?
+
+pub fn lookup_dg(String) -> Registered?
 
 pub fn lookup_matroid(String) -> RegisteredMatroid?
 
 pub fn matroid_summary(RegisteredMatroid, Bool) -> String
 
 pub fn registered() -> Array[Registered]
+
+pub fn registered_dg() -> Array[Registered]
+
+pub fn registered_dg_names() -> Array[String]
 
 pub fn registered_matroid_names() -> Array[String]
 

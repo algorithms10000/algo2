@@ -8,6 +8,8 @@
 ///   moon run cmd/main -- matroid <名稱>   擬陣摘要＋A12 檢核（B0002）
 ///   moon run cmd/main -- mcheck <名稱>    擬陣摘要＋A12＋B0001 繼承檢核（規模允許時）
 ///   moon run cmd/main -- mcircuits <名稱> 列出迴路系統（B0002）
+///   moon run cmd/main -- dg <名稱>        A3′ 增量式典範基（統計＋檢核）
+///   moon run cmd/main -- dgbasis <名稱>   列出每一條蘊含
 ///   moon run cmd/main -- negctl           負控制：區間凸包必須 FAIL 交換公理（T8）
 ///   moon run cmd/main -- info <名稱>      單一上下文摘要 + A6 檢核
 ///   moon run cmd/main -- concepts <名稱>  列出全部概念（外延 ↔ 內涵）
@@ -247,6 +249,51 @@ fn main {
           for i = 0; i < cs.length(); i = i + 1 {
             println("  C" + i.to_string() + " = " + cs[i].render())
           }
+        }
+      }
+    }
+  } else if cmd == "dg" {
+    if rest.length() < 1 {
+      println("用法：-- dg <名稱>（A3′ 增量式典範基）")
+      println("樣本：" + @registry.registered_dg_names().join("、"))
+    } else {
+      match @registry.lookup_dg(rest[0]) {
+        None => println("找不到 A3′ 樣本：" + rest[0])
+        Some(reg) => {
+          let ctx = reg.ctx()
+          println("上下文：" + reg.name())
+          println("  來源：" + reg.source())
+          println(
+            "  |A|=" +
+            ctx.num_axioms().to_string() +
+            "，|S|=" +
+            ctx.num_stmts().to_string() +
+            "，|R|=" +
+            ctx.edge_count().to_string(),
+          )
+          println("  " + @lattice.dg_stats_line(ctx))
+          println("  " + @lattice.dg_report(ctx).render())
+        }
+      }
+    }
+  } else if cmd == "dgbasis" {
+    if rest.length() < 1 {
+      println(
+        "用法：-- dgbasis <名稱>（列出 A3′ 典範基的每一條蘊含）",
+      )
+    } else {
+      match @registry.lookup_dg(rest[0]) {
+        None => println("找不到 A3′ 樣本：" + rest[0])
+        Some(reg) => {
+          let ctx = reg.ctx()
+          let run = @lattice.canonical_basis_incremental(ctx)
+          println(
+            "上下文：" +
+            reg.name() +
+            "　|Σ|=" +
+            run.basis().length().to_string(),
+          )
+          println(@lattice.render_basis(ctx, run.basis()))
         }
       }
     }

@@ -27,6 +27,15 @@ R 的每個元素都由群作用算出，沒有任何手寫邊。
 | `Fano` | PG(2,2)：F₂³ 的 7 個非零向量 | \|𝒞\|=14、\|ℱ\|=16、r=3 |
 | `interval-4` | 負控制：區間凸包（antimatroid） | `check_exchange` 必須 FAIL |
 
+## A3′ 追加：整除上下文族（`registry.mbt` 的 `registered_dg()`）
+
+| 名稱 | N | \|A\|=\|S\| | \|Σ\| | 用途 |
+|---|---|---|---|
+| `divisors-12` | 12 | 6 | 6 | A3′ vs 暴力 A3 同族核對 |
+| `divisors-180` | 180 | 18 | 27 | 同上（2^18 仍可暴力） |
+| `divisors-240` | 240 | 20 | 30 | 同上（暴力的最後可負擔點） |
+| `divisors-420` | 420 | 24 | 38 | 暴力不可行（16,777,215），改用 E16 判定 |
+
 ## 已實作的演算法
 
 - `cyclotomic_context / divisibility_context / two_blocks_context`：由數學定義生成 K。
@@ -43,4 +52,5 @@ registry ◀── cmd/main
 ## 接口
 
 `registered() / lookup(name) / registered_names() / summarize(reg) / Registered::make(...)`
+【A3′】`registered_dg() / lookup_dg(name) / registered_dg_names() / divisor_context(value)`
 【B0002】`registered_matroids() / lookup_matroid(name) / registered_matroid_names() / matroid_summary(reg, with_inherit) / interval_summary(n)`

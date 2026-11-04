@@ -16,7 +16,9 @@
 5. B0002：四份擬陣各 **8/8 PASS**（合計 32），且期望值核對欄不得出現 ✗。
 6. B0002 負控制：`interval-4` **必須 FAIL** 交換公理（否則判定檢核器失效）。
 7. B0002 繼承：`M(K3)` 的 `K_ℱ*` 上 B0001 A6 **13/13 PASS**（提升／嵌入的可執行見證）。
-8. `python3 tools/make_registry.py` 重建 `algorithm.xlsx`（13 個工作表；與提交版本不一致則失敗）。
+8. A3′（增量式 DG 基）：四份整除上下文；`divisors-12/180/240` 必須與暴力 A3 **同族**（15 條 PASS），
+   `divisors-420`（n=24）必須「3 PASS + 1 條明示未檢核」——未檢核不得算成綠燈。
+9. `python3 tools/make_registry.py` 重建 `algorithm.xlsx`（14 個工作表；與提交版本不一致則失敗）。
 
 ## 依賴關係
 

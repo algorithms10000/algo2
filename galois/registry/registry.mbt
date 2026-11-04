@@ -139,3 +139,81 @@ pub fn registered_names() -> Array[String] {
   }
   out
 }
+
+///|
+/// 【A3′ 用】除數上下文：A = S = N 的全部正因數，R = {(a,s) : a | s}。
+/// 這是「整除格」的古典伽羅瓦對應，閉集 = 某因數的全體倍數 ⇒ |ℭ| = d(N)（可獨立核對）。
+pub fn divisor_context(value : Int32) -> @context.FormalContext {
+  let vals : Array[Int32] = []
+  for d = 1; d <= value; d = d + 1 {
+    if value % d == 0 {
+      vals.push(d)
+    }
+  }
+  let axiom_names : Array[String] = []
+  let stmt_names : Array[String] = []
+  for i = 0; i < vals.length(); i = i + 1 {
+    axiom_names.push(vals[i].to_string())
+    stmt_names.push(vals[i].to_string())
+  }
+  let edges : Array[(Int32, Int32)] = []
+  for i = 0; i < vals.length(); i = i + 1 {
+    for j = 0; j < vals.length(); j = j + 1 {
+      if vals[j] % vals[i] == 0 {
+        edges.push((i, j))
+      }
+    }
+  }
+  @context.FormalContext::new(axiom_names, stmt_names, edges)
+}
+
+///|
+/// 【A3′ 用】大屬性集的除數上下文族（n = d(N)：12→6、180→18、240→20、420→24）。
+/// 與 `registered()` 分開，因為這些樣本只跑 A3′/T4（不含 A6 的窮舉檢核預算）。
+pub fn registered_dg() -> Array[Registered] {
+  [
+    {
+      name: "divisors-12",
+      ctx: divisor_context(12),
+      source: "整除上下文：A=S=12 的因數 {1,2,3,4,6,12}，|ℭ|=d(12)=6；A3′ 與暴力 A3 交叉核對用",
+    },
+    {
+      name: "divisors-180",
+      ctx: divisor_context(180),
+      source: "整除上下文：d(180)=18 個因數；A3′ 與暴力 A3 交叉核對用（2^18 仍可暴力）",
+    },
+    {
+      name: "divisors-240",
+      ctx: divisor_context(240),
+      source: "整除上下文：d(240)=20 個因數；暴力 A3 的最後一個可負擔點（2^20−1 = 1,048,575）",
+    },
+    {
+      name: "divisors-420",
+      ctx: divisor_context(420),
+      source: "整除上下文：d(420)=24 個因數；暴力 A3 需 16,777,215 次候選判定，只有 A3′ 可算",
+    },
+  ]
+}
+
+///|
+/// 【A3′ 用】在 `registered_dg()` 中查找。
+pub fn lookup_dg(name : String) -> Registered? {
+  let all = registered_dg()
+  for i = 0; i < all.length(); i = i + 1 {
+    if all[i].name == name {
+      return Some(all[i])
+    }
+  }
+  None
+}
+
+///|
+/// 【A3′ 用】`registered_dg()` 的名稱表。
+pub fn registered_dg_names() -> Array[String] {
+  let out : Array[String] = []
+  let all = registered_dg()
+  for i = 0; i < all.length(); i = i + 1 {
+    out.push(all[i].name)
+  }
+  out
+}
