@@ -3,7 +3,12 @@
 ///
 /// 用法（於 galois/ 目錄）：
 ///   moon run cmd/main                     全部登記上下文的完整摘要（示範）
-///   moon run cmd/main -- list             列出登記上下文
+///   moon run cmd/main -- list             列出登記上下文（B0001）
+///   moon run cmd/main -- matroids         列出擬陣樣本（B0002）
+///   moon run cmd/main -- matroid <名稱>   擬陣摘要＋A12 檢核（B0002）
+///   moon run cmd/main -- mcheck <名稱>    擬陣摘要＋A12＋B0001 繼承檢核（規模允許時）
+///   moon run cmd/main -- mcircuits <名稱> 列出迴路系統（B0002）
+///   moon run cmd/main -- negctl           負控制：區間凸包必須 FAIL 交換公理（T8）
 ///   moon run cmd/main -- info <名稱>      單一上下文摘要 + A6 檢核
 ///   moon run cmd/main -- concepts <名稱>  列出全部概念（外延 ↔ 內涵）
 ///   moon run cmd/main -- basis <名稱>     列出 Duquenne–Guiguès 典範基
@@ -202,7 +207,52 @@ fn main {
   for i = offset + 1; i < args.length(); i = i + 1 {
     rest.push(args[i])
   }
-  if cmd == "list" {
+  if cmd == "matroids" {
+    let all = @registry.registered_matroids()
+    for i = 0; i < all.length(); i = i + 1 {
+      println("  " + all[i].name + "  ←  " + all[i].source)
+    }
+    println(
+      "  interval-4  ←  負控制：區間凸包（antimatroid，非擬陣）",
+    )
+  } else if cmd == "matroid" || cmd == "mcheck" {
+    if rest.length() < 1 {
+      println("用法：-- matroid <名稱>（可用名稱見 -- matroids）")
+      return
+    }
+    match @registry.lookup_matroid(rest[0]) {
+      None =>
+        if rest[0] == "interval-4" {
+          println(@registry.interval_summary(4))
+        } else {
+          println("找不到擬陣：" + rest[0])
+        }
+      Some(reg) => {
+        let with_inherit = cmd == "mcheck"
+        println(@registry.matroid_summary(reg, with_inherit))
+      }
+    }
+  } else if cmd == "mcircuits" {
+    if rest.length() < 1 {
+      println("用法：-- mcircuits <名稱>")
+    } else {
+      match @registry.lookup_matroid(rest[0]) {
+        None => println("找不到擬陣：" + rest[0])
+        Some(reg) => {
+          let m = reg.matroid()
+          println(
+            "迴路系統（|𝒞|=" + m.circuit_count().to_string() + "）：",
+          )
+          let cs = m.circuits()
+          for i = 0; i < cs.length(); i = i + 1 {
+            println("  C" + i.to_string() + " = " + cs[i].render())
+          }
+        }
+      }
+    }
+  } else if cmd == "negctl" {
+    println(@registry.interval_summary(4))
+  } else if cmd == "list" {
     show_list()
   } else if cmd == "all" {
     show_all()

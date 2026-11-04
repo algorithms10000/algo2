@@ -1,0 +1,73 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/matroid"
+
+import {
+  "arena/b0001/bitset",
+  "arena/b0001/context",
+  "arena/b0001/galois",
+}
+
+// Values
+pub fn check_exchange(Int32, (@bitset.BitSet) -> @bitset.BitSet) -> @galois.Check
+
+pub fn circuits_from_gf2(Array[@bitset.BitSet]) -> Array[@bitset.BitSet]
+
+pub fn context_of_moore_family(String, Int32, Array[@bitset.BitSet]) -> @context.FormalContext
+
+pub fn fano_columns() -> Array[@bitset.BitSet]
+
+pub fn graphic_columns(Int32, Array[(Int32, Int32)]) -> Array[@bitset.BitSet]
+
+pub fn independent_gf2(Array[@bitset.BitSet]) -> Bool
+
+pub fn interval_closure(Int32, @bitset.BitSet) -> @bitset.BitSet
+
+pub fn interval_report(Int32) -> @galois.Report
+
+pub fn moore_family_of_context(@context.FormalContext) -> Array[@bitset.BitSet]
+
+pub fn rank_gf2(Array[@bitset.BitSet]) -> Int32
+
+pub fn select_columns(Array[@bitset.BitSet], Array[Int32], Int32) -> Array[@bitset.BitSet]
+
+pub fn without_empty(Array[@bitset.BitSet]) -> Array[@bitset.BitSet]
+
+// Errors
+
+// Types and methods
+pub struct Matroid {
+  name : String
+  n : Int32
+  circuits : Array[@bitset.BitSet]
+}
+pub fn Matroid::atoms(Self) -> Array[@bitset.BitSet]
+pub fn Matroid::check_b0001_inheritance(Self) -> @galois.Report
+pub fn Matroid::check_circuit_axioms(Self) -> @galois.Check
+pub fn Matroid::check_empty_flat_support(Self) -> @galois.Check
+pub fn Matroid::check_exchange(Self) -> @galois.Check
+pub fn Matroid::check_flats_agree_with_context(Self) -> @galois.Check
+pub fn Matroid::check_geometric(Self) -> @galois.Check
+pub fn Matroid::check_independence(Self) -> @galois.Check
+pub fn Matroid::check_rank_axioms(Self) -> @galois.Check
+pub fn Matroid::check_realization(Self) -> @galois.Check
+pub fn Matroid::circuit_count(Self) -> Int32
+pub fn Matroid::circuits(Self) -> Array[@bitset.BitSet]
+pub fn Matroid::closure(Self, @bitset.BitSet) -> @bitset.BitSet
+pub fn Matroid::closure_by_rank(Self, @bitset.BitSet) -> @bitset.BitSet
+pub fn Matroid::fano() -> Self
+pub fn Matroid::flat_count(Self) -> Int32
+pub fn Matroid::flats(Self) -> Array[@bitset.BitSet]
+pub fn Matroid::from_circuits(String, Int32, Array[@bitset.BitSet]) -> Self
+pub fn Matroid::from_gf2(String, Array[@bitset.BitSet]) -> Self
+pub fn Matroid::graphic(String, Int32, Array[(Int32, Int32)]) -> Self
+pub fn Matroid::ground_size(Self) -> Int32
+pub fn Matroid::independent(Self, @bitset.BitSet) -> Bool
+pub fn Matroid::is_flat(Self, @bitset.BitSet) -> Bool
+pub fn Matroid::matroid_report(Self) -> @galois.Report
+pub fn Matroid::name(Self) -> String
+pub fn Matroid::rank(Self, @bitset.BitSet) -> Int32
+pub fn Matroid::uniform(Int32, Int32) -> Self
+
+// Type aliases
+
+// Traits

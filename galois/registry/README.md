@@ -17,10 +17,21 @@ R 的每個元素都由群作用算出，沒有任何手寫邊。
 樣本本身不新增定理，而是 T1／P5 的**實例見證**：
 `|ℭ_A| = |ℭ_S| = |B(K)| = 5`，且 5 個概念即伽羅瓦基本定理的 5 組（子群, 中間體）。
 
+## B0002 追加：擬陣樣本（`matroids.mbt`）
+
+| 名稱 | 構造 | 驗證目標 |
+|---|---|---|
+| `U24` | 均勻擬陣 U(2,4)（非二元，迴路直接給出） | \|𝒞\|=4、\|ℱ\|=6、r=2 |
+| `M(K3)` | 三角形圖擬陣（GF(2) 關聯矩陣） | \|𝒞\|=1、\|ℱ\|=5 = Bell(3) |
+| `M(K4)` | K₄ 圖擬陣（4 三角形 + 3 四環） | \|𝒞\|=7、\|ℱ\|=15 = Bell(4) |
+| `Fano` | PG(2,2)：F₂³ 的 7 個非零向量 | \|𝒞\|=14、\|ℱ\|=16、r=3 |
+| `interval-4` | 負控制：區間凸包（antimatroid） | `check_exchange` 必須 FAIL |
+
 ## 已實作的演算法
 
 - `cyclotomic_context / divisibility_context / two_blocks_context`：由數學定義生成 K。
 - `summarize(reg)`：一次算出閉集數、概念數、Hasse 邊、\|Σ\|、冗餘公理、A6 報告（`summary.mbt`）。
+- 【B0002】`matroid_summary(reg, with_inherit)`、`interval_summary(n)`：擬陣摘要＋A12 檢核＋（可選）B0001 繼承（`matroids.mbt`）。
 
 ## 依賴關係
 
@@ -32,3 +43,4 @@ registry ◀── cmd/main
 ## 接口
 
 `registered() / lookup(name) / registered_names() / summarize(reg) / Registered::make(...)`
+【B0002】`registered_matroids() / lookup_matroid(name) / registered_matroid_names() / matroid_summary(reg, with_inherit) / interval_summary(n)`

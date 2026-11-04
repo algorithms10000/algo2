@@ -405,3 +405,40 @@ pub fn subsets_by_cardinality(n : Int32) -> Array[BitSet] {
   }
   out
 }
+
+///|
+/// 對稱差（xor）：self △ other。GF(2) 高斯消去的基本運算（B0002 A13）。
+pub fn BitSet::xor(self : BitSet, other : BitSet) -> BitSet {
+  if self.n != other.n {
+    abort("BitSet::xor 位元長度不一致")
+  }
+  let r = BitSet::new(self.n)
+  for i = 0; i < self.words.length(); i = i + 1 {
+    let a : UInt64 = self.words[i]
+    let b : UInt64 = other.words[i]
+    r.words[i] = a ^ b
+  }
+  r
+}
+
+///|
+/// 最高位 1 的索引；全空回傳 None。
+pub fn BitSet::highest_bit(self : BitSet) -> Int32? {
+  let mut i = self.words.length() - 1
+  while i >= 0 {
+    let w : UInt64 = self.words[i]
+    if w != 0UL {
+      let mut bit = WORD_BITS - 1
+      while bit >= 0 {
+        let shifted : UInt64 = w >> bit
+        if (shifted & 1UL) == 1UL {
+          let idx = i * WORD_BITS + bit
+          return Some(idx)
+        }
+        bit = bit - 1
+      }
+    }
+    i = i - 1
+  }
+  None
+}

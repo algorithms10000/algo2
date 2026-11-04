@@ -21,6 +21,7 @@ pub fn BitSet::from_indices(Int32, Array[Int32]) -> Self
 pub fn BitSet::from_mask(Int32, Int32) -> Self
 pub fn BitSet::full(Int32) -> Self
 pub fn BitSet::get(Self, Int32) -> Bool
+pub fn BitSet::highest_bit(Self) -> Int32?
 pub fn BitSet::intersect(Self, Self) -> Self
 pub fn BitSet::is_empty(Self) -> Bool
 pub fn BitSet::is_full(Self) -> Bool
@@ -42,6 +43,7 @@ pub fn BitSet::to_mask(Self) -> Int32
 pub fn BitSet::union(Self, Self) -> Self
 pub fn BitSet::union_inplace(Self, Self) -> Unit
 pub fn BitSet::unset(Self, Int32) -> Unit
+pub fn BitSet::xor(Self, Self) -> Self
 
 // Type aliases
 

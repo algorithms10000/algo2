@@ -12,8 +12,11 @@
 1. `moon check --target all`：wasm／wasm-gc／js／native 全目標型別檢查。
 2. `moon build`：產出 executable。
 3. `moon fmt --check`：格式一致性。
-4. 跑 `cmd/main`，檢查三份樣本上下文 **13/13 PASS**（A6 常設檢核），並核對 |ℭ_A|=|ℭ_S|。
-5. `python3 tools/make_registry.py` 重建 `algorithm.xlsx`（若與提交版本不一致，CI 失敗）。
+4. B0001：跑 `cmd/main`，三份樣本上下文 **39/39 PASS**，並核對 |ℭ_A|=|ℭ_S|。
+5. B0002：四份擬陣各 **8/8 PASS**（合計 32），且期望值核對欄不得出現 ✗。
+6. B0002 負控制：`interval-4` **必須 FAIL** 交換公理（否則判定檢核器失效）。
+7. B0002 繼承：`M(K3)` 的 `K_ℱ*` 上 B0001 A6 **13/13 PASS**（提升／嵌入的可執行見證）。
+8. `python3 tools/make_registry.py` 重建 `algorithm.xlsx`（13 個工作表；與提交版本不一致則失敗）。
 
 ## 依賴關係
 

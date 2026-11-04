@@ -4,6 +4,7 @@ package "arena/b0001/registry"
 import {
   "arena/b0001/context",
   "arena/b0001/galois",
+  "arena/b0001/matroid",
 }
 
 // Values
@@ -11,9 +12,19 @@ pub fn cyclotomic_context() -> @context.FormalContext
 
 pub fn divisibility_context() -> @context.FormalContext
 
+pub fn interval_summary(Int32) -> String
+
 pub fn lookup(String) -> Registered?
 
+pub fn lookup_matroid(String) -> RegisteredMatroid?
+
+pub fn matroid_summary(RegisteredMatroid, Bool) -> String
+
 pub fn registered() -> Array[Registered]
+
+pub fn registered_matroid_names() -> Array[String]
+
+pub fn registered_matroids() -> Array[RegisteredMatroid]
 
 pub fn registered_names() -> Array[String]
 
@@ -51,6 +62,17 @@ pub fn Registered::ctx(Self) -> @context.FormalContext
 pub fn Registered::make(String, @context.FormalContext, String) -> Self
 pub fn Registered::name(Self) -> String
 pub fn Registered::source(Self) -> String
+
+pub struct RegisteredMatroid {
+  name : String
+  matroid : @matroid.Matroid
+  source : String
+  expected_flats : Int32
+  expected_circuits : Int32
+}
+pub fn RegisteredMatroid::matroid(Self) -> @matroid.Matroid
+pub fn RegisteredMatroid::name(Self) -> String
+pub fn RegisteredMatroid::source(Self) -> String
 
 // Type aliases
 

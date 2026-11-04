@@ -6,6 +6,7 @@
 
 ```
 cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context ──▶ bitset
+    │             └──▶ matroid ──▶ lattice/galois/context/bitset（B0002）
     └──────────────────────▶ lattice/galois（直接使用）
 ```
 
@@ -18,6 +19,17 @@ cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context
 | T2 | 重建定理（冗餘判準） | `galois/closure.mbt`（`redundant_axioms`） |
 | T3 | 局部性定理（分量分解與坍縮） | `context/components.mbt`、`galois/closure.mbt` |
 | T4 | Duquenne–Guiguès 典範基 | `lattice/basis.mbt` |
+
+## B0002 追加（擬陣，見 `matroid/README.md`）
+
+| 編號 | 名稱 | 落點 |
+|---|---|---|
+| X5／X6 | 交換公理、秩公理 | `matroid/checks.mbt` |
+| T5 | 三公理等價（閉包／迴路／秩） | `matroid/{matroid,gf2,checks}.mbt` |
+| T6 | 平坦格 = 幾何格 | `matroid/flats.mbt` |
+| T7 | Moore 實現／提升（ℱ → K_ℱ，B0001 逐字適用） | `matroid/realize.mbt` |
+| T8 | 負控制（檢核器不得恆真） | `matroid/antimatroid.mbt` |
+| A8–A14 | 迴路閉包、秩、平坦集、實現、檢核、GF(2)、交換反例搜尋 | `matroid/*.mbt` |
 
 ## 本模組已實作的演算法
 
@@ -38,3 +50,5 @@ moon check --target all && moon build && moon fmt && moon info
 ```
 
 `pkg.generated.mbti` 為 `moon info` 產生的公開介面檔，應與原始碼一同提交。
+
+B0002 的 CLI 追加：`matroids`、`matroid <名稱>`、`mcheck <名稱>`、`mcircuits <名稱>`、`negctl`。
