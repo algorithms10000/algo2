@@ -80,4 +80,16 @@ B0001 開發流水帳（Dev.txt）
 [未完成（本回合內）]
   無。R1 之交付範圍（B0001 定理體系 + 6 套件程式 + 3 樣本 + 13 條檢核 + 登記表 + 文件 + CI + commit）全部完成。
 
+[回合收尾紀錄]
+  - CI（ci/ci.sh）五步全部通過：
+      1) moon check --target all（wasm/wasm-gc/js/native）
+      2) moon build
+      3) moon fmt --check
+      4) 樣本 A6：PASS=39 FAIL=0；P5（|ℭ_A|=|ℭ_S|）成立
+      5) algorithm.xlsx 可由 tools/make_registry.py 重建且與提交版本逐格一致（8 工作表的 cells 全等）
+  - git：單一乾淨提交 fe4589b（55 個檔案）；galois/_build/ 與環境產物 .moon/ 已列入 .gitignore。
+  - 環境產物清理：`moon add` 會把 registry 索引 clone 到 $HOME/.moon（26MB）；本回合已刪除並加入 .gitignore，
+    避免環境快取混入工程快照。工具鏈本身位於 /tmp/moon（383MB），由 ci/bootstrap_toolchain.sh 重建。
+  - 覆核：moon info 產生的 pkg.generated.mbti 已入庫（公開介面基準），下次改動若 .mbti 變動需在 Dev.txt 記錄。
+
 ==================================================================
