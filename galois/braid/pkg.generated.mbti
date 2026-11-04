@@ -1,0 +1,133 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/braid"
+
+import {
+  "arena/b0001/galois",
+  "moonbitlang/core/bigint",
+}
+
+// Values
+pub fn braid_report() -> @galois.Report
+
+pub fn burau_braid_relation(Int32, Int32) -> Bool
+
+pub fn burau_commutes(Int32, Int32, Int32) -> Bool
+
+pub fn burau_fake_kernels(Int32, Int32) -> Int32
+
+pub fn burau_generator(Int32, Int32) -> LMat
+
+pub fn burau_inverse(Int32, Int32) -> LMat
+
+pub fn burau_of_word(BraidWord) -> LMat
+
+pub fn burau_specialize_minus_one(BraidWord) -> Array[Array[@bigint.BigInt]]
+
+pub fn bw_empty(Int32) -> BraidWord
+
+pub fn bw_gen(Int32, Int32, Bool) -> BraidWord
+
+pub fn bw_make(Int32, Array[Int32]) -> BraidWord
+
+pub fn check_b3_image_generates(Int32) -> @galois.Check
+
+pub fn check_b3_to_psl() -> @galois.Check
+
+pub fn check_burau_determinant(Int32, Array[Int32]) -> @galois.Check
+
+pub fn check_burau_no_fake_kernel(Int32, Int32) -> @galois.Check
+
+pub fn check_burau_representation(Int32) -> @galois.Check
+
+pub fn check_permutation_quotient(Int32) -> @galois.Check
+
+pub fn factorial(Int32) -> Int32
+
+pub fn generated_permutation_count(Int32) -> Int32
+
+pub fn lm_det(LMat) -> LPoly
+
+pub fn lm_eq(LMat, LMat) -> Bool
+
+pub fn lm_identity(Int32) -> LMat
+
+pub fn lm_mul(LMat, LMat) -> LMat
+
+pub fn lp_add(LPoly, LPoly) -> LPoly
+
+pub fn lp_at_minus_one(LPoly) -> @bigint.BigInt
+
+pub fn lp_const(Int32) -> LPoly
+
+pub fn lp_eq(LPoly, LPoly) -> Bool
+
+pub fn lp_is_one(LPoly) -> Bool
+
+pub fn lp_is_zero(LPoly) -> Bool
+
+pub fn lp_mul(LPoly, LPoly) -> LPoly
+
+pub fn lp_neg(LPoly) -> LPoly
+
+pub fn lp_one() -> LPoly
+
+pub fn lp_render(LPoly) -> String
+
+pub fn lp_sub(LPoly, LPoly) -> LPoly
+
+pub fn lp_t() -> LPoly
+
+pub fn lp_zero() -> LPoly
+
+pub fn mat2_is_pm_identity((Int64, Int64, Int64, Int64)) -> Bool
+
+pub fn mat2_mul((Int64, Int64, Int64, Int64), (Int64, Int64, Int64, Int64)) -> (Int64, Int64, Int64, Int64)
+
+pub fn mat2_same_pm((Int64, Int64, Int64, Int64), (Int64, Int64, Int64, Int64)) -> Bool
+
+pub fn n_of(LMat) -> Int32
+
+pub fn perm_identity(Int32) -> Array[Int32]
+
+pub fn perm_key(Array[Int32]) -> String
+
+pub fn perm_mul(Array[Int32], Array[Int32]) -> Array[Int32]
+
+pub fn permutation_braid_relation(Int32, Int32) -> Bool
+
+pub fn psl_image(Int32) -> (Int64, Int64, Int64, Int64)
+
+pub fn psl_image_generates_sl2(Int32) -> Bool
+
+pub fn psl_image_of_word(BraidWord) -> (Int64, Int64, Int64, Int64)
+
+pub fn transposition(Int32, Int32) -> Array[Int32]
+
+pub fn word_count(Int32, Int32) -> Int32
+
+pub fn word_permutation(BraidWord) -> Array[Int32]
+
+// Errors
+
+// Types and methods
+pub struct BraidWord {
+  n : Int32
+  letters : Array[Int32]
+}
+pub fn BraidWord::concat(Self, Self) -> Self
+pub fn BraidWord::exponent_sum(Self) -> Int32
+pub fn BraidWord::inverse(Self) -> Self
+pub fn BraidWord::length(Self) -> Int32
+
+pub struct LMat {
+  n : Int32
+  e : Array[Array[LPoly]]
+}
+
+pub struct LPoly {
+  t : Array[(Int32, @bigint.BigInt)]
+}
+
+// Type aliases
+
+// Traits

@@ -1,0 +1,156 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/jacobian"
+
+import {
+  "arena/b0001/galois",
+  "moonbitlang/core/bigint",
+}
+
+// Values
+pub fn all_f2_matrices(Int32) -> Array[F2Mat]
+
+pub fn arf_invariant(Int32, Int32) -> Int32
+
+pub fn arf_of_pullback(Int32, Int32, F2Mat) -> Int32
+
+pub fn base_quadratic(Int32, Int32) -> Int32
+
+pub fn bigmat(Int32, Int32) -> BigMat
+
+pub fn bigmat_minor(BigMat, Array[Int32], Array[Int32]) -> BigMat
+
+pub fn bigmat_of(Array[Array[Int32]]) -> BigMat
+
+pub fn canonical_divisor(Graph) -> Array[Int32]
+
+pub fn check_arf_counts(Int32) -> @galois.Check
+
+pub fn check_arf_invariance(Int32) -> @galois.Check
+
+pub fn check_complete_graph_jacobian(Int32) -> @galois.Check
+
+pub fn check_cycle_rank(String, Graph) -> @galois.Check
+
+pub fn check_deletion_contraction(String, Graph) -> @galois.Check
+
+pub fn check_hypercube_invariants(Int32, Array[Int32]) -> @galois.Check
+
+pub fn check_hypercube_tau(Int32, Int64) -> @galois.Check
+
+pub fn check_hypercube_tau_dc(Int32, Int64) -> @galois.Check
+
+pub fn check_jacobian_order(String, Graph) -> @galois.Check
+
+pub fn check_registered_invariants(String, Graph, Array[Int32]) -> @galois.Check
+
+pub fn check_riemann_roch(String, Graph, Int32) -> @galois.Check
+
+pub fn check_two_torsion(String, Graph) -> @galois.Check
+
+pub fn compositions(Int32, Int32) -> Array[Array[Int32]]
+
+pub fn count_refinements(Int32) -> ArfCount
+
+pub fn det_bareiss(BigMat) -> @bigint.BigInt
+
+pub fn divisor_rank(Graph, Array[Int32], Int32) -> Int32
+
+pub fn edge_contract(Graph, Int32) -> Graph
+
+pub fn edge_delete(Graph, Int32) -> Graph
+
+pub fn expected_arf0(Int32) -> Int32
+
+pub fn expected_arf1(Int32) -> Int32
+
+pub fn gcd_big(@bigint.BigInt, @bigint.BigInt) -> @bigint.BigInt
+
+pub fn hypercube(Int32) -> Graph
+
+pub fn in_laplacian_image(Graph, Array[Int32]) -> Bool
+
+pub fn invariant_factors(BigMat) -> Array[@bigint.BigInt]
+
+pub fn is_effectively_equivalent(Graph, Array[Int32]) -> Bool
+
+pub fn is_quadratic_refinement(Int32, Int32) -> Bool
+
+pub fn is_symplectic(Int32, F2Mat) -> Bool
+
+pub fn jacobian_order(Graph) -> @bigint.BigInt
+
+pub fn jacobian_report() -> @galois.Report
+
+pub fn jump_bit(Int32, Int32) -> Int32
+
+pub fn laplacian(Graph) -> BigMat
+
+pub fn laplacian_rank_mod2(Graph) -> Int32
+
+pub fn minor_gcd(BigMat, Int32) -> @bigint.BigInt
+
+pub fn popcount_parity(Int32) -> Int32
+
+pub fn pow_int(Int32, Int32) -> Int32
+
+pub fn rank_over_q(BigMat) -> Int32
+
+pub fn refined_quadratic(Int32, Int32, Int32) -> Int32
+
+pub fn render_divisor(Array[Int32]) -> String
+
+pub fn riemann_roch(Graph, Int32) -> RRResult
+
+pub fn sample_graphs() -> Array[(String, Graph)]
+
+pub fn spanning_trees_bruteforce(Graph) -> Int32
+
+pub fn spanning_trees_by_det(Graph) -> @bigint.BigInt
+
+pub fn symplectic_pair(Int32, Int32, Int32) -> Int32
+
+pub fn tau_deletion_contraction(Graph) -> Int64
+
+// Errors
+
+// Types and methods
+pub struct ArfCount {
+  arf0 : Int32
+  arf1 : Int32
+  invalid : Int32
+}
+pub fn ArfCount::render(Self) -> String
+
+pub struct BigMat {
+  r : Int32
+  c : Int32
+  e : Array[Array[@bigint.BigInt]]
+}
+
+pub struct F2Mat {
+  n : Int32
+  rows : Array[Int32]
+}
+pub fn F2Mat::act(Self, Int32) -> Int32
+
+pub struct Graph {
+  n : Int32
+  edges : Array[(Int32, Int32)]
+}
+pub fn Graph::components(Self) -> Int32
+pub fn Graph::cycle_rank(Self) -> Int32
+pub fn Graph::num_edges(Self) -> Int32
+pub fn Graph::num_vertices(Self) -> Int32
+
+pub struct RRResult {
+  tested : Int32
+  violations : Int32
+  witness : String
+}
+pub fn RRResult::render(Self) -> String
+pub fn RRResult::tested(Self) -> Int32
+pub fn RRResult::violations(Self) -> Int32
+
+// Type aliases
+
+// Traits

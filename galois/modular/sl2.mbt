@@ -86,6 +86,18 @@ pub fn norm_mod(x : Int32, n : Int32) -> Int32 {
 }
 
 ///|
+/// 建立 SL₂(ℤ/N) 的元素（座標自動歸一化）——供其他套件在有限群裡做 BFS／共軛。
+pub fn sl2_make(n : Int32, a : Int32, b : Int32, c : Int32, d : Int32) -> Sl2 {
+  {
+    n,
+    a: norm_mod(a, n),
+    b: norm_mod(b, n),
+    c: norm_mod(c, n),
+    d: norm_mod(d, n),
+  }
+}
+
+///|
 /// 列舉 SL₂(ℤ/N) 的全部元素。
 ///
 /// ＊開發期修正（BUG-3）＊ 首版寫 `(a*d - b*c) % n == 1`：當 `a*d - b*c` 為負時，

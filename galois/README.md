@@ -1,6 +1,6 @@
 # galois/ — B0001 MoonBit 模組（arena/b0001）
 
-本資料夾是 MoonBit 模組根（`moon.mod`）。下面 8 個套件構成 B0001–B0004 的全部實作。
+本資料夾是 MoonBit 模組根（`moon.mod`）。下面 10 個套件構成 B0001–B0005 的全部實作。
 
 ## 資料夾視角的依賴關係
 
@@ -8,7 +8,9 @@
 cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context ──▶ bitset
     │             ├──▶ matroid ──▶ lattice/galois/context/bitset（B0002）
     │             ├──▶ modular  ──▶ galois（B0003）
-    │             └──▶ elliptic ──▶ modular, galois（B0004）
+    │             ├──▶ elliptic ──▶ modular, galois（B0004）
+    │             ├──▶ braid    ──▶ modular, galois（B0005：辮群）
+    │             └──▶ jacobian ──▶ galois（B0005：圖雅可比簇）
     └──────────────────────▶ lattice/galois/modular/elliptic（直接使用）
 ```
 
@@ -40,6 +42,17 @@ cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context
 | T13／T14 | 同餘子群指數公式、X₀(N) 解析不變量 | `modular/`（見 `modular/README.md`） |
 | T15–T21 | 撓群 E[n] ≅ (ℤ/n)²、軌道計數＝同餘指數、Galois 等變、Paley/Ramsey、鏡像對稱、撓群擬陣、團複形同調 | `elliptic/`（見 `elliptic/README.md`） |
 
+## B0005 追加（辮群與雅可比簇，見 `braid/README.md`、`jacobian/README.md`）
+
+| 編號 | 名稱 | 落點 |
+|---|---|---|
+| T22 | B_n ↠ S_n（\|im π\| = n!，n = 2..6） | `braid/braid.mbt` |
+| T23 | Burau β_n 是表示、det = (−t)^{exp}、界內無偽核 | `braid/burau.mbt` |
+| T24 | B_3 → PSL₂(ℤ) → PSL₂(ℤ/n)（n = 2..12），Γ(n) 是這條滿射的核 | `braid/checks.mbt` |
+| T25–T31 | \|J(G)\| = τ（三＋一路徑）、J(K_n) ≅ (ℤ/n)^{n−2}、圈秩、Riemann–Roch、Arf、刪縮、超立方體 Q_n | `jacobian/` |
+
+**關鍵接縫**：T24 把 B0003 的 Γ(n) 說成「B_3 ↠ PSL₂(ℤ/n) 的核」，B0005 與 B0003／B0004 在同一條滿射鏈上對齊。
+
 **關鍵接縫**：T16 證明 `[SL₂:Γ₁] = ψφ`、`[SL₂:Γ₀] = ψ`、`[SL₂:Γ] = ψφn` 恰好是
 E[n] 上「階為 n 的點」「循環子群」「辛基」的**個數**——B0003 的算術恆等式因此有了軌道意義。
 
@@ -62,5 +75,7 @@ moon check --target all && moon build && moon fmt && moon info
 ```
 
 `pkg.generated.mbti` 為 `moon info` 產生的公開介面檔，應與原始碼一同提交。
+
+B0005 的 CLI 追加：`braid`、`jacobian`、`jtable`、`arf`。
 
 B0002 的 CLI 追加：`matroids`、`matroid <名稱>`、`mcheck <名稱>`、`mcircuits <名稱>`、`negctl`。

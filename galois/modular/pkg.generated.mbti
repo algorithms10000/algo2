@@ -74,6 +74,8 @@ pub fn order_sl2_mod(Int32) -> Int32
 
 pub fn sl2_group(Int32) -> Array[Sl2]
 
+pub fn sl2_make(Int32, Int32, Int32, Int32, Int32) -> Sl2
+
 pub fn subset_by_bruteforce(SubgroupType, Int32, SubgroupType, Int32, Int32) -> Bool
 
 // Errors

@@ -1,6 +1,6 @@
 # B0001 全局公理伽羅瓦對應（Global Axiom–Galois Correspondence, GAGC）
 
-**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）**　　**狀態：R1–R6 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
+**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）**　　**狀態：R1–R7 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群 B_n ＋ 雅可比簇 J(G)）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
 
 本專案把「公理系統 → 定理 → 演算法」做成**可執行**的鏈條：一條全局公理 + 四條局部公理，
 推出四條定理與 13 條等式，再由定理的構造性內容導出 7 條演算法，並附一套能**主動找出反例**的檢核器。
@@ -26,7 +26,8 @@ B0001（本目錄）
 │   ├── B0001-定理體系.md
 │   ├── B0002-定理體系.md
 │   ├── B0003-定理體系.md
-│   └── B0004-定理體系.md
+│   ├── B0004-定理體系.md
+│   └── B0005-定理體系.md
 ├── galois/                  MoonBit 模組 arena/b0001
 │   ├── bitset/              稠密位元集（UInt64 字組）＋ GF(2) 消去所需的 xor
 │   ├── context/             形式上下文 K=(A,S,R)、Φ/Ψ、分量、文字格式 parse
@@ -35,6 +36,8 @@ B0001（本目錄）
 │   ├── matroid/             【B0002】擬陣：GF(2)、迴路、閉包、秩、平坦格、Moore 實現
 │   ├── modular/             【B0003】Γ(n)/Γ₀(n)/Γ₁(n)、PSL₂(ℤ)、SL₂(ℤ/N)、X₀(N) 不變量
 │   ├── elliptic/            【B0004】E[n]≅(ℤ/n)²、除多項式、Weil 配對、Paley/Ramsey、團複形同調
+│   ├── braid/               【B0005】B_n、置換商、Burau 表示、B_3 → PSL₂(ℤ) 接縫
+│   ├── jacobian/            【B0005】圖雅可比簇 J(G)：不變因子、τ 三路徑、Riemann–Roch、Arf、超立方體
 │   ├── registry/            樣本上下文與擬陣樣本（含 ℚ(ζ₈)/ℚ、K₃/K₄ 圖擬陣、Fano）
 │   ├── cmd/main/            CLI（接入與輸出接口）
 │   └── contexts/*.ctx       文字格式樣本（dump/parse 互逆）
@@ -482,3 +485,68 @@ paley_adjacency, paley_tournament, clique_number, is_strongly_regular, is_doubly
 self_complementary_witness, reversal_witness, flag_homology, components_of, rank_mod_p,
 circuits_bruteforce, flats_bruteforce, simplification_is_uniform, elliptic_report}`、
 `@registry.paley_context / paley_summary`。
+
+---
+
+# B0005：拓撲辮群 B_n 與圖雅可比簇 J(G)（R7）
+
+## 兩件事，一條接縫
+
+名詞群裡最後兩個「大名字」：**拓撲辮群**與**雅可比簇群分**。本輪各做成一個套件，並且都接到既有體系上：
+
+| 問題 | 答案 | 定理 |
+|---|---|---|
+| B0003 的 Γ(n) 是「什麼的核」？ | **B_3 ↠ PSL₂(ℤ) → PSL₂(ℤ/n)** 這條滿射的核 | **T24** |
+| 撓群 E[n] 的置換層從哪來？ | B_n ↠ S_n 的滿射（n! 個置換） | **T22** |
+| 代數曲線的 J(C) 怎麼算？ | 用圖的沙堆群 J(G) = ℤ^V/im L 落地 | **D-J3** |
+| \|J(G)\| 是什麼？ | 生成樹個數 τ(G)（三條獨立路徑） | **T25** |
+| J(C) 上的「Riemann–Roch 障礙」在哪？ | r(D) − r(K−D) = deg D − g + 1（全除子枚舉 0 反例） | **T28** |
+| 兩件之間的非交換／交換對偶 | Burau（非交換 → 線性）↔ 不變因子（交換 → 有限群） | T23、T26 |
+
+## 辮群（`galois/braid`，T22–T24，27 條檢核）
+
+| 編號 | 內容 | 實測 |
+|---|---|---|
+| **T22** | π: B_n ↠ S_n，\|im π\| = n!，P_n = ker π 指數 n! | n = 2..6：2, 6, 24, 120, 720 |
+| **T23** | Burau β_n: B_n → GL_n(ℤ[t<sup>±1</sup>]) **精確**成立；det = (−t)<sup>exp w</sup>；界內無偽核 | n = 2..6；`burau_fake_kernels(3,6) = 0`（**有界陳述**，不主張忠實） |
+| **T24** | (σ₁σ₂)³ ↦ −I；⟨T, STS⟩ 在 SL₂(ℤ/n) 中生成全群 | n = 2..12 全 PASS |
+
+## 雅可比簇（`galois/jacobian`，T25–T31，54 條檢核）
+
+| 圖 | β₁ | 不變因子 | \|J(G)\| = τ |
+|---|---|---|---|
+| K₃ | 1 | (1, 3) | 3 |
+| K₄ | 3 | (1, 4, 4) | 16 |
+| K₅ | 5 | (1, 5, 5, 5) | 125 |
+| C₄／C₅ | 1 | (1,1,4)／(1,1,1,5) | 4／5 |
+| θ／蝴蝶結 | 2 | (3)／(1,1,3,3) | 3／9 |
+| Q₂／Q₃／Q₄ | 1／5／17 | (1,1,4)／(1,1,1,1,2,8,24)／— | 4／384／42 467 328 |
+
+- **T25** \|J\| = τ 三路徑（Bareiss 行列式／暴力枚舉／子式 gcd 不變因子）；**T30** 再加上第四條：刪縮 τ = τ₋ + τ∕。
+- **T26** J(K_n) ≅ (ℤ/n)<sup>n−2</sup>，並與**外部登記的** Smith 正規形逐一比對。
+- **T27** β₁ = \|E\| − rank<sub>ℚ</sub>(L)；**並證僞** rank<sub>𝔽₂</sub>(L)（C₅：1 vs 4）。
+- **T28** Riemann–Roch 在 K₃/C₄/θ/K₄ 上全除子枚舉，違反 0。
+- **T29** Arf 計數 2<sup>g−1</sup>(2<sup>g</sup>±1)：g=1 → 3/1、g=2 → 10/6、g=3 → 36/28；Sp<sub>2g</sub>(𝔽₂) 不變（g ≤ 2 全矩陣枚舉）。
+- **T31** 超立方體網絡 Q_n（超立方體網絡群的可計算面）。
+
+## 這輪被抓到的六個錯（已修，記於 `algorithm.xlsx`）
+
+**BUG-7**「\|J[2]\| = 2^{β₁}」不是定理（K₄：4 vs 8）→ 降級為整除；**BUG-8** 圈秩不能用 rank<sub>𝔽₂</sub>（C₅）；
+**BUG-9** PSL₂ 的相等是「差 ±I」；**BUG-10** `in_laplacian_image` 漏驗 Σx = 0；
+**BUG-11** 手寫 SNF 會 ZeroDivision → 子式 gcd；**BUG-12** 對 Q₄ 用子式 gcd 會爆（C(32,16) 個子式）。
+
+## 怎麼跑
+
+```bash
+cd galois
+moon run cmd/main -- braid      # T22–T24：27 條檢核
+moon run cmd/main -- jacobian   # T25–T31：54 條檢核
+moon run cmd/main -- jtable     # 七個樣本圖的 g、不變因子、|J|、τ
+moon run cmd/main -- arf        # theta 特徵的 Arf 計數（g=1,2,3）
+```
+
+介面：`@braid.{BraidWord, bw_make, word_permutation, generated_permutation_count, burau_of_word, lm_det,
+burau_fake_kernels, psl_image, psl_image_generates_sl2, braid_report}`、
+`@jacobian.{Graph, laplacian, invariant_factors, jacobian_order, spanning_trees_by_det,
+spanning_trees_bruteforce, tau_deletion_contraction, divisor_rank, riemann_roch, canonical_divisor,
+count_refinements, arf_invariant, arf_of_pullback, hypercube, jacobian_report}`。

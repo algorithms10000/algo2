@@ -18,6 +18,10 @@
 ///   moon run cmd/main -- eptable          E[n] 的軌道計數與 B0003 同餘指數對照
 ///   moon run cmd/main -- paley            Paley 圖／競賽與團複形同調（T18、T19、T21）
 ///   moon run cmd/main -- paleyctx         paley-13 樣本上下文（A6＋A3′）
+///   moon run cmd/main -- braid           【B0005】辮群檢核（T22–T24）
+///   moon run cmd/main -- jacobian        【B0005】圖雅可比簇檢核（T25–T31）
+///   moon run cmd/main -- jtable          圖雅可比簇的結構表（不變因子、階、生成樹）
+///   moon run cmd/main -- arf             theta 特徵與 Arf 不變量
 ///   moon run cmd/main -- mreg             擬陣登記期望值核對（含延伸樣本）
 ///   moon run cmd/main -- mextall          B0002 延伸的全域定理檢核（T9–T12）
 ///   moon run cmd/main -- mcensus <n>      小型擬陣普查（n ≤ 5）
@@ -419,6 +423,62 @@ fn main {
         (if c.passed() { "✓ " } else { "✗ " }) +
         c.detail(),
       )
+    }
+  } else if cmd == "braid" {
+    let r = @braid.braid_report()
+    println(
+      "B0005 辮群 B_n 檢核（T22–T24）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "jacobian" {
+    let r = @jacobian.jacobian_report()
+    println(
+      "B0005 圖雅可比簇檢核（T25–T31）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "jtable" {
+    println("圖雅可比簇 J(G) 的結構表（T25、T26）")
+    let gs = @jacobian.sample_graphs()
+    for i = 0; i < gs.length(); i = i + 1 {
+      let (name, g) = gs[i]
+      let fs = @jacobian.invariant_factors(@jacobian.laplacian(g))
+      let sb = StringBuilder()
+      for k = 0; k < fs.length(); k = k + 1 {
+        if k > 0 {
+          sb.write_char(',')
+        }
+        sb.write_string(fs[k].to_string())
+      }
+      println(
+        "  " +
+        name +
+        "\t|V|=" +
+        g.num_vertices().to_string() +
+        " |E|=" +
+        g.num_edges().to_string() +
+        "\tg=" +
+        g.cycle_rank().to_string() +
+        "\t不變因子 [" +
+        sb.to_string() +
+        "]\t|J(G)|=" +
+        @jacobian.jacobian_order(g).to_string() +
+        "\tτ=" +
+        @jacobian.spanning_trees_bruteforce(g).to_string(),
+      )
+    }
+  } else if cmd == "arf" {
+    println("theta 特徵與 Arf 不變量（T29）")
+    for g = 1; g <= 3; g = g + 1 {
+      let c = @jacobian.count_refinements(g)
+      println("  g=" + g.to_string() + "：" + c.render())
     }
   } else if cmd == "paleyctx" {
     println(@registry.paley_summary())
