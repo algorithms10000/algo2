@@ -105,7 +105,7 @@ B0001（本目錄）
 
 | 編號 | 演算法 | 複雜度 | 位置 |
 |---|---|---|---|
-| A1 | 雙閉包 `closure_axioms` / `closure_stmts` | O((\|X\|·⌈n/64⌉ + \|Φ(X)\|·⌈m/64⌉) | `galois/closure.mbt` |
+| A1 | 雙閉包 `closure_axioms` / `closure_stmts` | O(\|X\|·⌈n/64⌉ + \|Φ(X)\|·⌈m/64⌉) | `galois/closure.mbt` |
 | A2 | NextClosure 枚舉全部閉集（多項式延遲） | 延遲 O(n·(⌈m/64⌉+⌈n/64⌉)) | `lattice/next_closure.mbt` |
 | A3 | Duquenne–Guiguès 典範基（偽內涵） | O(2ⁿ·n·\|Σ\|)（輸出可指數） | `lattice/basis.mbt` |
 | A4 | 分量分解（DSU）＋局部閉包 | O((m+n+\|R\|)·α) | `context/components.mbt`、`galois/closure.mbt` |
@@ -142,7 +142,7 @@ cd galois
 moon run cmd/main                       # 三份樣本的完整摘要（含逐條 PASS/FAIL）
 moon run cmd/main -- list               # 列出樣本
 moon run cmd/main -- info cyclotomic-q8 # 單一摘要
-moon run cmd/main -- concepts cycotomic… # 概念格（子群 ↔ 中間體）
+moon run cmd/main -- concepts cyclotomic-q8   # 概念格（子群 ↔ 中間體）
 moon run cmd/main -- basis  divisibility # DG 典範基
 moon run cmd/main -- check  two-blocks   # 只跑 A6 檢核
 moon run cmd/main -- closure cyclotomic-q8 '⟨σ⟩' '⟨τ⟩'   # 計算 cl_A(X)、Φ(X)、A4 局部閉包

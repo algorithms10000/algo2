@@ -160,7 +160,7 @@ add(ws, [
     ["E10", "cl_A(X) = A ⟺ Φ(X) = ∅（X2 下）", "坍縮判準", "T3(1)(3)", "local_closure.collapsed"],
     ["E11", "A = ⊎A_i，S = ⊎S_i，R = ⊎R_i", "分量分解", "X4", "components_of / decompose"],
     ["E12", "Σ = {P → cl_S(P) | P∈PI} 完備且非冗餘", "典範基", "T4", "canonical_basis + 3 檢核"],
-    ["E13", "上覆蓋(Y) = min{cl(Y∪{s}) | s∉Y}", "覆蓋式", "A5", "upper_covers_stmts"],
+    ["E13", "covers(Y) = min{cl_S(Y∪{s}) | s∉Y}", "上覆蓋式（對偶的 cl_S(Y∖{s}) 取極大者不成立，反例見開發期缺陷 BUG-2）", "A5", "upper_covers_stmts"],
 ])
 
 # ---------------------------------------------------------------- 樣本上下文
