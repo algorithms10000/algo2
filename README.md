@@ -1,6 +1,6 @@
 # B0001 全局公理伽羅瓦對應（Global Axiom–Galois Correspondence, GAGC）
 
-**登記編號：B0001（R1）＋ B0002（R2）＋ 延伸（R4）**　　**狀態：R1–R4 完成（R3 = A3′ 增量式 DG 基；R4 = B0002 延伸）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
+**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）**　　**狀態：R1–R5 完成（R3 = A3′ 增量式 DG 基；R4 = B0002 延伸；R5 = B0003 同餘子群）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
 
 本專案把「公理系統 → 定理 → 演算法」做成**可執行**的鏈條：一條全局公理 + 四條局部公理，
 推出四條定理與 13 條等式，再由定理的構造性內容導出 7 條演算法，並附一套能**主動找出反例**的檢核器。
@@ -23,13 +23,16 @@
 ```
 B0001（本目錄）
 ├── docs/                    數學合約：定理體系全文（含證明）
-│   └── B0001-定理體系.md
+│   ├── B0001-定理體系.md
+│   ├── B0002-定理體系.md
+│   └── B0003-定理體系.md
 ├── galois/                  MoonBit 模組 arena/b0001
 │   ├── bitset/              稠密位元集（UInt64 字組）＋ GF(2) 消去所需的 xor
 │   ├── context/             形式上下文 K=(A,S,R)、Φ/Ψ、分量、文字格式 parse
 │   ├── galois/              A1 閉包、A4 局部閉包、A6 檢核器、參考實作
 │   ├── lattice/             A2 NextClosure、A3 DG 典範基、A5 概念格與覆蓋
 │   ├── matroid/             【B0002】擬陣：GF(2)、迴路、閉包、秩、平坦格、Moore 實現
+│   ├── modular/             【B0003】Γ(n)/Γ₀(n)/Γ₁(n)、PSL₂(ℤ)、SL₂(ℤ/N)、X₀(N) 不變量
 │   ├── registry/            樣本上下文與擬陣樣本（含 ℚ(ζ₈)/ℚ、K₃/K₄ 圖擬陣、Fano）
 │   ├── cmd/main/            CLI（接入與輸出接口）
 │   └── contexts/*.ctx       文字格式樣本（dump/parse 互逆）
@@ -51,6 +54,10 @@ B0001（本目錄）
         ┌─────▼─────┐          ┌─────▼─────┐        ┌──────────┐
         │ registry  │          │  lattice  │        │ matroid  │
         └──┬─────┬──┘          └──┬─────┬──┘        └────┬─────┘
+           │     │                │     │         ┌──────┘  ┌──────────┐
+           │  ┌──▼────────────────▼─────▼─┐       │    ┌────▼─────┐
+           │  │        modular（B0003）    │◀──────┼────┤（獨立）  │
+           │  └───────────────────────────┘       │    └──────────┘
            │     │                │     │                │
            │     └────────┬───────┘     │        ┌───────┘
            │     └───────┬────────┘     │
@@ -67,7 +74,8 @@ B0001（本目錄）
                  └───────────┘
 ```
 
-（無環：bitset ← context ← galois ← lattice ← registry ← cmd/main）
+（無環：bitset ← context ← galois ← {lattice, matroid, modular} ← registry ← cmd/main）
+`modular` 只依賴 `galois`（取檢核型別），與 `matroid`、`lattice` 無耦合；`registry/congruence.mbt` 把 `modular` 造出的子群上下文餵給 `lattice` 的 A3′/A6。
 
 ### 動線（一次請求怎麼流動）
 
@@ -163,11 +171,11 @@ moon run cmd/main -- parse  "$(cat contexts/two-blocks.ctx)"  # 解析外部上�
 
 ## 8. 文件索引
 
-- 數學合約：[`docs/B0001-定理體系.md`](docs/B0001-定理體系.md)、[`docs/B0002-定理體系.md`](docs/B0002-定理體系.md)
+- 數學合約：[`docs/B0001-定理體系.md`](docs/B0001-定理體系.md)、[`docs/B0002-定理體系.md`](docs/B0002-定理體系.md)、[`docs/B0003-定理體系.md`](docs/B0003-定理體系.md)
 - 登記總帳：`algorithm.xlsx`（公理定義／命題引理定理／演算法／等式／樣本／名詞對應／開發期缺陷）
 - 工程流水帳：`Dev.txt`
 - 工程約束：`AGENTS.md`
-- 各資料夾說明：`docs/`、`galois/`、`galois/{bitset,context,galois,lattice,matroid,registry,cmd/main,contexts}/`、`tools/`、`ci/`、`uploads/`
+- 各資料夾說明：`docs/`、`galois/`、`galois/{bitset,context,galois,lattice,matroid,modular,registry,cmd/main,contexts}/`、`tools/`、`ci/`、`uploads/`
 
 ---
 
@@ -338,3 +346,63 @@ moon run cmd/main -- mcensus 5        # 406 個擬陣、38 個同構類、32 個
 is_binary_by_minors,is_binary_by_construction,is_regular,tutte_deletion_contraction,tutte_subsets,
 characteristic_definition,characteristic_from_tutte,proper_coloring_count,
 all_matroids_by_circuits,all_matroids_by_independent_sets,isomorphism_classes,extension_report}`。
+
+---
+
+# B0003：主同餘子群 Γ(n)/Γ₀(n)/Γ₁(n) 與射影模群 PSL₂(ℤ)（R5）
+
+`工程內容2.md` 的名詞群要求「**射影模群 PSL₂(ℤ)**」與「**主同餘子群 Γ(n)、Γ₀(n)、Γ₁(n)**」。
+B0001 把「子群 ↔ 中間體」的伽羅瓦對應做成了可執行框架，B0003 換上**真的一組子群**：同餘子群。
+它們由模 N 的同餘條件定義，因此「包含、指數、正規性」都能在有限群 SL₂(ℤ/N) 上**暴力判定**，
+給封閉公式一個完全獨立的對照；而 X₀(N) 又有古典的解析不變量（尖點、橢圓點、虧格）可作外部期望值。
+
+## 定理（詳見 `docs/B0003-定理體系.md`）
+
+| 編號 | 內容 | 驗證 |
+|---|---|---|
+| **T13** | [SL₂(ℤ):Γ₀(N)] = ψ(N)、[SL₂:Γ₁(N)] = ψ(N)φ(N)、[SL₂:Γ(N)] = ψ(N)φ(N)N = N³∏(1−1/p²) | N = 2..6 在 SL₂(ℤ/N) 上暴力數元素比對；另核對 [Γ₀:Γ₁]=φ(N)、[Γ₁:Γ]=N |
+| **T14** | X₀(N)：ν_∞ = Σ_{d\|N}φ(gcd(d,N/d))、ν₂、ν₃、**12g = 12 + ψ − 3ν₂ − 4ν₃ − 6ν_∞** | 與古典虧格表 N = 1..24 **逐一相符**；表外明示「未檢核」 |
+| P-C1／P-C2 | Γ(N) ◁ SL₂(ℤ/N)；Γ₁(N) ◁ Γ₀(N)、Γ₀/Γ₁ ≅ (ℤ/N)^×，但 N ≥ 2 時 Γ₁(N) **不**正規於 SL₂ | 全元素共軛暴力；附**顯式共軛見證** |
+| P-C3／P-C4 | −I ∈ Γ₀(N) 恆真；−I ∈ Γ₁(N)/Γ(N) ⟺ N\|2；N ≥ 3：\|PSL₂(ℤ/N)\| = \|SL₂\|/2，N = 2：PSL₂ = SL₂ = S₃ | ± 成對暴力計數 |
+
+## 演算法
+
+A20 算術函數（φ、ψ、χ₋₄、χ₋₃、ν₂、ν₃、ν_∞、g，全整數運算，12g 整除性即時攔錯）、
+A21 有限群暴力（`sl2_group`、`in_subgroup`、指數／包含／正規性／共軛見證）、
+A22 同餘子群上下文（12 個子群的包含關係，由 SL₂(ℤ/12) 的暴力判定給出）。
+
+## 驗收（真數字）
+
+**虧格表**（`moon run cmd/main -- genus`，N = 1..24 全部「✓古典」）：
+
+| N | 1 | 2 | 3 | 4 | 5 | 6 | 11 | 12 | 17 | 19 | 22 | 23 | 24 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ψ | 1 | 3 | 4 | 6 | 6 | 12 | 12 | 24 | 18 | 20 | 36 | 24 | 48 |
+| ν_∞ | 1 | 2 | 2 | 3 | 2 | 4 | 2 | 6 | 2 | 2 | 4 | 2 | 8 |
+| g | 0 | 0 | 0 | 0 | 0 | 0 | **1** | 0 | 1 | 1 | **2** | **2** | 1 |
+
+**樣本上下文 `congruence-12`**：A = S = { Γ₀(2), Γ(2), Γ₀(3), Γ₁(3), Γ(3), Γ₀(4), Γ₁(4), Γ(4), Γ₀(6), Γ₁(6), Γ(6), SL₂(ℤ) }，
+R = 包含（SL₂(ℤ/12) 暴力判定）。實測 |R| = 47、|ℭ_S| = 13、DG 基 |Σ| = 16（A3′ 走 29 步 vs 暴力 4095），
+**B0001 的 A6 8/8、A3′ 4/4 全通過**——B0001 的結構定理在這一組真子群上逐字成立。
+（Γ₁(2) 被排除：φ(2)=1 ⇒ Γ₀(2)=Γ₁(2)，同時入表會破壞分離性 X3。）
+
+## 這輪被抓到的兩個錯（已修，記於 `algorithm.xlsx`）
+
+1. **BUG-3**：`(a*d − b*c) % n == 1` —— MoonBit 的 `%` 對負數給負餘數，N = 2 時只數到 3 個元素（正確 6）。
+   改為 `norm_mod`。**最小的例子最能翻臉。**
+2. **DOC-4**：把「−I ∈ Γ ⟺ N\|2」套到三種子群（其實 −I ∈ Γ₀(N) 恆真，因 c = 0）；
+   又把 |PSL₂(ℤ/N)| 一律寫成 |SL₂|/2（N = 2 時 −I ≡ I，故 PSL₂ = SL₂ = S₃）。
+
+## 怎麼跑
+
+```bash
+cd galois
+moon run cmd/main -- modular      # T13、T14：62 條檢核
+moon run cmd/main -- genus        # ψ/φ/ν₂/ν₃/ν_∞/g 並與古典表比對（N=1..24）
+moon run cmd/main -- congruence   # 樣本上下文：A6 8/8、DG 基 |Σ|=16
+```
+
+介面：`@modular.{sl2_group, in_subgroup, index_by_bruteforce, subset_by_bruteforce,
+is_normal_by_bruteforce, conjugation_witness, gamma_zero, gamma_one, gamma_level, full_sl2,
+dedekind_psi, euler_phi, cusp_count, elliptic_two_count, elliptic_three_count, genus_x0,
+classical_genus, modular_report}`、`@registry.congruence_context / congruence_summary`。

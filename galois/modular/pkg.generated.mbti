@@ -1,0 +1,106 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/modular"
+
+import {
+  "arena/b0001/galois",
+}
+
+// Values
+pub fn check_containment_chain(Int32) -> @galois.Check
+
+pub fn check_cusp_special_values() -> @galois.Check
+
+pub fn check_genus(Int32) -> @galois.Check
+
+pub fn check_group_order(Int32) -> @galois.Check
+
+pub fn check_index_formulas(Int32) -> @galois.Check
+
+pub fn check_level_one() -> @galois.Check
+
+pub fn check_neg_one(Int32) -> @galois.Check
+
+pub fn check_normality(Int32) -> @galois.Check
+
+pub fn check_psl2_order(Int32) -> @galois.Check
+
+pub fn check_quotient_orders(Int32) -> @galois.Check
+
+pub fn classical_genus(Int32) -> Int32?
+
+pub fn conjugation_witness(SubgroupType, Int32, Int32) -> (Sl2, Sl2, Sl2)?
+
+pub fn cusp_count(Int32) -> Int32
+
+pub fn dedekind_psi(Int32) -> Int32
+
+pub fn elliptic_three_count(Int32) -> Int32
+
+pub fn elliptic_two_count(Int32) -> Int32
+
+pub fn euler_phi(Int32) -> Int32
+
+pub fn factorize(Int32) -> Array[(Int32, Int32)]
+
+pub fn full_sl2() -> SubgroupType
+
+pub fn gamma_level() -> SubgroupType
+
+pub fn gamma_one() -> SubgroupType
+
+pub fn gamma_zero() -> SubgroupType
+
+pub fn gcd(Int32, Int32) -> Int32
+
+pub fn genus_x0(Int32) -> Int32
+
+pub fn in_subgroup(Sl2, SubgroupType, Int32) -> Bool
+
+pub fn index_by_bruteforce(SubgroupType, Int32) -> Int32
+
+pub fn index_gamma0(Int32) -> Int32
+
+pub fn index_gamma1(Int32) -> Int32
+
+pub fn index_gamma_level(Int32) -> Int32
+
+pub fn is_normal_by_bruteforce(SubgroupType, Int32, Int32) -> Bool
+
+pub fn modular_report(Int32) -> @galois.Report
+
+pub fn norm_mod(Int32, Int32) -> Int32
+
+pub fn order_sl2_mod(Int32) -> Int32
+
+pub fn sl2_group(Int32) -> Array[Sl2]
+
+pub fn subset_by_bruteforce(SubgroupType, Int32, SubgroupType, Int32, Int32) -> Bool
+
+// Errors
+
+// Types and methods
+pub struct Sl2 {
+  n : Int32
+  a : Int32
+  b : Int32
+  c : Int32
+  d : Int32
+}
+pub fn Sl2::in_gamma0(Self) -> Bool
+pub fn Sl2::in_gamma1(Self) -> Bool
+pub fn Sl2::in_gamma_level(Self) -> Bool
+pub fn Sl2::inverse(Self) -> Self
+pub fn Sl2::key(Self) -> String
+pub fn Sl2::mul(Self, Self) -> Self
+
+pub enum SubgroupType {
+  GammaZero
+  GammaOne
+  GammaLevel
+  FullSl2
+}
+pub fn SubgroupType::label(Self) -> String
+
+// Type aliases
+
+// Traits

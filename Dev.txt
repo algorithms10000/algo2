@@ -304,3 +304,56 @@ B0001 開發流水帳（Dev.txt）
 
 [本回合未完成]
   無。R4 交付範圍（T9–T12 全部定理＋4 個新檔＋3 份延伸樣本＋普查＋17 工作表＋CI 10 步＋文件＋commit）全部完成。
+
+================================================================================
+R5（2026-11-04）：B0003 主同餘子群 Γ(n)/Γ₀(n)/Γ₁(n) 與射影模群 PSL₂(ℤ)
+================================================================================
+[指示] 承接「先 A3、再 B0002、最後 B0003」的順序；B0003 為本階段最後一塊，須程式＋檢核＋文件＋
+       登記表＋CI＋commit 一次收尾。
+[動工前的規劃] 為什麼選同餘子群：名詞群同時要求「射影模群 PSL₂(ℤ)」與「Γ(n)/Γ₀/Γ₁」。
+  同餘子群由模 N 同餘條件定義 ⇒ 包含、指數、正規性都能在有限群 SL₂(ℤ/N) 上暴力判定 ⇒
+  封閉公式有完全獨立的對照；X₀(N) 又有古典解析不變量（尖點／橢圓點／虧格）可作外部期望值。
+  這三點正好把「真實執行、可反駁」的工程約束兌現。
+
+[已完成]
+1. galois/modular/arith.mbt：factorize、euler_phi、dedekind_psi、chi4、chi3、gcd、
+   elliptic_two_count(ν₂)、elliptic_three_count(ν₃)、cusp_count(ν_∞)、genus_x0（整數式
+   12g = 12 + ψ − 3ν₂ − 4ν₃ − 6ν_∞，不整除即 abort）、index_gamma0/1/level、order_sl2_mod、
+   classical_genus（古典虧格表；表外回 None，不假裝通過）。
+2. galois/modular/sl2.mbt：Sl2(n,a,b,c,d)、key/mul/inverse/norm_mod、in_gamma0/1/level、
+   sl2_group(n) 暴力列舉、SubgroupType{GammaZero,GammaOne,GammaLevel,FullSl2}＋label、
+   in_subgroup、index_by_bruteforce、subset_by_bruteforce、is_normal_by_bruteforce、
+   conjugation_witness、跨套件建構子 gamma_zero/gamma_one/gamma_level/full_sl2。
+3. galois/modular/checks.mbt：check_group_order、check_index_formulas、check_containment_chain、
+   check_normality、check_quotient_orders、check_neg_one、check_psl2_order、check_genus（N=1..25）、
+   check_cusp_special_values、check_level_one、modular_report(level_max)。
+4. galois/registry/congruence.mbt：12 列同餘子群樣本上下文 congruence-12（R 由 SL₂(ℤ/12) 暴力判定）、
+   congruence_context、congruence_summary。
+5. CLI：-- modular / -- congruence / -- genus；cmd/main/moon.pkg 加 modular。
+6. docs/B0003-定理體系.md、galois/modular/README.md、README.md（B0003 章）、docs/README.md、
+   registry/README.md、cmd/main/README.md。
+7. tools/make_registry.py 新增「B0003 同餘子群」「B0003 樣本」兩表＋說明頁 B0003 條目＋
+   缺陷頁補 BUG-3、DOC-4 → algorithm.xlsx 現為 19 個工作表。
+8. ci/ci.sh 由 10 步擴為 11 步（第 10 步：T13/T14 檢核 62/62、虧格 24/24、congruence-12 的 |R|=47／
+   |ℭ_S|=13／A6 8/8／A3′ 4/4）。
+
+[本輪由檢核器抓到並已修正的兩個錯]
+- BUG-3：sl2_group 用 (a*d − b*c) % n == 1 判行列式；MoonBit 的 % 對負數給負餘數（−1 % 2 = −1），
+  N=2 只數到 3 個元素（正確 6）。→ 改 norm_mod(x, n) 歸一化。首輪 42/52，修後 52/52。
+- DOC-4：把「−I ∈ Γ ⟺ N|2」套到三種子群（實則 −I ∈ Γ₀(N) 恆真，因 c=0）；又把 |PSL₂(ℤ/N)|
+  一律寫成 |SL₂|/2（N=2 時 −I ≡ I，PSL₂ = SL₂ = S₃，6 階）。→ 兩條檢核 check_neg_one、
+  check_psl2_order 分開處理，並各留註解。修後 62/62。
+
+[實測真數字]
+- moon run cmd/main -- modular   → 62/62 通過（0 FAIL）
+- moon run cmd/main -- genus     → N=1..24 全部「✓古典」（例如 N=11 g=1、N=22 g=2、N=23 g=2、
+                                   N=24 ψ48 ν_∞8 g=1）
+- moon run cmd/main -- congruence → |A|=|S|=12、|R|=47、|ℭ_S|=13、DG 基 |Σ|=16（走訪 29 步／
+                                   跳躍 141／cl_S 29／偽閉包迭代 286，vs A3 暴力 4095）、
+                                   B0001 A6 8/8、A3′ 4/4
+
+[聯網搜查] 本輪未再查（工具鏈 0.1.20261102 已裝、語法沿用 R1–R4 已驗證的寫法；新增 API 皆為自寫）。
+
+[未完成／下一步] 本輪結束前跑 bash ci/ci.sh（11 步）並 commit。之後可挑的名詞群缺口：
+  真 KK-理論、內部張量積、循環同調、漸新態射、橢圓曲線 n 等分點群（E[n] ≅ (ℤ/n)²）、
+  雅可比簇、拓撲辮群 B_n、超立方體網絡群、正則圖邊置換群。

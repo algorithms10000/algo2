@@ -4,4 +4,5 @@ import {
   "arena/b0001/galois",
   "arena/b0001/lattice",
   "arena/b0001/matroid",
+  "arena/b0001/modular",
 }

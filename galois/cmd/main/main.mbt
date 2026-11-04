@@ -11,6 +11,9 @@
 ///   moon run cmd/main -- dg <名稱>        A3′ 增量式典範基（統計＋檢核）
 ///   moon run cmd/main -- dgbasis <名稱>   列出每一條蘊含
 ///   moon run cmd/main -- mext <名稱>      B0002 延伸（二元性／正則性／對偶／Tutte）
+///   moon run cmd/main -- modular          B0003 同餘子群檢核（T13、T14）
+///   moon run cmd/main -- congruence       B0003 樣本上下文（A6＋DG 基）
+///   moon run cmd/main -- genus            印出 X₀(N) 的 ψ/φ/ν₂/ν₃/ν_∞/g 並與古典表比對
 ///   moon run cmd/main -- mreg             擬陣登記期望值核對（含延伸樣本）
 ///   moon run cmd/main -- mextall          B0002 延伸的全域定理檢核（T9–T12）
 ///   moon run cmd/main -- mcensus <n>      小型擬陣普查（n ≤ 5）
@@ -330,6 +333,52 @@ fn main {
         None => println("找不到擬陣：" + rest[0])
         Some(reg) => println(@registry.extension_summary(reg))
       }
+    }
+  } else if cmd == "modular" {
+    let r = @modular.modular_report(6)
+    println(
+      "B0003 同餘子群檢核（T13、T14）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "congruence" {
+    println(@registry.congruence_summary())
+  } else if cmd == "genus" {
+    println(
+      "X₀(N) 的解析不變量（N = 1..24；g = (12 + ψ − 3ν₂ − 4ν₃ − 6ν_∞)/12）",
+    )
+    for n = 1; n <= 24; n = n + 1 {
+      let g = @modular.genus_x0(n)
+      let c = @modular.classical_genus(n)
+      let tag = match c {
+        None => "（無外部期望值）"
+        Some(want) =>
+          if want == g {
+            " ✓古典"
+          } else {
+            " ✗古典=" + want.to_string()
+          }
+      }
+      println(
+        "  N=" +
+        n.to_string() +
+        "	ψ=" +
+        @modular.dedekind_psi(n).to_string() +
+        "	φ=" +
+        @modular.euler_phi(n).to_string() +
+        "	ν₂=" +
+        @modular.elliptic_two_count(n).to_string() +
+        "	ν₃=" +
+        @modular.elliptic_three_count(n).to_string() +
+        "	ν_∞=" +
+        @modular.cusp_count(n).to_string() +
+        "	g=" +
+        g.to_string() +
+        tag,
+      )
     }
   } else if cmd == "mreg" {
     let r = @registry.check_registered_expectations()

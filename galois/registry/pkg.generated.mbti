@@ -14,6 +14,10 @@ pub fn census_summary(Int32) -> String
 
 pub fn check_registered_expectations() -> @galois.Report
 
+pub fn congruence_context() -> @context.FormalContext
+
+pub fn congruence_summary() -> String
+
 pub fn cyclotomic_context() -> @context.FormalContext
 
 pub fn divisibility_context() -> @context.FormalContext

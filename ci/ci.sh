@@ -16,16 +16,16 @@ fi
 export PATH="$(dirname "$MOON"):$PATH"
 echo "工具鏈：$("$MOON" version)"
 
-step "1/10 moon check --target all"
+step "1/11 moon check --target all"
 ( cd "$ROOT/galois" && "$MOON" check --target all ); check $? "全目標型別檢查"
 
-step "2/10 moon build"
+step "2/11 moon build"
 ( cd "$ROOT/galois" && "$MOON" build ); check $? "建置 executable"
 
-step "3/10 moon fmt --check"
+step "3/11 moon fmt --check"
 ( cd "$ROOT/galois" && "$MOON" fmt --check ); check $? "格式一致"
 
-step "4/10 樣本上下文 A6 檢核（13 條 × 3 份）"
+step "4/11 樣本上下文 A6 檢核（13 條 × 3 份）"
 out="$( cd "$ROOT/galois" && "$MOON" run cmd/main 2>&1 )"
 echo "$out" | grep -E '上下文：|檢核（A6）|\|ℭ_A\|'
 pass_lines=$(echo "$out" | grep -c '^  \[PASS\]')
@@ -39,7 +39,7 @@ else
   echo "   ✗ P5：|ℭ_A| 與 |ℭ_S| 不一致"; FAILED=1
 fi
 
-step "5/10 B0002 擬陣樣本（A12 八條 × 4 份）與期望值核對"
+step "5/11 B0002 擬陣樣本（A12 八條 × 4 份）與期望值核對"
 m_all="$( cd "$ROOT/galois"; for mn in U24 'M(K3)' 'M(K4)' Fano; do "$MOON" run cmd/main -- matroid "$mn"; done 2>&1 )"
 echo "$m_all" | grep -E '擬陣：|期望值核對|擬陣檢核（A12）'
 m_pass=$(echo "$m_all" | grep -c '^  \[PASS\]')
@@ -52,7 +52,7 @@ else
   echo "   ✗ B0002 擬陣檢核異常"; FAILED=1
 fi
 
-step "6/10 負控制：區間凸包必須 FAIL 交換公理（T8：檢核器不得恆真）"
+step "6/11 負控制：區間凸包必須 FAIL 交換公理（T8：檢核器不得恆真）"
 neg="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- negctl 2>&1 )"
 echo "$neg" | grep -E '負控制|check_exchange 結果|\[FAIL\]'
 if echo "$neg" | grep -q 'FAIL（正確：非擬陣）' && echo "$neg" | grep -q '^  \[FAIL\] X5'; then
@@ -61,7 +61,7 @@ else
   echo "   ✗ 負控制未失敗：檢核器可能失效"; FAILED=1
 fi
 
-step "7/10 B0002 繼承：K_ℱ* 上跑 B0001 的 A6（M(K3) 13/13）"
+step "7/11 B0002 繼承：K_ℱ* 上跑 B0001 的 A6（M(K3) 13/13）"
 inh="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- mcheck 'M(K3)' 2>&1 )"
 echo "$inh" | grep -E '繼承檢核'
 if echo "$inh" | grep -q 'B0001 繼承檢核（K_ℱ 上的 A6）：13/13 通過'; then
@@ -70,7 +70,7 @@ else
   echo "   ✗ B0001 繼承檢核未全通"; FAILED=1
 fi
 
-step "8/10 A3′ 增量式典範基（與暴力版同族 × 3 份、n=24 靠 E16 判定）"
+step "8/11 A3′ 增量式典範基（與暴力版同族 × 3 份、n=24 靠 E16 判定）"
 dg_out="$( cd "$ROOT/galois"; for dn in divisors-12 divisors-180 divisors-240 divisors-420; do "$MOON" run cmd/main -- dg "$dn"; done 2>&1 )"
 echo "$dg_out" | grep -E '上下文：|A3′ 走訪|\[PASS\]|\[FAIL\]' | sed 's/^/  /'
 dg_pass=$(echo "$dg_out" | grep -c '\[PASS\]')
@@ -83,7 +83,7 @@ else
   echo "   ✗ A3′ 檢核異常"; FAILED=1
 fi
 
-step "9/10 B0002 延伸：T9–T12 全域檢核、7 份樣本、n=4 普查"
+step "9/11 B0002 延伸：T9–T12 全域檢核、7 份樣本、n=4 普查"
 ext_all="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- mextall 2>&1 )"
 echo "$ext_all" | sed 's/^/  /'
 ext_global_pass=$(echo "$ext_all" | grep -c '^  \[PASS\]')
@@ -109,7 +109,28 @@ else
   echo "   ✗ B0002 延伸檢核異常"; FAILED=1
 fi
 
-step "10/10 algorithm.xlsx 可重建且與提交版本一致"
+step "10/11 B0003 同餘子群（T13、T14）與樣本上下文 congruence-12"
+mod_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- modular 2>&1 )"
+echo "$mod_out" | sed 's/^/  /'
+mod_pass=$(echo "$mod_out" | grep -c '^  \[PASS\]')
+mod_fail=$(echo "$mod_out" | grep -c '^  \[FAIL\]')
+gen_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- genus 2>&1 )"
+echo "$gen_out" | tail -5 | sed 's/^/  /'
+gen_ok=$(echo "$gen_out" | grep -c '✓古典')
+con_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- congruence 2>&1 )"
+echo "$con_out" | sed 's/^/  /'
+echo "   PASS=$mod_pass 真失敗=$mod_fail 虧格相符=$gen_ok/24"
+if [[ "$mod_pass" -eq 62 && "$mod_fail" -eq 0 && "$gen_ok" -eq 24 ]] \
+  && echo "$con_out" | grep -q '|R|=47' \
+  && echo "$con_out" | grep -q '|ℭ_S|=13' \
+  && echo "$con_out" | grep -q 'B0001 A6 檢核：8/8 通過' \
+  && echo "$con_out" | grep -q 'A3′ 檢核：4/4 通過'; then
+  echo "   ✓ B0003 全數通過（T13 指數公式、T14 虧格表 24/24、樣本上下文 A6 8/8＋DG 4/4）"
+else
+  echo "   ✗ B0003 檢核異常"; FAILED=1
+fi
+
+step "11/11 algorithm.xlsx 可重建且與提交版本一致"
 tmp_xlsx="$(mktemp -d)"
 ( cd "$ROOT" && cp tools/make_registry.py "$tmp_xlsx/" && cd "$tmp_xlsx" && python3 make_registry.py >/dev/null ) \
   && python3 - "$ROOT/algorithm.xlsx" "$tmp_xlsx/algorithm.xlsx" <<'PY'
