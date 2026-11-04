@@ -1,6 +1,6 @@
 # galois/ — B0001 MoonBit 模組（arena/b0001）
 
-本資料夾是 MoonBit 模組根（`moon.mod`）。下面 10 個套件構成 B0001–B0005 的全部實作。
+本資料夾是 MoonBit 模組根（`moon.mod`）。下面 11 個套件構成 B0001–B0006 的全部實作。
 
 ## 資料夾視角的依賴關係
 
@@ -10,7 +10,8 @@ cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context
     │             ├──▶ modular  ──▶ galois（B0003）
     │             ├──▶ elliptic ──▶ modular, galois（B0004）
     │             ├──▶ braid    ──▶ modular, galois（B0005：辮群）
-    │             └──▶ jacobian ──▶ galois（B0005：圖雅可比簇）
+    │             ├──▶ jacobian ──▶ galois（B0005：圖雅可比簇）
+    │             └──▶ kk       ──▶ braid, modular, context, lattice, galois（B0006：KK）
     └──────────────────────▶ lattice/galois/modular/elliptic（直接使用）
 ```
 
@@ -56,6 +57,17 @@ cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context
 **關鍵接縫**：T16 證明 `[SL₂:Γ₁] = ψφ`、`[SL₂:Γ₀] = ψ`、`[SL₂:Γ] = ψφn` 恰好是
 E[n] 上「階為 n 的點」「循環子群」「辛基」的**個數**——B0003 的算術恆等式因此有了軌道意義。
 
+## B0006 追加（真 KK-理論片段，見 `kk/README.md`）
+
+| 編號 | 名稱 | 落點 |
+|---|---|---|
+| T32 | Hilbert 模秩向量 ⇒ K₀(A) = ℤ^r | `kk/hilbert.mbt` |
+| T33 | 六項正合列的秩—零化度判準（Toeplitz／分裂擴張＋負控制） | `kk/cstar.mbt` |
+| T34 | K₀(O_n) = ℤ/(n−1)（MvN 計算 → coker/ker，三路徑） | `kk/cstar.mbt` |
+| T35–T38 | UCT 值表、Kasparov 乘積、KK-等價、穩定性與 Bott | `kk/kasparov.mbt` |
+| T39 | index(T_f) = −wind(f)（精確有理＋幅角原理） | `kk/hilbert.mbt` |
+| T40 | 與 B0001（理想格 A6/A3′）、B0003（SL₂(ℤ/n) 共軛類）、B0005（S_n）的接縫 | `kk/sym.mbt`、`kk/checks.mbt` |
+
 ## 本模組已實作的演算法
 
 A1 雙閉包（`galois`）、A2 NextClosure（`lattice`）、A3 DG 典範基（`lattice`）、
@@ -75,6 +87,8 @@ moon check --target all && moon build && moon fmt && moon info
 ```
 
 `pkg.generated.mbti` 為 `moon info` 產生的公開介面檔，應與原始碼一同提交。
+
+B0006 的 CLI 追加：`kk`、`kktable`、`kksix`、`kkctx`。
 
 B0005 的 CLI 追加：`braid`、`jacobian`、`jtable`、`arf`。
 

@@ -1,4 +1,4 @@
-# docs/ — 數學合約（B0001–B0005）
+# docs/ — 數學合約（B0001–B0006）
 
 ## 檔案
 
@@ -8,6 +8,7 @@
 | `B0003-定理體系.md` | D-C1–D-C5 定義、P-C1–P-C4 命題、T13（指數公式 ψ、ψφ、ψφN = N³∏(1−1/p²)）、T14（X₀(N) 的尖點／橢圓點／虧格公式，與古典虧格表 N=1..24 全數相符）、A20–A22、樣本上下文 `congruence-12`、DOC-4／BUG-3 修正紀錄 |
 | `B0004-定理體系.md` | D-E1–D-E7 定義、P-E1–P-E5 命題、T15（撓群三刻劃）、T16（軌道計數＝同餘指數）、T17（Galois 等變/GSp₂）、T18（Paley/Ramsey）、T19（鏡像對稱）、T20（撓群擬陣）、T21（團複形同調）、A23–A28、§10 手法落地對照表、BUG-4/5/6 |
 | `B0005-定理體系.md` | A-B1–A-B3／A-J1–A-J2 公理、D-B1–D-B6／D-J1–D-J7 定義、P-B1–P-B4／P-J1–P-J5 命題、T22（B_n↠S_n，n!）、T23（Burau 表示＋det=(−t)^{exp}＋有界偽核）、T24（B_3→PSL₂(ℤ)→PSL₂(ℤ/n)，n=2..12）、T25（\|J\|=τ 三路徑）、T26（J(K_n)≅(ℤ/n)^{n−2}＋外部 SNF）、T27（圈秩並證僞 rank_{𝔽₂}）、T28（Riemann–Roch）、T29（Arf 2^{g−1}(2^g±1)＋Sp 不變）、T30（刪縮）、T31（超立方體 Q_n）、A29–A35、§10 二十動詞落地表、§11 十四式組合範例落點表、BUG-7..12 |
+| `B0006-定理體系.md` | A-K1–A-K4 公理、D-K1–D-K8 定義、P-K1–P-K6 命題、T32（Hilbert 模秩向量）、T33（六項正合列秩判準＋負控制）、T34（K₀(O_n) = ℤ/(n−1) 三路徑）、T35（UCT 值表）、T36（Kasparov 乘積）、T37（KK-等價與 K-理論不完備）、T38（穩定性／Bott）、T39（index = −wind）、T40（B0001／B0003／B0005 接縫）、A36–A43、§11 二十動詞落地表、§12 十四式落點表、BUG-13..16 |
 | `B0002-定理體系.md` | D-B1–D-B11 定義、X5–X7 公理、P-B1–P-B8 命題、T5–T12 定理、E-B1–E-B21 等式、A8–A19 演算法、§9 與 §10–13 的實測修正紀錄（DOC-1/2/3、AXIOM-1、FIX-1、NOTE-1、THM-1/2/3） |
 
 ## 已獲得的定理清單（依編號）
@@ -21,7 +22,8 @@ T12（Tutte 與 Whitney）；
 B0003：D-C1–D-C5、P-C1–P-C4（Γ(N) 正規、Γ₁ 只在 Γ₀ 中正規、−I 的歸屬、|PSL₂|）、
 **T13**（[SL₂:Γ₀]=ψ、[SL₂:Γ₁]=ψφ、[SL₂:Γ]=ψφN）、**T14**（X₀(N) 的 ν_∞／ν₂／ν₃／虧格）；
 B0004：T15–T21（撓群 E[n]、軌道＝指數、Galois 等變、Paley/Ramsey、鏡像、撓群擬陣、團複形同調）；
-B0005：T22–T24（辮群、Burau、模群接縫）、T25–T31（\|J\|=τ、SNF、圈秩、RR、Arf、刪縮、超立方體）。
+B0005：T22–T24（辮群、Burau、模群接縫）、T25–T31（\|J\|=τ、SNF、圈秩、RR、Arf、刪縮、超立方體）；
+B0006：T32–T34（秩向量、六項正合列、K₀(O_n)）、T35–T38（UCT、乘積、等價、穩定性）、T39（index = −wind）、T40（跨輪接縫）。
 
 ## 已實作的演算法清單
 
@@ -30,6 +32,8 @@ A1 雙閉包、A2 NextClosure、A3 DG 典範基、A4 分量＋局部閉包、A5 
 B0002：A8 迴路消去閉包、A9 秩、A10 平坦集＋幾何格、A11 Moore 實現、A12 擬陣檢核＋B0001 繼承、
 A13 GF(2) 線性擬陣、A14 交換公理反例搜尋；B0002 延伸 A15–A19；
 B0004：A23 BigInt ψ_n、A24 撓群與配對、A25 線性擬陣、A26 Paley 構造、A27 團複形同調、A28 paley-13 上下文；
+B0006：A36 交換群引擎（SNF/Hom/Ext）、A37 六項正合列檢核、A38 C*-代數模型、A39 UCT 計算器、
+A40 Kasparov 乘積、A41 Hilbert 模秩向量、A42 指標與繞數、A43 群 K₀；
 B0005：A29 辮字與置換引擎、A30 Laurent 多項式與 Burau、A31 BigMat 與 SNF、A32 生成樹三路徑、
 A33 除子引擎、A34 𝔽₂ 二次型引擎、A35 超立方體建構；
 B0003：A20 算術函數（φ、ψ、χ₋₄、χ₋₃、ν₂、ν₃、ν_∞、g）、A21 有限群暴力（SL₂(ℤ/N)、指數、包含、正規性、共軛見證）、
@@ -42,6 +46,8 @@ docs/B0001-定理體系.md  ──（定義合約）──▶  galois/ 各套件
 docs/B0002-定理體系.md  ──（擬陣合約）──▶  galois/matroid ──▶ B0001 的 T1 適用於 K_ℱ
 docs/B0003-定理體系.md  ──（同餘合約）──▶  galois/modular  ──▶ galois/registry（congruence-12）──▶ lattice 的 A3′/A6
 docs/B0004-定理體系.md  ──（撓群合約）──▶  galois/elliptic ──▶ modular（T16 併攏）＋ galois/registry（paley-13）
+docs/B0006-定理體系.md  ──（KK 合約）──▶  galois/kk（T32–T40）
+                        ──（併攏）──▶  braid（T40a）、modular（T40b）、context＋lattice＋galois（T40c）
 docs/B0005-定理體系.md  ──（辮群／雅可比合約）──▶  galois/braid（T22–T24）＋ galois/jacobian（T25–T31）
                         ──（併攏）──▶  modular（T24 用 sl2_make 驗模 n 生成）
                         ◀──（實作回饋）──   algorithm.xlsx「開發期缺陷」頁

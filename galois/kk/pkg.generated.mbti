@@ -1,0 +1,347 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/kk"
+
+import {
+  "arena/b0001/context",
+  "arena/b0001/galois",
+}
+
+// Values
+pub fn algebra_samples() -> Array[(String, KPair)]
+
+pub fn bit_of(Int32, Int32) -> Bool
+
+pub fn check_cuntz_ktheory(Int32) -> @galois.Check
+
+pub fn check_hilbert_module_k0() -> @galois.Check
+
+pub fn check_index_is_boundary() -> @galois.Check
+
+pub fn check_index_winding() -> @galois.Check
+
+pub fn check_k_theory_incomplete() -> @galois.Check
+
+pub fn check_kk_equivalence_cases() -> @galois.Check
+
+pub fn check_kk_product_assoc() -> @galois.Check
+
+pub fn check_kk_product_unit() -> @galois.Check
+
+pub fn check_projection_algebra() -> @galois.Check
+
+pub fn check_seam_context_axioms() -> @galois.Check
+
+pub fn check_seam_context_zero_quotient() -> @galois.Check
+
+pub fn check_seam_sl2_conjugacy(Int32) -> @galois.Check
+
+pub fn check_seam_symmetric_group(Int32) -> @galois.Check
+
+pub fn check_six_term_negative_control() -> @galois.Check
+
+pub fn check_six_term_split(Array[Bool]) -> @galois.Check
+
+pub fn check_six_term_toeplitz() -> @galois.Check
+
+pub fn check_stability_bott() -> @galois.Check
+
+pub fn check_uct_case(String, KPair, KPair, FgAb) -> @galois.Check
+
+pub fn check_winding_general() -> @galois.Check
+
+pub fn coker_of(IntMat) -> FgAb
+
+pub fn cuntz_ktheory(Int32) -> KPair
+
+pub fn fda(Array[Int32]) -> FDA
+
+pub fn fda_dim(FDA) -> Int64
+
+pub fn fda_extension(FDA, Array[Bool]) -> SixTerm
+
+pub fn fda_ideal(FDA, Array[Bool]) -> FDA
+
+pub fn fda_is_simple(FDA) -> Bool
+
+pub fn fda_k(FDA) -> KPair
+
+pub fn fda_quotient(FDA, Array[Bool]) -> FDA
+
+pub fn fda_rank(FDA) -> Int32
+
+pub fn fda_unit(FDA) -> Array[Int64]
+
+pub fn fga_canonical(FgAb) -> FgAb
+
+pub fn fga_cyclic(Int64) -> FgAb
+
+pub fn fga_direct_sum(FgAb, FgAb) -> FgAb
+
+pub fn fga_eq(FgAb, FgAb) -> Bool
+
+pub fn fga_ext1(FgAb, FgAb) -> FgAb
+
+pub fn fga_free(Int32) -> FgAb
+
+pub fn fga_hom(FgAb, FgAb) -> FgAb
+
+pub fn fga_make(Int32, Array[Int64]) -> FgAb
+
+pub fn fga_render(FgAb) -> String
+
+pub fn fga_zero() -> FgAb
+
+pub fn hilbert_module_rank_vector(Array[Int32], Array[Int32]) -> Array[Int64]?
+
+pub fn hook_product(Array[Int32]) -> Int64
+
+pub fn igcd(Int64, Int64) -> Int64
+
+pub fn ilcm(Int64, Int64) -> Int64
+
+pub fn imod(Int64, Int64) -> Int64
+
+pub fn intmat_apply(IntMat, Array[Int64]) -> Array[Int64]
+
+pub fn intmat_eq(IntMat, IntMat) -> Bool
+
+pub fn intmat_identity(Int32, Int64) -> IntMat
+
+pub fn intmat_mul(IntMat, IntMat) -> IntMat
+
+pub fn intmat_of(Array[Array[Int64]]) -> IntMat
+
+pub fn intmat_rank(IntMat) -> Int32
+
+pub fn intmat_transpose(IntMat) -> IntMat
+
+pub fn intmat_zero(Int32, Int32) -> IntMat
+
+pub fn irrep_dim(Array[Int32]) -> Int64
+
+pub fn is_injective(IntMat) -> Bool
+
+pub fn is_projection(QMat) -> Bool
+
+pub fn is_surjective(IntMat) -> Bool
+
+pub fn k_of_circle() -> KPair
+
+pub fn k_of_compact() -> KPair
+
+pub fn k_of_symmetric_group(Int32) -> KPair
+
+pub fn k_of_toeplitz(Int32) -> KPair
+
+pub fn kernel_of(IntMat) -> FgAb
+
+pub fn kk_class(KPair, KPair, IntMat, IntMat) -> KKClass
+
+pub fn kk_class_eq(KKClass, KKClass) -> Bool
+
+pub fn kk_class_invertible(KKClass) -> Bool
+
+pub fn kk_compose(KKClass, KKClass) -> KKClass
+
+pub fn kk_equivalence_witness(KPair, KPair) -> Bool
+
+pub fn kk_equivalent(KPair, KPair) -> Bool
+
+pub fn kk_ideal_context(Array[Int32]) -> @context.FormalContext
+
+pub fn kk_ideal_context_with_zero(Array[Int32]) -> @context.FormalContext
+
+pub fn kk_identity(KPair) -> KKClass
+
+pub fn kk_report() -> @galois.Report
+
+pub fn kk_uct(KPair, KPair) -> UCTData
+
+pub fn kpair(FgAb, FgAb) -> KPair
+
+pub fn kpair_bott_periodic(KPair) -> Bool
+
+pub fn kpair_eq(KPair, KPair) -> Bool
+
+pub fn kpair_render(KPair) -> String
+
+pub fn kpair_shift(KPair) -> KPair
+
+pub fn kpair_tensor_k(KPair) -> KPair
+
+pub fn laur_monomial(Int32) -> Laur
+
+pub fn laur_mul(Laur, Laur) -> Laur
+
+pub fn laur_of(Array[(Int32, Rat)]) -> Laur
+
+pub fn laur_of_factors(Int32, Array[(Rat, Int32)], Array[(Rat, Int32)]) -> Laur
+
+pub fn laur_render(Laur) -> String
+
+pub fn normalized_rank(Array[Int32], Array[Int32]) -> Array[Rat]
+
+pub fn partition_render(Array[Int32]) -> String
+
+pub fn partition_size(Array[Int32]) -> Int32
+
+pub fn partitions(Int32) -> Array[Array[Int32]]
+
+pub fn pow2(Int32) -> Int32
+
+pub fn qmat_fredholm_index(QMat) -> Int32
+
+pub fn qmat_identity(Int32, Rat) -> QMat
+
+pub fn qmat_mul(QMat, QMat) -> QMat
+
+pub fn qmat_nullity(QMat) -> Int32
+
+pub fn qmat_of(Array[Array[Int64]]) -> QMat
+
+pub fn qmat_rank(QMat) -> Int32
+
+pub fn qmat_transpose(QMat) -> QMat
+
+pub fn qmat_zero(Int32, Int32) -> QMat
+
+pub fn quotient_label(Int32, Array[Int32]) -> String
+
+pub fn rat_add(Rat, Rat) -> Rat
+
+pub fn rat_div(Rat, Rat) -> Rat
+
+pub fn rat_eq(Rat, Rat) -> Bool
+
+pub fn rat_inside_unit(Rat) -> Bool
+
+pub fn rat_is_zero(Rat) -> Bool
+
+pub fn rat_make(Int64, Int64) -> Rat
+
+pub fn rat_mul(Rat, Rat) -> Rat
+
+pub fn rat_neg(Rat) -> Rat
+
+pub fn rat_of_int(Int64) -> Rat
+
+pub fn rat_one() -> Rat
+
+pub fn rat_render(Rat) -> String
+
+pub fn rat_sub(Rat, Rat) -> Rat
+
+pub fn rat_vec_add(Array[Rat], Array[Rat]) -> Array[Rat]
+
+pub fn rat_vec_eq(Array[Rat], Array[Rat]) -> Bool
+
+pub fn rat_vec_render(Array[Rat]) -> String
+
+pub fn rat_zero() -> Rat
+
+pub fn shift_truncation_index(Int32) -> Int32
+
+pub fn six_term(FgAb, FgAb, FgAb, FgAb, FgAb, FgAb, IntMat, IntMat, IntMat, IntMat, IntMat, IntMat) -> SixTerm
+
+pub fn six_term_check(SixTerm) -> SixCheck
+
+pub fn snf_diag(IntMat) -> Array[Int64]
+
+pub fn sum_dim_squares(Int32) -> Int64
+
+pub fn toeplitz_circle_extension() -> SixTerm
+
+pub fn toeplitz_extension(Int32) -> SixTerm
+
+pub fn toeplitz_index_of_symbol(Int32) -> Int32
+
+pub fn toeplitz_truncation(Int32, Int32) -> QMat
+
+pub fn toeplitz_truncation_linear(Int32, Rat, Rat) -> QMat
+
+pub fn toeplitz_truncation_rect(Int32, Int32) -> QMat
+
+pub fn uct_determined(UCTData) -> Bool
+
+pub fn uct_group(UCTData) -> FgAb
+
+pub fn uct_render(UCTData) -> String
+
+pub fn wind_of_factors(Int32, Array[(Rat, Int32)], Array[(Rat, Int32)]) -> Int32
+
+// Errors
+
+// Types and methods
+pub struct FDA {
+  blocks : Array[Int32]
+}
+
+pub struct FgAb {
+  rank : Int32
+  tors : Array[Int64]
+}
+
+pub struct IntMat {
+  rows : Int32
+  cols : Int32
+  e : Array[Array[Int64]]
+}
+
+pub struct KKClass {
+  dom : KPair
+  cod : KPair
+  f0 : IntMat
+  f1 : IntMat
+}
+
+pub struct KPair {
+  k0 : FgAb
+  k1 : FgAb
+}
+
+pub struct Laur {
+  c : Array[(Int32, Rat)]
+}
+
+pub struct QMat {
+  rows : Int32
+  cols : Int32
+  e : Array[Array[Rat]]
+}
+
+pub struct Rat {
+  n : Int64
+  d : Int64
+}
+
+pub struct SixCheck {
+  ok : Bool
+  composes : Bool
+  ranks : Bool
+  detail : String
+}
+
+pub struct SixTerm {
+  j0 : FgAb
+  j1 : FgAb
+  a0 : FgAb
+  a1 : FgAb
+  q0 : FgAb
+  q1 : FgAb
+  alpha : IntMat
+  beta : IntMat
+  del0 : IntMat
+  gamma : IntMat
+  delta : IntMat
+  del1 : IntMat
+}
+
+pub struct UCTData {
+  hom : FgAb
+  ext : FgAb
+  kind : Int32
+}
+
+// Type aliases
+
+// Traits

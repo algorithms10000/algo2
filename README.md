@@ -1,6 +1,6 @@
 # B0001 全局公理伽羅瓦對應（Global Axiom–Galois Correspondence, GAGC）
 
-**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）**　　**狀態：R1–R7 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群 B_n ＋ 雅可比簇 J(G)）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
+**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）＋ B0006（R8）**　　**狀態：R1–R8 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群／雅可比簇；R8 = B0006 真 KK-理論片段）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
 
 本專案把「公理系統 → 定理 → 演算法」做成**可執行**的鏈條：一條全局公理 + 四條局部公理，
 推出四條定理與 13 條等式，再由定理的構造性內容導出 7 條演算法，並附一套能**主動找出反例**的檢核器。
@@ -27,7 +27,8 @@ B0001（本目錄）
 │   ├── B0002-定理體系.md
 │   ├── B0003-定理體系.md
 │   ├── B0004-定理體系.md
-│   └── B0005-定理體系.md
+│   ├── B0005-定理體系.md
+│   └── B0006-定理體系.md
 ├── galois/                  MoonBit 模組 arena/b0001
 │   ├── bitset/              稠密位元集（UInt64 字組）＋ GF(2) 消去所需的 xor
 │   ├── context/             形式上下文 K=(A,S,R)、Φ/Ψ、分量、文字格式 parse
@@ -38,6 +39,7 @@ B0001（本目錄）
 │   ├── elliptic/            【B0004】E[n]≅(ℤ/n)²、除多項式、Weil 配對、Paley/Ramsey、團複形同調
 │   ├── braid/               【B0005】B_n、置換商、Burau 表示、B_3 → PSL₂(ℤ) 接縫
 │   ├── jacobian/            【B0005】圖雅可比簇 J(G)：不變因子、τ 三路徑、Riemann–Roch、Arf、超立方體
+│   ├── kk/                  【B0006】真 KK-理論片段：UCT、六項正合列、Kasparov 乘積、指標—繞數
 │   ├── registry/            樣本上下文與擬陣樣本（含 ℚ(ζ₈)/ℚ、K₃/K₄ 圖擬陣、Fano）
 │   ├── cmd/main/            CLI（接入與輸出接口）
 │   └── contexts/*.ctx       文字格式樣本（dump/parse 互逆）
@@ -550,3 +552,56 @@ burau_fake_kernels, psl_image, psl_image_generates_sl2, braid_report}`、
 `@jacobian.{Graph, laplacian, invariant_factors, jacobian_order, spanning_trees_by_det,
 spanning_trees_bruteforce, tau_deletion_contraction, divisor_rank, riemann_roch, canonical_divisor,
 count_refinements, arf_invariant, arf_of_pullback, hypercube, jacobian_report}`。
+
+---
+
+# B0006：真 KK-理論的可計算片段（R8）
+
+## 先劃界，再落地
+
+KK(A, B) 一般是 Hilbert 模上 Fredholm 模的算子同倫類，**不可判定**。本輪只做
+**bootstrap 類 + K-群有限生成**的片段：Kasparov 的萬有係數定理（UCT）把它化約成 `Hom` 與 `Ext¹`
+的整數線性代數。凡超出此界的問題，程式會回 `kind = 0` **明示「只決定到擴張」**，不以綠燈冒充。
+
+三條主線是同一件事的三面：
+
+| 面 | 內容 | 定理 |
+|---|---|---|
+| **Hilbert 空間** | 精確有理線性代數 ⇒ 投影、Hilbert 模的秩向量 [p] = (rank p_i / n_i) ⇒ K₀(A) = ℤ^r | **T32** |
+| **C*-代數** | 六項正合列的**秩—零化度判準**；Toeplitz 擴張全正合、改壞必須 FAIL | **T33** |
+| **KK 理論** | UCT ⇒ Hom ⊕ Ext；Kasparov 乘積 = 合成；KK-等價 ⟺ K-同構 | **T35、T36、T37** |
+
+## 定理（詳見 `docs/B0006-定理體系.md`）
+
+| 編號 | 內容 | 實測 |
+|---|---|---|
+| **T32** | Hilbert C*-模的投影類 ⇒ K₀(A) = ℤ^r：秩向量可加、生成、[1] = (1,…,1) | (1/2,0)、(0,1/3) 生成 ℤ² |
+| **T33** | 自由群上的正合 ⟺ g∘f = 0 且 rank f + rank g = rank H；Toeplitz 與分裂擴張全通過 | 節點秩 1+0=1, 0+1=1, 1+0=1, 0, 0, 0+1=1 |
+| **T34** | (n−1)[1] = −[p] ⇒ **K₀(O_n) = ℤ/(n−1)、K₁(O_n) = 0** | n = 2..8：0, ℤ/2, ℤ/3, …, ℤ/7（三路徑） |
+| **T35** | UCT 值表：KK(ℂ,B) = K₀(B)、KK(C(S¹),C(S¹)) = ℤ²、KK(ℂ,O_n) = ℤ/(n−1)、KK(O_n,ℂ) = 0 | 12 條登記值全對 |
+| **T36** | Kasparov 乘積：單位律、結合律、K-函子性 | [[1,0]]·[[1],[1]] = [[1]] |
+| **T37** | KK-等價 ⟺ K-同構；並證 K-理論**不完備**（K_*(O₂) = (0,0)） | ℂ ~ M₂ ~ M₃；ℂ ≁ C(S¹)；O₂ ≁ O₃ |
+| **T38** | 穩定性 A⊗K ~ A 與 Bott 週期性 K_{i+2} = K_i | 全 PASS |
+| **T39** | **index(T_f) = −wind(f)**：算子側非方截斷的精確秩 ↔ 符號側幅角原理；並明示界限 | t^0..t^4 ⇒ 0,−1,−2,−3,−4；方截斷恆 0 |
+| **T40** | 跨輪接縫：K₀(C*(S_n)) = ℤ^{p(n)}、K₀(C*(SL₂(ℤ/n))) = ℤ^{#共軛類}、理想格通過 B0001 的 A6＋A3′ | p(n)=1,2,3,5,7,11；SL₂：3,7,10,9；A6 8/8 |
+
+## 這輪被抓到的四個錯（已修，記於 `algorithm.xlsx`）
+
+**BUG-13** `fga_hom` 漏了「自由 ℤ → H 的撓部分」（KK(ℂ,O₃) 一度算成 0）；
+**BUG-14** Laurent 多項式未合併同指數項；**BUG-15** 方矩陣截斷把指標抹平成 0（必須用非方截斷）；
+**BUG-16** 理想格含零商 ⇒ B0001 的 X2 必失敗 ⇒ 主上下文只取非零商，零商另立邊界檢核。
+
+## 怎麼跑
+
+```bash
+cd galois
+moon run cmd/main -- kk        # T32–T40：46 條檢核
+moon run cmd/main -- kktable   # K-群與 UCT 的 KK 值表
+moon run cmd/main -- kksix     # Toeplitz／Cuntz 的六項正合列
+moon run cmd/main -- kkctx     # 理想格上下文（B0001 A6 8/8＋A3′ 4/4）
+```
+
+介面：`@kk.{FgAb, fga_hom, fga_ext1, snf_diag, coker_of, kernel_of, KPair, FDA, fda_k,
+toeplitz_circle_extension, cuntz_ktheory, SixTerm, six_term_check, kk_uct, uct_group,
+KKClass, kk_compose, kk_equivalent, Rat, QMat, qmat_fredholm_index, wind_of_factors,
+toeplitz_truncation_rect, partitions, irrep_dim, k_of_symmetric_group, kk_ideal_context, kk_report}`。

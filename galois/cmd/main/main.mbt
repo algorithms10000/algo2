@@ -22,6 +22,10 @@
 ///   moon run cmd/main -- jacobian        【B0005】圖雅可比簇檢核（T25–T31）
 ///   moon run cmd/main -- jtable          圖雅可比簇的結構表（不變因子、階、生成樹）
 ///   moon run cmd/main -- arf             theta 特徵與 Arf 不變量
+///   moon run cmd/main -- kk             【B0006】真 KK-理論片段檢核（T32–T40）
+///   moon run cmd/main -- kktable        K-群與 UCT 的 KK 值表
+///   moon run cmd/main -- kksix          Cuntz／Toeplitz 的六項正合列
+///   moon run cmd/main -- kkctx          理想格樣本上下文（B0001 A6＋A3′）
 ///   moon run cmd/main -- mreg             擬陣登記期望值核對（含延伸樣本）
 ///   moon run cmd/main -- mextall          B0002 延伸的全域定理檢核（T9–T12）
 ///   moon run cmd/main -- mcensus <n>      小型擬陣普查（n ≤ 5）
@@ -434,6 +438,95 @@ fn main {
       " 通過",
     )
     println(r.render())
+  } else if cmd == "kk" {
+    let r = @kk.kk_report()
+    println(
+      "B0006 真 KK-理論片段檢核（T32–T40）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "kktable" {
+    println("K-群與 UCT 的 KK 值表（T35）")
+    let samples = @kk.algebra_samples()
+    for i = 0; i < samples.length(); i = i + 1 {
+      let (name, k) = samples[i]
+      println("  " + name + "\tK_* = " + @kk.kpair_render(k))
+    }
+    println("  ── UCT 計算（A → B）")
+    for i = 0; i < samples.length(); i = i + 1 {
+      let (na, ka) = samples[i]
+      for j = 0; j < samples.length(); j = j + 1 {
+        let (nb, kb) = samples[j]
+        let u = @kk.kk_uct(ka, kb)
+        println("  KK(" + na + ", " + nb + ")：" + @kk.uct_render(u))
+      }
+    }
+  } else if cmd == "kksix" {
+    println("六項正合列（T33、T34）")
+    let s = @kk.toeplitz_circle_extension()
+    let c = @kk.six_term_check(s)
+    println(
+      "  0 → K → 𝒯 → C(S¹) → 0：" +
+      (if c.ok { "正合 ✓" } else { "不正合 ✗" }),
+    )
+    println("    " + c.detail)
+    for n = 2; n <= 6; n = n + 1 {
+      let k = @kk.cuntz_ktheory(n)
+      let ext = @kk.toeplitz_extension(n)
+      let u = @kk.kk_uct(@kk.kpair(@kk.fga_free(1), @kk.fga_zero()), k)
+      println(
+        "  0 → K → 𝒯_" +
+        n.to_string() +
+        " → O_" +
+        n.to_string() +
+        " → 0 ⇒ K_*(O_" +
+        n.to_string() +
+        ") = " +
+        @kk.kpair_render(k) +
+        "、i_* 的秩 " +
+        @kk.intmat_rank(ext.alpha).to_string() +
+        "、UCT：KK(ℂ,O_" +
+        n.to_string() +
+        ") = " +
+        @kk.fga_render(@kk.uct_group(u)),
+      )
+    }
+  } else if cmd == "kkctx" {
+    let ctx = @kk.kk_ideal_context([1, 2, 3])
+    println(
+      "上下文：kk-ideal（A = M₁ ⊕ M₂ ⊕ M₃ 的理想格；物件 = 商 A/I、屬性 = 存活的簡單塊）",
+    )
+    println(
+      "  |A|=" +
+      ctx.num_axioms().to_string() +
+      "、|S|=" +
+      ctx.num_stmts().to_string() +
+      "、|R|=" +
+      ctx.edge_count().to_string() +
+      "、閉集數=" +
+      @lattice.all_closed_stmts(ctx).length().to_string(),
+    )
+    let a6 = @galois.structural_report(ctx)
+    println(
+      "  B0001 A6 檢核：" +
+      a6.passed_count().to_string() +
+      "/" +
+      a6.size().to_string() +
+      " 通過",
+    )
+    println(a6.render())
+    let dg = @lattice.dg_report(ctx)
+    println(
+      "  A3′ 檢核：" +
+      dg.passed_count().to_string() +
+      "/" +
+      dg.size().to_string() +
+      " 通過",
+    )
+    println(dg.render())
   } else if cmd == "jacobian" {
     let r = @jacobian.jacobian_report()
     println(

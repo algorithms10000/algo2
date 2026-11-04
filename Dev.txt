@@ -469,3 +469,66 @@ R6（2026-11-04）：B0004 橢圓曲線撓群 E[n] ≅ (ℤ/n)² 及其衍生結
 [未完成／下一步] 名詞群仍缺：真 KK-理論、內部張量積、漸新態射、循環同調（獨立主題）、
   正則圖邊置換群、超立方體網絡群的完整刻劃（本輪只做 Q_n 的 J 與 τ）。
   另：jacobian 的不變因子走子式 gcd，n > 8 需換 Bareiss＋SNF 增量演算法（已記為 BUG-12 的規模界限）。
+
+================================================================================
+[2026-11-05　第八回合（R8）：B0006 真 KK-理論的可計算片段
+================================================================================
+
+[指示] 「實做真KK-理論，使KK-理論在C*-代數與 Hilbert 空間與其他數學結構及公理相互作用，
+        並沿用20動詞及14範例得出定理及演算法。」
+
+[先劃界（否則就是 stub）]
+KK(A,B) 一般是 Hilbert 模上 Fredholm 模的算子同倫類，不可判定。本輪只做
+**bootstrap 類 + K-群有限生成**的片段：Kasparov 的萬有係數定理（UCT）把它化約成
+Hom 與 Ext¹ 的整數線性代數。超出此界者一律回 kind = 0「只決定到擴張」，不以綠燈冒充。
+
+[新增套件]
+1. galois/kk/fga.mbt：有限生成交換群引擎（A36）——SNF（歐幾里得＋除法修正）、coker、ker、
+   Hom、Ext¹、直和規範化。全部 Int64 精確運算。
+2. galois/kk/cstar.mbt：C*-代數側（A37、A38）——KPair、有限維 C*-代數 ⊕M_{n_i}(ℂ)、
+   Toeplitz 代數 𝒯_n（正交等距元）、Toeplitz 擴張 0 → K → 𝒯_n → O_n → 0、Cuntz O_n、
+   六項正合列 SixTerm 與「秩—零化度」判準 six_term_check。
+3. galois/kk/hilbert.mbt：Hilbert 空間側（A41、A42）——精確有理數 Rat、有理矩陣 QMat（秩、
+   零化度、Fredholm 指標）、投影判準、Hilbert 模秩向量、Laurent 多項式、因式法繞數、
+   Toeplitz 截斷（方／非方）。
+4. galois/kk/kasparov.mbt：KK 側（A39、A40）——UCTData（Hom／Ext／kind）、KKClass、
+   Kasparov 乘積（合成）、KK-等價、穩定性 A⊗K、Bott 週期性。
+5. galois/kk/sym.mbt：群側（A43）——分割、hook length、不可約維度、Σd_λ²、K₀(C*(S_n))。
+6. galois/kk/checks.mbt：T32–T40 共 46 條檢核、kk_report()、理想格上下文 kk_ideal_context。
+7. CLI：-- kk / kktable / kksix / kkctx；cmd/main/moon.pkg 增 import kk。
+
+[本輪由檢核器抓到並修正的四個人為錯誤]
+- BUG-13：fga_hom 漏了「自由 ℤ 因子映到 H 的撓部分」（Hom(ℤ,H) = H 含撓），fga_ext1 漏了
+  (ℤ/d)^{rank H}。後果：UCT 把 KK(ℂ,O₃) 算成 0，與六項正合列的 ℤ/2 互相指責。
+  → 修公式並在註解中寫明；這一條是本輪最有價值的錯誤。
+- BUG-14：Laurent 多項式建構未合併同指數項 ⇒ (t−1/2)(t−2) 留下 4 個項、係數比對全錯。
+- BUG-15：以為 Toeplitz 指標可用方矩陣截斷算；方矩陣 nullity 與 coker 同為 cols−rank ⇒ 指標恆 0。
+  → 改用非方截斷 ℂ^N → ℂ^{N+k}（秩 N、coker k ⇒ 指標 −k），並把「方截斷恆 0」升格為正面斷言。
+- BUG-16：理想格上下文含零商 A/A（支撐為空）⇒ B0001 的 X2 必失敗、T3 連帶不適用。
+  → 主上下文只取非零商（7 個物件），零商另立「邊界檢核」正面斷言（沿用 B0002 NOTE-1）。
+
+[實測真數字]
+- moon run cmd/main -- kk      → 46/46 通過：
+    T32 投影／秩向量 2 條；T33 六項正合列 5 條（含負控制）；
+    T34 K₀(O_n) = ℤ/(n−1)，n = 2..8 全對（三路徑：coker/ker、UCT、SNF）；
+    T35 UCT 值表 12 條（KK(ℂ,ℂ)=ℤ、KK(ℂ,ℂ⊕M₂)=ℤ²、KK(C(S¹),C(S¹))=ℤ²、
+        KK(ℂ,O_n)=ℤ/(n−1)、KK(O_n,ℂ)=0）；
+    T36 乘積 2 條；T37 等價與不完備 2 條；T38 穩定性／Bott 1 條；
+    T39 指標—繞數 3 條（t^0..t^4 → 0,−1,−2,−3,−4；方截斷恆 0；∂₁ 秩 1）；
+    T40 跨輪接縫 13 條（S_n：p(n)=1,2,3,5,7,11 且 Σd_λ²=n!；SL₂(ℤ/n)：3,7,10,9；
+        理想格 A6 8/8、A3′ 4/4、閉集 2³；含零商的邊界）。
+- moon run cmd/main -- kksix   → Toeplitz → C(S¹) 六項正合列全正合；O_2..O_6 的 K_* 與 i_*。
+- moon run cmd/main -- kkctx   → |A|=7、|S|=3、|R|=12、閉集 8；A6 8/8、A3′ 4/4。
+- bash ci/ci.sh                → 16 步全綠（含 algorithm.xlsx 26 表可重建）。
+
+[文件與登記]
+- docs/B0006-定理體系.md（§11 二十動詞落地表、§12 十四式組合範例落點表、§14 BUG-13..16）。
+- galois/kk/README.md；README.md（B0006 章）、docs/README.md、galois/README.md、cmd/main/README.md。
+- tools/make_registry.py 新增「B0006 KK」「B0006 樣本」兩表，缺陷頁補 BUG-13..16，
+  名詞對應頁把「真 KK-理論」改為已實作（可判定片段）、「內部張量積」改為部分實作
+  → algorithm.xlsx 現為 26 個工作表。
+- ci/ci.sh 由 14 步擴為 16 步（第 14 步 kk 46 條＋kktable＋kksix；第 15 步 kkctx）。
+
+[未完成／下一步] 名詞群仍缺：循環同調（獨立主題）、漸新態射、正則圖邊置換群、
+  超立方體網絡群的完整刻劃；KK 側的界外部分（非 bootstrap 類、無窮維 Fredholm 模的算子同倫、
+  min/max 張量範疇、自由積的 K-群）留待後續，已在 A-K1 明示為界外。
