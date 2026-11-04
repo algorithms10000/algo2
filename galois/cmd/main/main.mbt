@@ -10,6 +10,10 @@
 ///   moon run cmd/main -- mcircuits <名稱> 列出迴路系統（B0002）
 ///   moon run cmd/main -- dg <名稱>        A3′ 增量式典範基（統計＋檢核）
 ///   moon run cmd/main -- dgbasis <名稱>   列出每一條蘊含
+///   moon run cmd/main -- mext <名稱>      B0002 延伸（二元性／正則性／對偶／Tutte）
+///   moon run cmd/main -- mreg             擬陣登記期望值核對（含延伸樣本）
+///   moon run cmd/main -- mextall          B0002 延伸的全域定理檢核（T9–T12）
+///   moon run cmd/main -- mcensus <n>      小型擬陣普查（n ≤ 5）
 ///   moon run cmd/main -- negctl           負控制：區間凸包必須 FAIL 交換公理（T8）
 ///   moon run cmd/main -- info <名稱>      單一上下文摘要 + A6 檢核
 ///   moon run cmd/main -- concepts <名稱>  列出全部概念（外延 ↔ 內涵）
@@ -85,6 +89,24 @@ fn show_basis(reg : @registry.Registered) -> Unit {
   )
   for i = 0; i < basis.length(); i = i + 1 {
     println("  " + @lattice.render_implication(ctx, basis[i]))
+  }
+}
+
+///|
+/// 小型整數解析（只接受 0..99 的十進位字串；CLI 的 n 參數用）。
+fn census_arg(text : String) -> Int32? {
+  if text == "1" {
+    Some(1)
+  } else if text == "2" {
+    Some(2)
+  } else if text == "3" {
+    Some(3)
+  } else if text == "4" {
+    Some(4)
+  } else if text == "5" {
+    Some(5)
+  } else {
+    None
   }
 }
 
@@ -295,6 +317,42 @@ fn main {
           )
           println(@lattice.render_basis(ctx, run.basis()))
         }
+      }
+    }
+  } else if cmd == "mext" {
+    if rest.length() < 1 {
+      println(
+        "用法：-- mext <名稱>（B0002 延伸：二元性、正則性、對偶、Tutte）",
+      )
+      println("樣本：" + @registry.all_matroid_names().join("、"))
+    } else {
+      match @registry.lookup_matroid_ext(rest[0]) {
+        None => println("找不到擬陣：" + rest[0])
+        Some(reg) => println(@registry.extension_summary(reg))
+      }
+    }
+  } else if cmd == "mreg" {
+    let r = @registry.check_registered_expectations()
+    println(
+      "擬陣登記期望值核對：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "mextall" {
+    println(@registry.extension_global_summary())
+  } else if cmd == "mcensus" {
+    if rest.length() < 1 {
+      println(
+        "用法：-- mcensus <n>（n ≤ 5：兩條列舉路線的擬陣普查）",
+      )
+    } else {
+      let n = census_arg(rest[0])
+      match n {
+        None => println("n 必須是 1..5 之間的整數")
+        Some(k) => println(@registry.census_summary(k))
       }
     }
   } else if cmd == "negctl" {

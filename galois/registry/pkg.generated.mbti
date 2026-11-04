@@ -8,11 +8,23 @@ import {
 }
 
 // Values
+pub fn all_matroid_names() -> Array[String]
+
+pub fn census_summary(Int32) -> String
+
+pub fn check_registered_expectations() -> @galois.Report
+
 pub fn cyclotomic_context() -> @context.FormalContext
 
 pub fn divisibility_context() -> @context.FormalContext
 
 pub fn divisor_context(Int32) -> @context.FormalContext
+
+pub fn extension_global_report() -> @galois.Report
+
+pub fn extension_global_summary() -> String
+
+pub fn extension_summary(RegisteredMatroid) -> String
 
 pub fn interval_summary(Int32) -> String
 
@@ -21,6 +33,8 @@ pub fn lookup(String) -> Registered?
 pub fn lookup_dg(String) -> Registered?
 
 pub fn lookup_matroid(String) -> RegisteredMatroid?
+
+pub fn lookup_matroid_ext(String) -> RegisteredMatroid?
 
 pub fn matroid_summary(RegisteredMatroid, Bool) -> String
 
@@ -33,6 +47,8 @@ pub fn registered_dg_names() -> Array[String]
 pub fn registered_matroid_names() -> Array[String]
 
 pub fn registered_matroids() -> Array[RegisteredMatroid]
+
+pub fn registered_matroids_ext() -> Array[RegisteredMatroid]
 
 pub fn registered_names() -> Array[String]
 

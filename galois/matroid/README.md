@@ -13,6 +13,20 @@
 | T7 | Moore 實現／提升（ℱ → K_ℱ，ℱ = ℭ_A） | `realize.mbt`（`check_realization`、`check_b0001_inheritance`） |
 | T8 | 可判定性與負控制（檢核器不得恆真） | `checks.mbt`（`check_exchange`）、`antimatroid.mbt` |
 
+## B0002 延伸（`minors.mbt`、`tutte.mbt`、`classify.mbt`、`checks2.mbt`）
+
+| 編號 | 內容 | 落點 |
+|---|---|---|
+| D-B8／A15 | minor（刪除、壓縮、一般 M/D.C；秩公式） | `minors.mbt` |
+| D-B9／T9 | 二元 ⟺ 無 U(2,4) minor；**兩條獨立路徑**：禁 minor vs 基本迴路顯式 GF(2) 構造 | `classify.mbt`、`checks2.mbt` |
+| T9′ | 正則 ⟺ 無 U(2,4)、F7、F7* minor；F7 **二元但非正則** | `classify.mbt`、`checks2.mbt` |
+| D-B10／T10 | 對偶 r*(X)=|X|−r(E)+r(E∖X)；(M*)*=M；餘迴路=超平面補集；對偶平坦秩判準；U(r,n)*≅U(n−r,n)；T_{M*}(x,y)=T_M(y,x)；M(K₄) 自對偶 | `minors.mbt`、`checks2.mbt` |
+| D-B11／T12 | Tutte 多項式（刪除–壓縮 vs 子集和）、特化、χ = (−1)^r T(1−λ,0)、Whitney P(G,λ)=λ^{c}χ、χ(F7)=(λ−1)(λ−2)(λ−4) | `tutte.mbt`、`checks2.mbt` |
+| T11／T11′ | |ℱ(U(r,n))| = 2+Σ_{1≤k<r}C(n,k)；小型擬陣普查（C1–C3 與 I1–I3 兩路線） | `classify.mbt` |
+
+普查實測：n=2/3/4/5 → 5/16/68/406 個擬陣（兩路線完全一致），同構類 4/8/17/38，
+非二元 0/0/**1（=U(2,4)）**/32。n=5 的 406 個擬陣上「禁 minor 判準」與「基本迴路構造」**0 次分歧**。
+
 ## 已實作的演算法
 
 | 編號 | 名稱 | 複雜度 |
@@ -24,6 +38,11 @@
 | A12 | `matroid_report`（8 條）／`check_b0001_inheritance`（K_ℱ* 上 13 條） | 見各檢核 |
 | A13 | `rank_gf2` / `circuits_from_gf2` / `graphic_columns` / `fano_columns` | 秩 O(n·⌈m/64⌉)；迴路 O(2ⁿ·n·r·⌈m/64⌉) |
 | A14 | `check_exchange`（對任意閉包 oracle 搜反例） | O(2ⁿ·n²) |
+| A15 | `delete_at` / `contract_at` / `minor_of` | O(2^k·rank) |
+| A16 | `dual` / `cocircuits` / `isomorphic` / `has_minor_in` | O(2ⁿ·rank) / O(3ⁿ·n!) |
+| A17 | `tutte_deletion_contraction` / `tutte_subsets` | O(2ⁿ·rank) / O(2ⁿ·n²) |
+| A18 | 特徵／色多項式（定義式、Tutte 路徑、暴力著色） | O(2ⁿ) / O(λ^v) |
+| A19 | `all_matroids_by_circuits` / `all_matroids_by_independent_sets` / `isomorphism_classes` | O(Dedekind(n)·n²) |
 
 ## 依賴關係
 

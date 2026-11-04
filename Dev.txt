@@ -226,3 +226,81 @@ B0001 開發流水帳（Dev.txt）
 
 [本回合未完成]
   無。R3 交付範圍（A3′ 演算法＋D9/P6′/T4′/E14–E16＋4 樣本＋CI 9 步＋14 工作表＋文件＋commit）全部完成。
+
+■ 回合 R4（2026-11-04）：B0002 延伸 —— 二元性、對偶、Tutte 多項式、小型擬陣普查
+------------------------------------------------------------------
+[指示來源]
+  使用者：「先A3增量式DG基，然後B0002，最後B0003」⇒ 本回合執行第二項（B0002 的延伸部分）。
+
+[本回合的方法學]
+  - 一律「兩條獨立路徑互比」，不拿程式跟自己比：
+      T9  二元性：禁 minor 判準（Tutte） vs 由基＋基本迴路顯式構造 GF(2) 表示
+      T10 對偶：秩公式 vs 對偶擬陣的閉包／超平面補集／Tutte 對偶
+      T12 Tutte：刪除–壓縮遞迴 vs 子集和公式；特徵多項式定義式 vs (−1)^r T(1−λ,0)；
+          圖擬陣 χ vs 暴力正常著色計數
+      T11′ 普查：迴路公理 C1–C3 路線 vs 獨立集公理 I1–I3 路線
+  - minority 一律以**秩函數**為唯一真相來源（r_{M/D.C}(X) = r_M(X∪C) − r_M(C)），
+    避免「迴路刪除／壓縮」表示法的陷阱。
+
+[已完成]
+  ✅ 新檔 matroid/minors.mbt（minor_of、delete_at、contract_at、dual、dual_rank、cocircuits、
+     isomorphic、rank_table、has_minor_in、forbidden_binary_minors、forbidden_regular_minors）
+  ✅ 新檔 matroid/tutte.mbt（Poly2、刪除–壓縮、子集和、特化求值、Poly1、特徵多項式兩路徑、
+     proper_coloring_count）
+  ✅ 新檔 matroid/classify.mbt（find_basis、fundamental_circuit、is_binary_by_minors、
+     is_binary_by_construction、is_regular、uniform_flat_formula、from_independent_sets、
+     all_matroids_by_circuits、all_matroids_by_independent_sets、isomorphism_classes）
+  ✅ 新檔 matroid/checks2.mbt（check_binary_two_routes、check_forbidden_minor_witness、
+     check_dual_rank、check_double_dual、check_tutte_two_routes、check_tutte_specializations、
+     check_tutte_dual、check_characteristic、check_chromatic、check_regular_implies_binary、
+     check_graphic_regular、check_fano_binary_not_regular、check_cocircuit_hyperplane、
+     check_dual_flat_criterion、check_self_dual_k4、check_fano_characteristic、extension_report）
+  ✅ registry：registered_matroids_ext()（Fano*、U(3,5)、M(K4)*）、lookup_matroid_ext、
+     all_matroid_names、extension_summary、extension_global_report/summary、
+     check_registered_expectations、census_summary
+  ✅ CLI：mext <名>、mextall、mreg、mcensus <n>
+  ✅ 實測（全部真數字）：
+       7 份樣本 × 11 條延伸檢核 = 77/77 PASS；全域定理檢核 13/13 PASS；登記期望值 7/7 PASS
+       普查：n=2 5/5（同構類 4）、n=3 16/16（8）、n=4 68/68（17、非二元 1）、n=5 406/406（38、非二元 32）
+       n=5 的 406 個擬陣上兩條二元性判準 0 次分歧
+       χ(F7) = λ³−7λ²+14λ−8 = (λ−1)(λ−2)(λ−4) ✓（根為 2 的冪）
+       T(F7*) 與 T(F7) 交換 x,y ✓；T(M(K4)*) = T(M(K4)) ✓（自對偶）
+  ✅ 開發期臨時檢核（已依規範刪除）：4 份基本擬陣的延伸報告、9 組均勻平坦公式、
+     n=1..5 普查兩路線對照、正則性判準、harness-sanity（故意 assert_eq(1,2)）。
+  ✅ docs/B0002-定理體系.md 新增 §10（二元／正則）、§11（對偶）、§12（Tutte／特徵／色）、
+     §12′（A15–A19、E-B11–E-B21）、§13（均勻平坦＋普查），並在修正紀錄表補 DOC-3、THM-1、THM-2、THM-3。
+  ✅ algorithm.xlsx 擴到 17 個工作表（新增「B0002 延伸」「B0002 普查」「B0002 延伸樣本」）。
+  ✅ ci/ci.sh 擴到 10 步（第 9 步：mextall 13/13、7 樣本 77/77、mreg 7/7、mcensus 4 數字核對）。
+  ✅ README（根、matroid、registry、cmd/main、ci、docs）全部更新。✅ commit。
+
+[本回合由檢核抓到的「定理級錯誤」（全部已修正）]
+  🐞 DOC-3：二元禁 minor 集誤含 F7、F7*（那是**正則**的禁集）。
+        F7 = PG(2,2) 本身就是 GF(2)³ 的七個非零向量，**是二元擬陣**；它不是正則擬陣。
+        兩條路徑在 Fano 上分歧 → 追查後改正：二元禁集只留 U(2,4)，另立 is_regular。
+  🐞 THM-1：憑「平坦格對偶」寫下 |ℱ(M*)| = |ℱ(M)|。反例：U(2,3) 有 5 個平坦集、其對偶 U(1,3) 只有 2 個。
+        → 改成可證的秩判準（P-B7）；Fano* 的平坦數 44 因此在登記表標成 −1「無獨立公式」，
+          不以程式自己算出的數冒充期望值（否則是循環論證）。
+  🐞 THM-2：著色多項式漏掉 λ^{c(G)}。K₃ 在 λ=3：χ=2 而正常著色數=6。
+        → 改為 Whitney 形式 P(G,λ) = λ^{c(G)}·χ_{M(G)}(λ)，連通分量數入參。
+  🐞 THM-3：均勻擬陣平坦公式寫成 Σ_{k≤r}C(n,k)。U(1,2) 實得 2、公式 3。
+        → 改成 2 + Σ_{1≤k<r}C(n,k)。
+
+[聯網搜查]
+  - 本回合無新增外部依賴（工具鏈仍為 moon 0.1.20261102）。
+  - 數學：Tutte 的二元／正則禁 minor 定理、Whitney 的著色–特徵多項式關係、Tutte 對偶、
+    Fano 的特徵多項式根 1,2,4 皆為標準結果；本回合不引用二手程式碼，
+    一律用「第二條獨立路徑 + 最小反例」自行驗證，並把抓到的錯寫回文件與登記表。
+
+[已決定但待辦（更新）]
+  ⏳ **B0003**（使用者指定的下一項）：主同餘子群 Γ(n)/Γ₀(n)/Γ₁(n) 與 PSL₂(ℤ) 的樣本上下文。
+  ⏳ B0004：真 KK-理論／內部張量積／循環同調／漸新態射。
+  ⏳ B0005：橢圓曲線 n 等分點群、雅可比簇群分。
+  ⏳ B0006：拓撲辮群、超立方體網絡群、正則圖邊置換群。
+  ⏳ B0007：近似單位元、投射與非交換投影、自由同倫不變性。
+  ⏳ B0002 再延伸（未排程）：連通性（Tutte 的 3 連通分解）、Tutte 多項式的計算複雜度（#P）、
+     U(2,4)/F7 之外的禁 minor 族（恰當／圖擬陣判準）、representation over GF(3)。
+  ⏳ A3′ 物件增量（新增一列即更新基，不重算）。
+  ⏳ 「推送 CI」：仍以 ci/ci.sh 做等價全局編譯測試＋本地 commit；配置遠端後可直接 push。
+
+[本回合未完成]
+  無。R4 交付範圍（T9–T12 全部定理＋4 個新檔＋3 份延伸樣本＋普查＋17 工作表＋CI 10 步＋文件＋commit）全部完成。

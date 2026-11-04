@@ -8,13 +8,63 @@ import {
 }
 
 // Values
+pub fn all_matroids_by_circuits(Int32) -> Array[Matroid]
+
+pub fn all_matroids_by_independent_sets(Int32) -> Array[Matroid]
+
+pub fn binom(Int32, Int32) -> Int32
+
+pub fn check_binary_two_routes(Matroid) -> @galois.Check
+
+pub fn check_characteristic(Matroid) -> @galois.Check
+
+pub fn check_chromatic(Int32, Array[(Int32, Int32)], Int32) -> @galois.Check
+
+pub fn check_cocircuit_hyperplane(Matroid) -> @galois.Check
+
+pub fn check_double_dual(Matroid) -> @galois.Check
+
+pub fn check_dual_flat_criterion(Matroid) -> @galois.Check
+
+pub fn check_dual_rank(Matroid) -> @galois.Check
+
 pub fn check_exchange(Int32, (@bitset.BitSet) -> @bitset.BitSet) -> @galois.Check
+
+pub fn check_fano_binary_not_regular() -> @galois.Check
+
+pub fn check_fano_characteristic() -> @galois.Check
+
+pub fn check_forbidden_minor_witness(Matroid) -> @galois.Check
+
+pub fn check_graphic_regular(String, Int32, Array[(Int32, Int32)]) -> @galois.Check
+
+pub fn check_regular_implies_binary(Matroid) -> @galois.Check
+
+pub fn check_self_dual_k4() -> @galois.Check
+
+pub fn check_tutte_dual(Matroid) -> @galois.Check
+
+pub fn check_tutte_specializations(Matroid) -> @galois.Check
+
+pub fn check_tutte_two_routes(Matroid) -> @galois.Check
+
+pub fn check_uniform_dual(Int32, Int32) -> @galois.Check
+
+pub fn check_uniform_flats(Int32, Int32) -> @galois.Check
 
 pub fn circuits_from_gf2(Array[@bitset.BitSet]) -> Array[@bitset.BitSet]
 
 pub fn context_of_moore_family(String, Int32, Array[@bitset.BitSet]) -> @context.FormalContext
 
+pub fn extension_report(Matroid) -> @galois.Report
+
 pub fn fano_columns() -> Array[@bitset.BitSet]
+
+pub fn forbidden_binary_minors() -> Array[Matroid]
+
+pub fn forbidden_regular_minors() -> Array[Matroid]
+
+pub fn from_independent_sets(String, Int32, Array[@bitset.BitSet]) -> Matroid
 
 pub fn graphic_columns(Int32, Array[(Int32, Int32)]) -> Array[@bitset.BitSet]
 
@@ -24,11 +74,23 @@ pub fn interval_closure(Int32, @bitset.BitSet) -> @bitset.BitSet
 
 pub fn interval_report(Int32) -> @galois.Report
 
+pub fn isomorphic(Matroid, Matroid) -> Bool
+
+pub fn isomorphism_classes(Array[Matroid]) -> Array[Matroid]
+
 pub fn moore_family_of_context(@context.FormalContext) -> Array[@bitset.BitSet]
+
+pub fn proper_coloring_count(Int32, Array[(Int32, Int32)], Int32) -> Int32
 
 pub fn rank_gf2(Array[@bitset.BitSet]) -> Int32
 
 pub fn select_columns(Array[@bitset.BitSet], Array[Int32], Int32) -> Array[@bitset.BitSet]
+
+pub fn tutte_deletion_contraction(Matroid) -> Poly2
+
+pub fn tutte_subsets(Matroid) -> Poly2
+
+pub fn uniform_flat_formula(Int32, Int32) -> Int32
 
 pub fn without_empty(Array[@bitset.BitSet]) -> Array[@bitset.BitSet]
 
@@ -41,6 +103,9 @@ pub struct Matroid {
   circuits : Array[@bitset.BitSet]
 }
 pub fn Matroid::atoms(Self) -> Array[@bitset.BitSet]
+pub fn Matroid::basis_count(Self) -> Int32
+pub fn Matroid::characteristic_definition(Self) -> Poly1
+pub fn Matroid::characteristic_from_tutte(Self) -> Poly1
 pub fn Matroid::check_b0001_inheritance(Self) -> @galois.Report
 pub fn Matroid::check_circuit_axioms(Self) -> @galois.Check
 pub fn Matroid::check_empty_flat_support(Self) -> @galois.Check
@@ -54,19 +119,58 @@ pub fn Matroid::circuit_count(Self) -> Int32
 pub fn Matroid::circuits(Self) -> Array[@bitset.BitSet]
 pub fn Matroid::closure(Self, @bitset.BitSet) -> @bitset.BitSet
 pub fn Matroid::closure_by_rank(Self, @bitset.BitSet) -> @bitset.BitSet
+pub fn Matroid::cocircuits(Self) -> Array[@bitset.BitSet]
+pub fn Matroid::contract_at(Self, Int32) -> Self
+pub fn Matroid::delete_at(Self, Int32) -> Self
+pub fn Matroid::dual(Self) -> Self
+pub fn Matroid::dual_rank(Self, @bitset.BitSet) -> Int32
 pub fn Matroid::fano() -> Self
+pub fn Matroid::find_basis(Self) -> Array[Int32]
 pub fn Matroid::flat_count(Self) -> Int32
 pub fn Matroid::flats(Self) -> Array[@bitset.BitSet]
 pub fn Matroid::from_circuits(String, Int32, Array[@bitset.BitSet]) -> Self
 pub fn Matroid::from_gf2(String, Array[@bitset.BitSet]) -> Self
 pub fn Matroid::graphic(String, Int32, Array[(Int32, Int32)]) -> Self
 pub fn Matroid::ground_size(Self) -> Int32
+pub fn Matroid::has_minor_in(Self, Array[Self]) -> Bool
+pub fn Matroid::has_uniform24_minor(Self) -> Bool
+pub fn Matroid::hyperplanes(Self) -> Array[@bitset.BitSet]
 pub fn Matroid::independent(Self, @bitset.BitSet) -> Bool
+pub fn Matroid::independent_count(Self) -> Int32
+pub fn Matroid::is_binary(Self) -> Bool
+pub fn Matroid::is_binary_by_construction(Self) -> Bool
+pub fn Matroid::is_binary_by_minors(Self) -> Bool
 pub fn Matroid::is_flat(Self, @bitset.BitSet) -> Bool
+pub fn Matroid::is_regular(Self) -> Bool
+pub fn Matroid::isomorphic_to(Self, Self) -> Bool
 pub fn Matroid::matroid_report(Self) -> @galois.Report
+pub fn Matroid::minor_of(Self, @bitset.BitSet, @bitset.BitSet) -> Self
 pub fn Matroid::name(Self) -> String
 pub fn Matroid::rank(Self, @bitset.BitSet) -> Int32
+pub fn Matroid::rank_table(Self) -> Array[Int32]
+pub fn Matroid::spanning_count(Self) -> Int32
+pub fn Matroid::tutte(Self) -> Poly2
 pub fn Matroid::uniform(Int32, Int32) -> Self
+
+pub struct Poly1 {
+  c : Array[Int32]
+}
+pub fn Poly1::eval(Self, Int32) -> Int32
+pub fn Poly1::render(Self) -> String
+
+pub struct Poly2 {
+  size : Int32
+  c : Array[Array[Int32]]
+}
+pub fn Poly2::add(Self, Self) -> Self
+pub fn Poly2::equals(Self, Self) -> Bool
+pub fn Poly2::eval(Self, Int32, Int32) -> Int32
+pub fn Poly2::one(Int32) -> Self
+pub fn Poly2::render(Self) -> String
+pub fn Poly2::resize(Self, Int32) -> Self
+pub fn Poly2::shift_x(Self) -> Self
+pub fn Poly2::shift_y(Self) -> Self
+pub fn Poly2::zero(Int32) -> Self
 
 // Type aliases
 

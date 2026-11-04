@@ -211,3 +211,17 @@ pub fn Matroid::check_geometric(self : Matroid) -> @galois.Check {
     self.rank(top).to_string(),
   )
 }
+
+///|
+/// 超平面（hyperplanes）= 秩 r(E)−1 的平坦集。T10 的餘迴路判準要用到。
+pub fn Matroid::hyperplanes(self : Matroid) -> Array[@bitset.BitSet] {
+  let rtop = self.rank(@bitset.BitSet::full(self.n))
+  let all = self.flats()
+  let out : Array[@bitset.BitSet] = []
+  for i = 0; i < all.length(); i = i + 1 {
+    if self.rank(all[i]) == rtop - 1 {
+      out.push(all[i])
+    }
+  }
+  out
+}

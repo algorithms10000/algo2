@@ -1,6 +1,6 @@
 # B0001 全局公理伽羅瓦對應（Global Axiom–Galois Correspondence, GAGC）
 
-**登記編號：B0001（R1）＋ B0002（R2）**　　**狀態：兩輪開發完成；R3 = A3′ 增量式 DG 基**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
+**登記編號：B0001（R1）＋ B0002（R2）＋ 延伸（R4）**　　**狀態：R1–R4 完成（R3 = A3′ 增量式 DG 基；R4 = B0002 延伸）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
 
 本專案把「公理系統 → 定理 → 演算法」做成**可執行**的鏈條：一條全局公理 + 四條局部公理，
 推出四條定理與 13 條等式，再由定理的構造性內容導出 7 條演算法，並附一套能**主動找出反例**的檢核器。
@@ -276,3 +276,65 @@ moon run cmd/main -- dgbasis divisors-420 # 列出 38 條蘊含
 介面：`@lattice.canonical_basis_incremental`、`dg_report`、`dg_stats_line`、`render_basis`、
 `theory_closed_sets`、`check_incremental_agrees_naive`、`check_basis_lectic`、
 `check_theory_equivalent`、`check_theory_irredundant`。
+
+---
+
+# B0002 延伸：二元性、對偶、Tutte 多項式、擬陣普查（R4）
+
+## 新立的定理
+
+| 編號 | 內容 | 驗證方式 |
+|---|---|---|
+| **T9** | M 二元 ⟺ M 無 **U(2,4)** minor（Tutte 1958） | 兩條**完全獨立**的路徑：禁 minor 判準 vs 由基 + 基本迴路顯式構造 GF(2) 表示 |
+| **T9′** | M 正則 ⟺ 無 {U(2,4), F7, F7\*} minor；**Fano 二元但非正則** | `check_fano_binary_not_regular`；圖／餘圖擬陣必正則 |
+| **T10** | 對偶：(M\*)\*=M、餘迴路＝超平面補集、對偶平坦秩判準、U(r,n)\*≅U(n−r,n)、T_{M\*}(x,y)=T_M(y,x)、M(K₄) 自對偶 | 六條逐項檢核 |
+| **T11** | \|ℱ(U(r,n))\| = 2 + Σ_{1≤k<r} C(n,k) | 多組 (r,n) 對照 |
+| **T11′** | 用 **C1–C3** 與 **I1–I3** 兩條公理路線列舉全部擬陣，計數必須相同 | 普查 n = 2..5 |
+| **T12** | Tutte 特化、χ=(−1)^r T(1−λ,0)、**Whitney** P(G,λ)=λ^{c}χ_{M(G)}(λ)、χ_{F7}=(λ−1)(λ−2)(λ−4) | 多項式與計數互比 |
+
+## 實測數字
+
+**擬陣普查**（兩條路線完全一致）：
+
+| n | 迴路路線 | 獨立集路線 | 同構類 | 非二元 | 非正則 |
+|---|---|---|---|---|---|
+| 2 | 5 | 5 | 4 | 0 | 0 |
+| 3 | 16 | 16 | 8 | 0 | 0 |
+| 4 | 68 | 68 | 17 | **1（= U(2,4)）** | 1 |
+| 5 | 406 | 406 | 38 | 32（6 類） | 32 |
+
+n = 5 的 406 個擬陣上，「禁 minor 判準」與「基本迴路構造」**0 次分歧**。
+
+**樣本**（`mext` 實測）：
+
+| 樣本 | 二元 | 正則 | T_M(x,y) | χ_M(λ) |
+|---|---|---|---|---|
+| U(2,4) | 否 | 否 | x²+2x+y²+2y | λ²−4λ+3 |
+| M(K₃) | 是 | 是 | x²+x+y | λ²−3λ+2 |
+| M(K₄) | 是 | 是 | x³+3x²+4x+2xy+3y²+y³+2y | λ³−6λ²+11λ−6 |
+| Fano | **是** | 否 | x³+4x²+3x+7xy+6y²+3y³+y⁴+3y | λ³−7λ²+14λ−8 = (λ−1)(λ−2)(λ−4) |
+| Fano\* | 是 | 否 | x⁴+3x³+6x²+3x+7xy+4y²+y³+3y | λ⁴−7λ³+21λ²−28λ+13 |
+| U(3,5) | 否 | 否 | x³+2x²+3x+y²+3y | λ³−5λ²+10λ−6 |
+| M(K₄)\* | 是 | 是 | 同 M(K₄)（自對偶） | λ³−6λ²+11λ−6 |
+
+## 這輪被檢核器抓到的四個「定理寫錯」（全部已修正並寫進登記表）
+
+1. **DOC-3**：把 F7、F7\* 放進**二元**禁 minor 集 —— 那是**正則**的判準。**Fano = PG(2,2) 本身就是二元擬陣**（GF(2)³ 的 7 個非零向量）。
+2. **THM-1**：我據「平坦格對偶」寫 `|ℱ(M*)| = |ℱ(M)|` —— 錯。U(2,3) 有 5 個平坦集，其對偶 U(1,3) 只有 2 個。改為秩判準 P-B7；Fano\* 因此**不設平坦數期望值**（登記 −1），不拿程式自己的輸出當期望值。
+3. **THM-2**：著色多項式漏掉 λ^{c(G)} 因子 —— K₃ 在 λ=3 上 χ=2 而著色數 6。
+4. **THM-3**：均勻擬陣平坦公式差一層 —— U(1,2) 實得 2、舊公式 3。
+
+## 怎麼跑
+
+```bash
+cd galois
+moon run cmd/main -- mext Fano        # 二元/正則判定 + Tutte + 11 條檢核
+moon run cmd/main -- mextall          # 13 條全域定理檢核
+moon run cmd/main -- mreg             # 登記期望值核對（7 份樣本）
+moon run cmd/main -- mcensus 5        # 406 個擬陣、38 個同構類、32 個非二元
+```
+
+介面：`@matroid.{minor_of,delete_at,contract_at,dual,cocircuits,isomorphic,has_minor_in,
+is_binary_by_minors,is_binary_by_construction,is_regular,tutte_deletion_contraction,tutte_subsets,
+characteristic_definition,characteristic_from_tutte,proper_coloring_count,
+all_matroids_by_circuits,all_matroids_by_independent_sets,isomorphism_classes,extension_report}`。

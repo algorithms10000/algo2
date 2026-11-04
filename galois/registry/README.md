@@ -26,6 +26,9 @@ R 的每個元素都由群作用算出，沒有任何手寫邊。
 | `M(K4)` | K₄ 圖擬陣（4 三角形 + 3 四環） | \|𝒞\|=7、\|ℱ\|=15 = Bell(4) |
 | `Fano` | PG(2,2)：F₂³ 的 7 個非零向量 | \|𝒞\|=14、\|ℱ\|=16、r=3 |
 | `interval-4` | 負控制：區間凸包（antimatroid） | `check_exchange` 必須 FAIL |
+| `Fano*` | F7 的對偶（二元、非正則） | |ℱ| 無獨立公式（登記為 −1）；|𝒞|=7 = 超平面補集 |
+| `U(3,5)` | 均勻擬陣 | |ℱ|=2+C(5,1)+C(5,2)=17、|𝒞|=5 |
+| `M(K4)*` | K₄ 的餘圖擬陣（正則） | 自對偶故 |ℱ|=15、|𝒞|=7（= 7 個割） |
 
 ## A3′ 追加：整除上下文族（`registry.mbt` 的 `registered_dg()`）
 
@@ -40,6 +43,8 @@ R 的每個元素都由群作用算出，沒有任何手寫邊。
 
 - `cyclotomic_context / divisibility_context / two_blocks_context`：由數學定義生成 K。
 - `summarize(reg)`：一次算出閉集數、概念數、Hasse 邊、\|Σ\|、冗餘公理、A6 報告（`summary.mbt`）。
+- 【B0002 延伸】`registered_matroids_ext()`、`lookup_matroid_ext(name)`、`all_matroid_names()`、
+  `extension_summary(reg)`、`extension_global_report()`、`check_registered_expectations()`、`census_summary(n)`。
 - 【B0002】`matroid_summary(reg, with_inherit)`、`interval_summary(n)`：擬陣摘要＋A12 檢核＋（可選）B0001 繼承（`matroids.mbt`）。
 
 ## 依賴關係
