@@ -1,13 +1,15 @@
 # galois/ — B0001 MoonBit 模組（arena/b0001）
 
-本資料夾是 MoonBit 模組根（`moon.mod`）。下面 6 個套件構成 B0001 的全部實作。
+本資料夾是 MoonBit 模組根（`moon.mod`）。下面 8 個套件構成 B0001–B0004 的全部實作。
 
 ## 資料夾視角的依賴關係
 
 ```
 cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context ──▶ bitset
-    │             └──▶ matroid ──▶ lattice/galois/context/bitset（B0002）
-    └──────────────────────▶ lattice/galois（直接使用）
+    │             ├──▶ matroid ──▶ lattice/galois/context/bitset（B0002）
+    │             ├──▶ modular  ──▶ galois（B0003）
+    │             └──▶ elliptic ──▶ modular, galois（B0004）
+    └──────────────────────▶ lattice/galois/modular/elliptic（直接使用）
 ```
 
 ## 本模組已獲得的定理（詳見 ../docs/B0001-定理體系.md）
@@ -30,6 +32,16 @@ cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context
 | T7 | Moore 實現／提升（ℱ → K_ℱ，B0001 逐字適用） | `matroid/realize.mbt` |
 | T8 | 負控制（檢核器不得恆真） | `matroid/antimatroid.mbt` |
 | A8–A14 | 迴路閉包、秩、平坦集、實現、檢核、GF(2)、交換反例搜尋 | `matroid/*.mbt` |
+
+## B0003／B0004 追加
+
+| 編號 | 名稱 | 落點 |
+|---|---|---|
+| T13／T14 | 同餘子群指數公式、X₀(N) 解析不變量 | `modular/`（見 `modular/README.md`） |
+| T15–T21 | 撓群 E[n] ≅ (ℤ/n)²、軌道計數＝同餘指數、Galois 等變、Paley/Ramsey、鏡像對稱、撓群擬陣、團複形同調 | `elliptic/`（見 `elliptic/README.md`） |
+
+**關鍵接縫**：T16 證明 `[SL₂:Γ₁] = ψφ`、`[SL₂:Γ₀] = ψ`、`[SL₂:Γ] = ψφn` 恰好是
+E[n] 上「階為 n 的點」「循環子群」「辛基」的**個數**——B0003 的算術恆等式因此有了軌道意義。
 
 ## 本模組已實作的演算法
 

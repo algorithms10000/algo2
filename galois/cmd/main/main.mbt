@@ -14,6 +14,10 @@
 ///   moon run cmd/main -- modular          B0003 同餘子群檢核（T13、T14）
 ///   moon run cmd/main -- congruence       B0003 樣本上下文（A6＋DG 基）
 ///   moon run cmd/main -- genus            印出 X₀(N) 的 ψ/φ/ν₂/ν₃/ν_∞/g 並與古典表比對
+///   moon run cmd/main -- elliptic         B0004 撓群 E[n] 檢核（T15–T21）
+///   moon run cmd/main -- eptable          E[n] 的軌道計數與 B0003 同餘指數對照
+///   moon run cmd/main -- paley            Paley 圖／競賽與團複形同調（T18、T19、T21）
+///   moon run cmd/main -- paleyctx         paley-13 樣本上下文（A6＋A3′）
 ///   moon run cmd/main -- mreg             擬陣登記期望值核對（含延伸樣本）
 ///   moon run cmd/main -- mextall          B0002 延伸的全域定理檢核（T9–T12）
 ///   moon run cmd/main -- mcensus <n>      小型擬陣普查（n ≤ 5）
@@ -344,6 +348,80 @@ fn main {
       " 通過",
     )
     println(r.render())
+  } else if cmd == "elliptic" {
+    let r = @elliptic.elliptic_report(12)
+    println(
+      "B0004 撓群 E[n] 檢核（T15–T21）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "eptable" {
+    println(
+      "E[n] 的結構表（n = 2..12）：|E[n]|、#階恰為 n、#循環子群、#有序基，並與 B0003 的同餘指數對照",
+    )
+    for n = 2; n <= 12; n = n + 1 {
+      let pts = @elliptic.count_points_of_order(n)
+      let lines = @elliptic.count_cyclic_subgroups(n)
+      let bases = @elliptic.count_det_one_bases(n)
+      let i1 = @modular.index_gamma1(n)
+      let i0 = @modular.index_gamma0(n)
+      let il = @modular.index_gamma_level(n)
+      let ok = pts == i1 && lines == i0 && bases == il
+      println(
+        "  n=" +
+        n.to_string() +
+        "\t|E[n]|=" +
+        (n * n).to_string() +
+        "\t#階=n：" +
+        pts.to_string() +
+        "（Γ₁ 指數 " +
+        i1.to_string() +
+        "）\t#循環子群：" +
+        lines.to_string() +
+        "（Γ₀ 指數 " +
+        i0.to_string() +
+        "）\t#基：" +
+        bases.to_string() +
+        "（Γ 指數 " +
+        il.to_string() +
+        "）\t" +
+        (if ok { "✓" } else { "✗" }),
+      )
+    }
+  } else if cmd == "paley" {
+    println(
+      "Paley 圖／競賽（由 Weil 配對的二次特徵給出；T18、T19）",
+    )
+    for qi = 0; qi < 6; qi = qi + 1 {
+      let qs : Array[Int32] = [5, 13, 17, 3, 7, 11]
+      let q = qs[qi]
+      let c = @elliptic.check_paley(q)
+      println(
+        "  q=" +
+        q.to_string() +
+        "：" +
+        (if c.passed() { "✓ " } else { "✗ " }) +
+        c.detail(),
+      )
+    }
+    println("團複形同調（T21，GF(2)）")
+    let qs2 : Array[Int32] = [5, 13, 17]
+    for qi = 0; qi < 3; qi = qi + 1 {
+      let q = qs2[qi]
+      let c = @elliptic.check_flag_homology(q)
+      println(
+        "  q=" +
+        q.to_string() +
+        "：" +
+        (if c.passed() { "✓ " } else { "✗ " }) +
+        c.detail(),
+      )
+    }
+  } else if cmd == "paleyctx" {
+    println(@registry.paley_summary())
   } else if cmd == "congruence" {
     println(@registry.congruence_summary())
   } else if cmd == "genus" {

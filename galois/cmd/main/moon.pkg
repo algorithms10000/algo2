@@ -2,6 +2,7 @@ import {
   "arena/b0001/context",
   "arena/b0001/galois",
   "arena/b0001/lattice",
+  "arena/b0001/elliptic",
   "arena/b0001/modular",
   "arena/b0001/registry",
   "moonbitlang/core/env",

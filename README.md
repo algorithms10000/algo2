@@ -1,6 +1,6 @@
 # B0001 全局公理伽羅瓦對應（Global Axiom–Galois Correspondence, GAGC）
 
-**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）**　　**狀態：R1–R5 完成（R3 = A3′ 增量式 DG 基；R4 = B0002 延伸；R5 = B0003 同餘子群）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
+**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）**　　**狀態：R1–R6 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
 
 本專案把「公理系統 → 定理 → 演算法」做成**可執行**的鏈條：一條全局公理 + 四條局部公理，
 推出四條定理與 13 條等式，再由定理的構造性內容導出 7 條演算法，並附一套能**主動找出反例**的檢核器。
@@ -25,7 +25,8 @@ B0001（本目錄）
 ├── docs/                    數學合約：定理體系全文（含證明）
 │   ├── B0001-定理體系.md
 │   ├── B0002-定理體系.md
-│   └── B0003-定理體系.md
+│   ├── B0003-定理體系.md
+│   └── B0004-定理體系.md
 ├── galois/                  MoonBit 模組 arena/b0001
 │   ├── bitset/              稠密位元集（UInt64 字組）＋ GF(2) 消去所需的 xor
 │   ├── context/             形式上下文 K=(A,S,R)、Φ/Ψ、分量、文字格式 parse
@@ -33,6 +34,7 @@ B0001（本目錄）
 │   ├── lattice/             A2 NextClosure、A3 DG 典範基、A5 概念格與覆蓋
 │   ├── matroid/             【B0002】擬陣：GF(2)、迴路、閉包、秩、平坦格、Moore 實現
 │   ├── modular/             【B0003】Γ(n)/Γ₀(n)/Γ₁(n)、PSL₂(ℤ)、SL₂(ℤ/N)、X₀(N) 不變量
+│   ├── elliptic/            【B0004】E[n]≅(ℤ/n)²、除多項式、Weil 配對、Paley/Ramsey、團複形同調
 │   ├── registry/            樣本上下文與擬陣樣本（含 ℚ(ζ₈)/ℚ、K₃/K₄ 圖擬陣、Fano）
 │   ├── cmd/main/            CLI（接入與輸出接口）
 │   └── contexts/*.ctx       文字格式樣本（dump/parse 互逆）
@@ -406,3 +408,77 @@ moon run cmd/main -- congruence   # 樣本上下文：A6 8/8、DG 基 |Σ|=16
 is_normal_by_bruteforce, conjugation_witness, gamma_zero, gamma_one, gamma_level, full_sl2,
 dedekind_psi, euler_phi, cusp_count, elliptic_two_count, elliptic_three_count, genus_x0,
 classical_genus, modular_report}`、`@registry.congruence_context / congruence_summary`。
+
+---
+
+# B0004：橢圓曲線撓群 E[n] ≅ (ℤ/n)²，及其衍生結構（R6）
+
+## 為什麼是它
+
+B0003 做出 Γ(n)/Γ₀/Γ₁ 與 PSL₂(ℤ)，但留下一個缺口：**Γ(n) 是什麼東西的自同構群？**
+答案是把 E[n] 的一組基（level-n structure）保住的那一群。本輪補上撓群，兩套體系因此**併攏**：
+
+| 撓群上的軌道 | 個數 | 等於 B0003 的指數 |
+|---|---|---|
+| 階恰為 n 的點 | ψ(n)φ(n) | [SL₂(ℤ) : Γ₁(n)] |
+| 階為 n 的循環子群 = ℙ¹(ℤ/n) | ψ(n) | [SL₂(ℤ) : Γ₀(n)] |
+| 辛基（det = 1） | ψ(n)φ(n)n | [SL₂(ℤ) : Γ(n)] |
+| 全部有序基 | ψ(n)φ(n)n·φ(n) = \|GL₂(ℤ/n)\| | [SL₂:Γ(n)]·φ(n) |
+
+**T16** 就是這張表。它把「算術函數 ψ、φ」與「有限群軌道—穩定化子」溶成同一個計數
+（n = 2..12 全部對上，見 `moon run cmd/main -- eptable`）。
+
+## 定理（詳見 `docs/B0004-定理體系.md`）
+
+| 編號 | 內容 | 驗證方式 |
+|---|---|---|
+| **T15** | E[n] ≅ (ℤ/n)² 的三條等價刻劃：群論／完美配對／**deg ψ_n = (n²−1)/2（奇）、(n²−4)/2（偶）** | BigInt 精確算 ψ_n：3 條曲線 × n = 2..12，含「除以 2y」整除性斷言 |
+| **T16** | 軌道計數 = 同餘指數（上表）＋ 軌道—穩定化子 \|orbit\|·\|stab\| = \|SL₂(ℤ/n)\| | n = 2..12 暴力計數 vs `@modular` 的公式 |
+| **T17** | Galois 等變 e(MT,MS) = det(M)·e(T,S) ⇒ ρ_{E,n} 的像 ⊂ GSp₂ = GL₂，**保配對者恰為 SL₂** | n = 2,3,4 對全部 GL₂(ℤ/n) 元素窮舉 |
+| **T18** | 配對值的二次特徵 ⇒ **Paley 圖**（q≡1 mod 4，srg、可遷、自補）／**Paley 競賽**（q≡3，雙正則）；Delsarte ⇒ **R(ω+1,α+1) > q** | q = 3,5,7,11,13,17，外部古典參數全部對上 |
+| **T19** | 鏡像對稱：χ(det) 平方→保色、非平方→翻色 ⇒ 圖自補、競賽反向同構；μ_n 共軛使 e_n 反演 | 顯式給出 λ 並逐元素比對 |
+| **T20** | 撓群線性擬陣：秩 2、p+1 個平行類、**簡化 = U(2,p+1)**；p = 2 時 = M(K₃)（B0002 樣本） | p = 2,3,5,7（p ≤ 3 暴力列迴路與平坦集） |
+| **T21** | 團複形 Δ(P(q)) 的 GF(2) 同調：β₀ = BFS 分量、Euler–Poincaré 兩路徑一致；並餵回 B0001 的 A6/A3′ | q = 5,13,17 ＋ 樣本上下文 `paley-13` |
+
+## 實測（真數字）
+
+| q | 類型 | 不變量 | ω | α | Ramsey 結論 |
+|---|---|---|---|---|---|
+| 5 | 圖 | srg(5,2,0,1) = C₅ | 2 | 2 | R(3,3) > 5 |
+| 13 | 圖 | srg(13,6,2,3) | 3 | 3 | R(4,4) > 13 |
+| 17 | 圖 | srg(17,8,3,4) | 3 | 3 | **R(4,4) > 17**（古典值 18，此處最優） |
+| 3／7／11 | 競賽 | 雙正則（出度 1/3/5、λ = 0/1/2） | 遞移子競賽 2/3/4 | — | — |
+
+| q | 面數 (f₀,f₁,f₂) | GF(2) Betti | χ(面) | χ(β) |
+|---|---|---|---|---|
+| 5 | (5, 5, 0) | (1, 1, 0) | 0 | 0 |
+| 13 | (13, 39, 26) | (1, 2, 1) | 0 | 0 |
+| 17 | (17, 68, 68) | (1, 0, 16) | 17 | 17 |
+
+`paley-13` 樣本上下文（P(13) 的閉鄰域）：\|R\| = 91、\|ℭ\| = 210、DG 基 \|Σ\| = 221
+（A3′ 走 431 步 vs 暴力 8191），**A6 8/8、A3′ 4/4 全通過**。
+
+## 這輪被抓到的三個錯（已修，記於 `algorithm.xlsx`）
+
+1. **BUG-4**：ψ_n 遞歸必須**先**「除以 2y」再化簡 y² = h(x)；首版反過來，n = 5 起整數性判定崩潰
+   （商環裡「是否含 y 因子」不可判定）。
+2. **BUG-5**：循環子群規範鍵誤取全部倍數（含 O 與非生成元）⇒ n = 4,5,6 的子群數塌成 1 或 9；
+   順帶發現「#基」要分成 det = 1 的辛基（= [SL₂:Γ]）與全部基（= \|GL₂\| = [SL₂:Γ]·φ）。
+3. **BUG-6**：撓群擬陣迴路數漏了「每條線 p−1 個非零向量」⇒ p 奇時應為 (p+1) + (p−1)³·C(p+1,3)。
+
+## 怎麼跑
+
+```bash
+cd galois
+moon run cmd/main -- elliptic    # T15–T21：69 條檢核
+moon run cmd/main -- eptable     # E[n] 軌道計數 vs B0003 同餘指數（n=2..12）
+moon run cmd/main -- paley       # Paley 圖／競賽、Ramsey 下界、團複形同調
+moon run cmd/main -- paleyctx    # paley-13 樣本上下文：A6 8/8、A3′ 4/4
+```
+
+介面：`@elliptic.{div_polys, np_reduce, e_group, weil_exp, is_basis, count_points_of_order,
+count_cyclic_subgroups, count_det_one_bases, count_all_bases, gl2_group, mact, legendre,
+paley_adjacency, paley_tournament, clique_number, is_strongly_regular, is_doubly_regular,
+self_complementary_witness, reversal_witness, flag_homology, components_of, rank_mod_p,
+circuits_bruteforce, flats_bruteforce, simplification_is_uniform, elliptic_report}`、
+`@registry.paley_context / paley_summary`。

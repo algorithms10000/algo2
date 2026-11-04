@@ -1,0 +1,182 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/elliptic"
+
+import {
+  "arena/b0001/galois",
+  "moonbitlang/core/bigint",
+}
+
+// Values
+pub fn all_cliques(Array[Array[Bool]]) -> Array[Array[Int32]]
+
+pub fn boundary_rank(Array[Array[Int32]], Array[Array[Int32]]) -> Int32
+
+pub fn check_div_poly(Int32, Int32, Int32) -> @galois.Check
+
+pub fn check_equivariance(Int32) -> @galois.Check
+
+pub fn check_flag_homology(Int32) -> @galois.Check
+
+pub fn check_orbit_equals_index(Int32) -> @galois.Check
+
+pub fn check_orbit_stabilizer(Int32) -> @galois.Check
+
+pub fn check_paley(Int32) -> @galois.Check
+
+pub fn check_torsion_matroid(Int32) -> @galois.Check
+
+pub fn check_torsion_size(Int32) -> @galois.Check
+
+pub fn check_weil_axioms(Int32) -> @galois.Check
+
+pub fn circuits_bruteforce(Int32) -> Array[Array[(Int32, Int32)]]
+
+pub fn clique_number(Array[Array[Bool]]) -> Int32
+
+pub fn complement(Array[Array[Bool]]) -> Array[Array[Bool]]
+
+pub fn components_of(Array[Array[Bool]]) -> Int32
+
+pub fn count_all_bases(Int32) -> Int32
+
+pub fn count_cyclic_subgroups(Int32) -> Int32
+
+pub fn count_det_one_bases(Int32) -> Int32
+
+pub fn count_points_of_order(Int32) -> Int32
+
+pub fn cyclic_subgroup_key(EPt) -> String
+
+pub fn degrees(Array[Array[Bool]]) -> Array[Int32]
+
+pub fn div_polys(Int32, Int32, Int32) -> Array[NPoly]?
+
+pub fn e_group(Int32) -> Array[EPt]
+
+pub fn elliptic_report(Int32) -> @galois.Report
+
+pub fn ept_make(Int32, Int32, Int32) -> EPt
+
+pub fn expected_psi_degree(Int32) -> Int32
+
+pub fn expected_psi_y_degree(Int32) -> Int32
+
+pub fn faces_by_dim(Array[Array[Int32]]) -> Array[Array[Array[Int32]]]
+
+pub fn flag_homology(Array[Array[Bool]]) -> Homology
+
+pub fn flats_bruteforce(Int32) -> Array[Array[(Int32, Int32)]]
+
+pub fn gl2_group(Int32) -> Array[(Int32, Int32, Int32, Int32)]
+
+pub fn is_basis(EPt, EPt) -> Bool
+
+pub fn is_doubly_regular(Int32, Array[Array[Bool]]) -> Bool
+
+pub fn is_strongly_regular(Array[Array[Bool]], Int32, Int32, Int32, Int32) -> Bool
+
+pub fn legendre(Int32, Int32) -> Int32
+
+pub fn mact((Int32, Int32, Int32, Int32), EPt) -> EPt
+
+pub fn max_transitive_subtournament(Int32, Array[Array[Bool]]) -> Int32
+
+pub fn mod_inverse(Int32, Int32) -> Int32
+
+pub fn non_square(Int32) -> Int32
+
+pub fn np_add(NPoly, NPoly) -> NPoly
+
+pub fn np_const(Int32) -> NPoly
+
+pub fn np_deg_x(NPoly) -> Int32
+
+pub fn np_div_2y(NPoly) -> NPoly?
+
+pub fn np_is_zero(NPoly) -> Bool
+
+pub fn np_mul(NPoly, NPoly) -> NPoly
+
+pub fn np_pow(NPoly, Int32) -> NPoly
+
+pub fn np_reduce(NPoly, Int32, Int32) -> NPoly
+
+pub fn np_scale(NPoly, Int32) -> NPoly
+
+pub fn np_sub(NPoly, NPoly) -> NPoly
+
+pub fn np_terms(NPoly) -> Int32
+
+pub fn np_x() -> NPoly
+
+pub fn np_y() -> NPoly
+
+pub fn np_y_degrees(NPoly) -> Array[Int32]
+
+pub fn np_zero() -> NPoly
+
+pub fn paley_adjacency(Int32) -> Array[Array[Bool]]
+
+pub fn paley_tournament(Int32) -> Array[Array[Bool]]
+
+pub fn parallel_class_count(Int32) -> Int32
+
+pub fn parallel_pair((Int32, Int32), (Int32, Int32), Int32) -> Bool
+
+pub fn projective_points(Int32) -> Array[(Int32, Int32)]
+
+pub fn rank_mod_p(Array[(Int32, Int32)], Int32) -> Int32
+
+pub fn reversal_witness(Int32, Array[Array[Bool]]) -> Bool
+
+pub fn self_complementary_witness(Int32, Array[Array[Bool]]) -> Bool
+
+pub fn signature_matrix(Int32) -> Array[Array[Int32]]
+
+pub fn simplex_key(Array[Int32]) -> String
+
+pub fn simplification_is_uniform(Int32) -> Bool
+
+pub fn stabilizer_order_of_line(Int32, EPt) -> Int32
+
+pub fn torsion_vectors(Int32) -> Array[(Int32, Int32)]
+
+pub fn translation_invariant(Array[Array[Bool]], Int32) -> Bool
+
+pub fn weil_exp(EPt, EPt) -> Int32
+
+pub fn weil_legendre(EPt, EPt) -> Int32
+
+// Errors
+
+// Types and methods
+pub struct EPt {
+  n : Int32
+  x : Int32
+  y : Int32
+}
+pub fn EPt::add(Self, Self) -> Self
+pub fn EPt::is_zero(Self) -> Bool
+pub fn EPt::key(Self) -> String
+pub fn EPt::neg(Self) -> Self
+pub fn EPt::order(Self) -> Int32
+pub fn EPt::scale(Self, Int32) -> Self
+
+pub struct Homology {
+  face_counts : Array[Int32]
+  betti : Array[Int32]
+  euler_faces : Int32
+  euler_betti : Int32
+}
+pub fn Homology::agree(Self) -> Bool
+pub fn Homology::betti(Self) -> Array[Int32]
+pub fn Homology::face_counts(Self) -> Array[Int32]
+pub fn Homology::render(Self) -> String
+
+pub struct NPoly {
+  t : Array[(Int32, Int32, @bigint.BigInt)]
+}
+
+// Type aliases
+
+// Traits
