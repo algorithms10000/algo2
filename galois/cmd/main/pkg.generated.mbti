@@ -1,0 +1,17 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/cmd/main"
+
+import {
+  "arena/b0001/context",
+}
+
+// Values
+pub fn dump_text(@context.FormalContext, String) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

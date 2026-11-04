@@ -1,0 +1,83 @@
+B0001 開發流水帳（Dev.txt）
+==================================================================
+每回合更新。記錄：開發指示、已完成、未完成、聯網搜查結果、已決定但待辦事項。
+本檔為「一直記錄直至完成」的帳本，任何未完工項不得刪除，只能標記狀態。
+
+■ 回合 R1（2026-11-04）：首次開發，定理及演算法登記編號 B0001
+------------------------------------------------------------------
+[指示來源]
+  1. uploads/作業規範.md    —— 最高成果守則／最重要作業守則（公理→定理→演算法）／最大盡責／最專業代理
+  2. uploads/工程內容2.md   —— 全局公理伽羅瓦對應（主體）；局部公理由代理決定；12 項數學名詞庫
+  3. uploads/工程約束.md    —— 最新穩定版 MoonBit；Dev.txt／AGENTS.md／README.md；局部編譯測試＋inspect；
+                               回合末 CI 全局編譯測試＋commit；algorithm.xlsx 登記定理與演算法與等式
+  4. uploads/組合範例.md    —— 14 條組合手段（泛性質、Grothendieck 拓撲、上極限／纖維積、單子、對偶、纖維範疇、
+                               推出／自由積、非交換乘法律、插槽、對偶對、Morita、局部化、短正合序列導函子、管線合成）
+
+[本回合採用的方法學]
+  - 以「形式上下文 K=(A,S,R) + 反單調伴隨對 (Φ,Ψ) + 閉包算子」作為全局公理 X0 的載體；
+    公理系統與演算法陳述系統視為同一結構的兩面 ⇒ 伽羅瓦對應不是類比，而是格反同構（P4）。
+  - 局部公理由本代理自訂四條：X1 有限性、X2 支撐完全性、X3 分離性、X4 分量局部性（見 docs §2）。
+  - 每條定理都必須有可執行判準（A6 反例搜尋），不得只有文字。
+
+[已完成]
+  ✅ 工具鏈：下載並安裝 MoonBit 最新穩定版 moon 0.1.20261102（2026-11-02），安裝於 /tmp/moon（沙盒快照外，
+     避免 383MB 二進位污染工程快照；重建指令見 ci/bootstrap_toolchain.sh）。
+  ✅ 聯網搜查最新語法（結果見下節「聯網搜查」），並以本地 core 原始碼交叉核對 0.9.x 語法：
+     moon.pkg（取代 moon.pkg.json）、#derive、declare、guard!、for/while 語法、using 別名、
+     try/catch（try? 已移除）、StringBuilder()、to_owned()、UInt64::popcnt、pub(all) enum。
+  ✅ 定理體系文件：docs/B0001-定理體系.md（D1–D8、X0–X4、P1–P7、L1–L4、C1、T1–T4、E1–E13，全部附證明）。
+  ✅ 程式（MoonBit，6 個套件）：
+     bitset  —— 稠密位元集（UInt64 字組、popcount、子集枚舉、按基數枚舉）
+     context —— K=(A,S,R)、Φ/Ψ、DSU 分量、子上下文、文字格式 parse
+     galois  —— A1 閉包、A4 局部閉包、A6 檢核器、參考實作（逐元素獨立路徑）
+     lattice —— A2 NextClosure、A3 DG 典範基、A5 概念格與上覆蓋、lattice 檢核
+     registry—— 三份樣本上下文（含 ℚ(ζ₈)/ℚ 由群作用計算）與摘要
+     cmd/main—— CLI：list/info/concepts/basis/closure/check/dump/parse
+  ✅ 樣本上下文（全部為真數學資料，非人造）：
+     cyclotomic-q8：ℚ(ζ₈)/ℚ，伽羅瓦群 C₂×C₂，R 由基底 {1,i,√2,i√2} 的符號表計算 → 5 子群 ↔ 5 中間體，
+                    |ℭ_A|=|ℭ_S|=|B(K)|=5（伽羅瓦基本定理的可執行實例）。
+     divisibility：ℤ 整除格（公倍數 ↔ 公因數）→ |B(K)|=4，並由 T2 判定出冗餘公理 {3,4,6}。
+     two-blocks  ：兩不交分量 → 驗證 T3 局部封閉與跨分支坍縮（cl(A)=全域）。
+  ✅ A6 檢核：三份上下文各 13 條（X2、P1、L1、P2+L4、P3、P4+P5、T2、T3、T4×3、A2 完整性、A5 覆蓋）全部 PASS。
+     並以 500 個隨機上下文（m,n ≤ 5）對照獨立暴力實作，全部一致（測試題已依規範刪除）。
+  ✅ 局部編譯測試＋inspect（moon check --target wasm/all、moon build、moon fmt、moon info）。
+  ✅ algorithm.xlsx（8 工作表）：公理與定義、命題引理定理、演算法、等式、樣本上下文、
+     工程內容2名詞對應、開發期缺陷、說明。由 tools/make_registry.py 產生（可重現）。
+  ✅ 每資料夾 README.md（定理列表、演算法列表、資料夾視角依賴圖、動線與接口）。
+  ✅ AGENTS.md（與 uploads/工程約束.md 同文）。
+  ✅ ci/ci.sh：全局編譯測試（check --target all + build + fmt 檢查 + 樣本上下文 A6 檢核 + xlsx 重建檢查）。
+  ✅ git commit（本回合末）。
+
+[開發期發現並修正的缺陷（真實缺陷，非演練）]
+  🐞 BUG-1 NextClosure 後繼少了「丟棄索引 ≥ i 的元素」一步：
+       cyclotomic 上下文只枚舉到 3 個閉集（正確為 5）。→ 已修正為 Ganter 的 A^{×i} 形式，
+       並把「NextClosure vs 逐元素窮舉」升格為常設檢核 check_nextclosure。
+  🐞 BUG-2 誤用「下覆蓋 = cl(Y∖{s}) 取極大者」：divisibility 的 Y={6,12,18} 之真閉子集 {12} 永遠取不到。
+       → 改為對偶上覆蓋公式 min{cl(Y∪{s}) | s∉Y}，程式與文件中留下反例警告。
+  兩者都由 A6 檢核抓到，證明「定理必須附可執行判準」這條守則的必要性。
+
+[聯網搜查]
+  - 語法與版本：moonbitlang.cn/updates（0.9.x：proof_ensure/moon prove、derive(Debug)、list comprehension、
+    extenum、struct 自訂建構子、運算子優先度警告）、docs.moonbitlang.com（fundamentals、moon.pkg 格式）、
+    moonbit-textbook。實際以本機 toolchain（0.1.20261102）與 core 原始碼驗證，不採信過時文章。
+  - 數學：Duquenne–Guiguès 典範基（1986）與 Ganter–Wille 的 NextClosure 屬標準結果，
+    本回合以「隨機上下文 + 暴力對照」自行驗證其實作，不直接引用二手實作。
+
+[已決定但待辦]
+  ⏳ B0002：擬陣／閉包系統擴展（P7 的交換公理）、Horn 蘊含系統的等價類（增量式屬性探索 AOC-poset）。
+  ⏳ B0003：主同餘子群 Γ(n)/Γ₀(n)/Γ₁(n) 與 PSL₂(ℤ) 的樣本上下文（需先查證離散群資料結構與模形式基本域）。
+  ⏳ B0004：真 KK-理論／內部張量積／循環同調／漸新態射（C*-代數範疇論方向）。
+  ⏳ B0005：橢圓曲線 n 等分點群、雅可比簇群分（扭模的伽羅瓦表示樣本）。
+  ⏳ B0006：拓撲辮群、超立方體網絡群、正則圖邊置換群（置換群樣本上下文與 Burnside/Polya 計數）。
+  ⏳ B0007：近似單位元、投射與非交換投影、自由同倫不變性（形式類比，先立定義再談實作）。
+  ⏳ 工程約束要求「500 萬行、10,000 條演算法」：B0001 為第 1 個 session 的第 1 筆登記（7 條演算法 + 4 條定理），
+     進度帳見 algorithm.xlsx「說明」頁；後續每個 session 需另開登記編號。
+  ⏳ 「推送 CI」：本環境無遠端倉庫，已以 ci/ci.sh 完成等價的「全局編譯測試」並 commit 到本地 git；
+     若日後配置遠端（GitHub/GitLab），只需 git remote add + push，ci/ci.sh 不需修改。
+  ⏳ 效能上限：A3（DG 基）本質為輸出指數；若後續要處理 n > 20 的上下文，需改寫為
+     「偽內涵 + 偽閉包」的 NextClosure 變體（P6 的另一個方向），並加上增量式檢核。
+
+[未完成（本回合內）]
+  無。R1 之交付範圍（B0001 定理體系 + 6 套件程式 + 3 樣本 + 13 條檢核 + 登記表 + 文件 + CI + commit）全部完成。
+
+==================================================================

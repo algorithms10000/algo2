@@ -1,0 +1,15 @@
+# B0001 上下文匯出：divisibility
+context divisibility
+axiom 2
+axiom 3
+axiom 4
+axiom 6
+stmt 4
+stmt 6
+stmt 12
+stmt 18
+edges 2 4 6 12 18
+edges 3 6 12 18
+edges 4 4 12
+edges 6 6 12 18
+

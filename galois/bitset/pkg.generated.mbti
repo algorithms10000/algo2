@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/bitset"
+
+// Values
+pub fn all_subsets(Int32) -> Array[BitSet]
+
+pub fn subsets_by_cardinality(Int32) -> Array[BitSet]
+
+// Errors
+
+// Types and methods
+pub struct BitSet {
+  words : Array[UInt64]
+  n : Int32
+}
+pub fn BitSet::complement(Self) -> Self
+pub fn BitSet::copy(Self) -> Self
+pub fn BitSet::count(Self) -> Int32
+pub fn BitSet::equals(Self, Self) -> Bool
+pub fn BitSet::from_indices(Int32, Array[Int32]) -> Self
+pub fn BitSet::from_mask(Int32, Int32) -> Self
+pub fn BitSet::full(Int32) -> Self
+pub fn BitSet::get(Self, Int32) -> Bool
+pub fn BitSet::intersect(Self, Self) -> Self
+pub fn BitSet::is_empty(Self) -> Bool
+pub fn BitSet::is_full(Self) -> Bool
+pub fn BitSet::minus(Self, Self) -> Self
+pub fn BitSet::minus_bit(Self, Int32) -> Self
+pub fn BitSet::minus_inplace(Self, Self) -> Unit
+pub fn BitSet::new(Int32) -> Self
+pub fn BitSet::ones(Self) -> Array[Int32]
+pub fn BitSet::plus_bit(Self, Int32) -> Self
+pub fn BitSet::prefix_equal(Self, Self, Int32) -> Bool
+pub fn BitSet::prefix_ones(Self, Int32) -> Array[Int32]
+pub fn BitSet::put(Self, Int32, Bool) -> Unit
+pub fn BitSet::render(Self) -> String
+pub fn BitSet::set(Self, Int32) -> Unit
+pub fn BitSet::singleton(Int32, Int32) -> Self
+pub fn BitSet::size(Self) -> Int32
+pub fn BitSet::subset_of(Self, Self) -> Bool
+pub fn BitSet::to_mask(Self) -> Int32
+pub fn BitSet::union(Self, Self) -> Self
+pub fn BitSet::union_inplace(Self, Self) -> Unit
+pub fn BitSet::unset(Self, Int32) -> Unit
+
+// Type aliases
+
+// Traits

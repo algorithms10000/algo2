@@ -1,0 +1,9 @@
+import {
+  "arena/b0001/context",
+  "arena/b0001/galois",
+  "arena/b0001/lattice",
+  "arena/b0001/registry",
+  "moonbitlang/core/env",
+}
+
+pkgtype(kind: "executable")

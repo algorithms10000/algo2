@@ -1,0 +1,57 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/registry"
+
+import {
+  "arena/b0001/context",
+  "arena/b0001/galois",
+}
+
+// Values
+pub fn cyclotomic_context() -> @context.FormalContext
+
+pub fn divisibility_context() -> @context.FormalContext
+
+pub fn lookup(String) -> Registered?
+
+pub fn registered() -> Array[Registered]
+
+pub fn registered_names() -> Array[String]
+
+pub fn summarize(Registered) -> ContextSummary
+
+pub fn two_blocks_context() -> @context.FormalContext
+
+// Errors
+
+// Types and methods
+pub struct ContextSummary {
+  name : String
+  source : String
+  axioms : Int32
+  stmts : Int32
+  edges : Int32
+  components : Int32
+  closed_axiom_count : Int32
+  closed_stmt_count : Int32
+  concept_count : Int32
+  hasse_edges : Int32
+  basis_size : Int32
+  redundant : Array[String]
+  basis : Array[String]
+  report : @galois.Report
+}
+pub fn ContextSummary::render(Self) -> String
+
+pub struct Registered {
+  name : String
+  ctx : @context.FormalContext
+  source : String
+}
+pub fn Registered::ctx(Self) -> @context.FormalContext
+pub fn Registered::make(String, @context.FormalContext, String) -> Self
+pub fn Registered::name(Self) -> String
+pub fn Registered::source(Self) -> String
+
+// Type aliases
+
+// Traits

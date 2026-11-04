@@ -1,0 +1,18 @@
+# B0001 上下文匯出：cyclotomic-q8
+context cyclotomic-q8
+axiom 1
+axiom ⟨σ⟩
+axiom ⟨τ⟩
+axiom ⟨στ⟩
+axiom G
+stmt Q
+stmt Q(√2)
+stmt Q(i)
+stmt Q(i√2)
+stmt Q(ζ8)
+edges 1 Q Q(√2) Q(i) Q(i√2) Q(ζ8)
+edges ⟨σ⟩ Q Q(√2)
+edges ⟨τ⟩ Q Q(i)
+edges ⟨στ⟩ Q Q(i√2)
+edges G Q
+

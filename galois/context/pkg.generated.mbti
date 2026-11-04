@@ -1,0 +1,73 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/context"
+
+import {
+  "arena/b0001/bitset",
+}
+
+// Values
+pub fn component_id_of_axiom(FormalContext) -> Array[Int32]
+
+pub fn component_id_of_stmt(FormalContext) -> Array[Int32]
+
+pub fn components_of(FormalContext) -> Array[Component]
+
+pub fn parse_context(String) -> ParsedContext raise ParseError
+
+pub fn sub_context(FormalContext, Component) -> FormalContext
+
+// Errors
+pub suberror ContextError {
+  UnknownAxiom(String)
+  UnknownStatement(String)
+}
+pub fn ContextError::message(Self) -> String
+
+pub suberror ParseError {
+  ParseAt(Int32, String)
+  UndefinedNameAt(Int32, String)
+  BadArity(Int32, String)
+}
+pub fn ParseError::message(Self) -> String
+
+// Types and methods
+pub struct Component {
+  id : Int32
+  axioms : Array[Int32]
+  stmts : Array[Int32]
+}
+
+pub struct FormalContext {
+  axiom_names : Array[String]
+  stmt_names : Array[String]
+  rows : Array[@bitset.BitSet]
+  cols : Array[@bitset.BitSet]
+  edge_count : Int32
+}
+pub fn FormalContext::axiom_index(Self, String) -> Int32?
+pub fn FormalContext::axiom_name(Self, Int32) -> String
+pub fn FormalContext::axiom_set(Self, Array[Int32]) -> @bitset.BitSet
+pub fn FormalContext::axioms_named(Self, Array[String]) -> @bitset.BitSet raise ContextError
+pub fn FormalContext::edge_count(Self) -> Int32
+pub fn FormalContext::extent(Self, @bitset.BitSet) -> @bitset.BitSet
+pub fn FormalContext::intent(Self, @bitset.BitSet) -> @bitset.BitSet
+pub fn FormalContext::new(Array[String], Array[String], Array[(Int32, Int32)]) -> Self
+pub fn FormalContext::num_axioms(Self) -> Int32
+pub fn FormalContext::num_stmts(Self) -> Int32
+pub fn FormalContext::render_axioms(Self, @bitset.BitSet) -> String
+pub fn FormalContext::render_stmts(Self, @bitset.BitSet) -> String
+pub fn FormalContext::stmt_index(Self, String) -> Int32?
+pub fn FormalContext::stmt_name(Self, Int32) -> String
+pub fn FormalContext::stmt_set(Self, Array[Int32]) -> @bitset.BitSet
+pub fn FormalContext::stmts_named(Self, Array[String]) -> @bitset.BitSet raise ContextError
+
+pub struct ParsedContext {
+  name : String
+  ctx : FormalContext
+}
+pub fn ParsedContext::ctx(Self) -> FormalContext
+pub fn ParsedContext::name(Self) -> String
+
+// Type aliases
+
+// Traits

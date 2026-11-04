@@ -1,0 +1,17 @@
+# B0001 上下文匯出：two-blocks
+context two-blocks
+axiom a1
+axiom a2
+axiom a3
+axiom a4
+stmt s1
+stmt s2
+stmt s3
+stmt s4
+stmt s5
+stmt s6
+edges a1 s1 s2
+edges a2 s2 s3
+edges a3 s4 s5
+edges a4 s5 s6
+

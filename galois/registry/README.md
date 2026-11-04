@@ -1,0 +1,34 @@
+# galois/registry — 樣本上下文（真數學物件）與摘要
+
+## 樣本（不是人造資料）
+
+| 名稱 | 數學物件 | 說明 |
+|---|---|---|
+| `cyclotomic-q8` | ℚ(ζ₈)/ℚ，G ≅ C₂×C₂ | R 由群作用對基底 {1, i, √2, i√2} 的**符號表計算**：(H,F)∈R ⟺ F⊆Fix(H)。 |
+| `divisibility` | ℤ 的整除格 | (a,s)∈R ⟺ a \| s；古典「公倍數 ↔ 公因數」伽羅瓦對應。 |
+| `two-blocks` | 兩個不交分量 | 驗證 T3 的局部封閉（分量內）與跨分支坍縮（cl=A）。 |
+
+`cyclotomic-q8` 的實作要點（`cyclotomic.mbt`）：
+σ(i)=−i、τ(√2)=−√2，故 G 對基底只做變號；於是「g 固定基底元素 b」是純符號判定，
+R 的每個元素都由群作用算出，沒有任何手寫邊。
+
+## 已獲得的定理（本資料夾的落點）
+
+樣本本身不新增定理，而是 T1／P5 的**實例見證**：
+`|ℭ_A| = |ℭ_S| = |B(K)| = 5`，且 5 個概念即伽羅瓦基本定理的 5 組（子群, 中間體）。
+
+## 已實作的演算法
+
+- `cyclotomic_context / divisibility_context / two_blocks_context`：由數學定義生成 K。
+- `summarize(reg)`：一次算出閉集數、概念數、Hasse 邊、\|Σ\|、冗餘公理、A6 報告（`summary.mbt`）。
+
+## 依賴關係
+
+```
+registry ──▶ lattice ──▶ galois ──▶ context ──▶ bitset
+registry ◀── cmd/main
+```
+
+## 接口
+
+`registered() / lookup(name) / registered_names() / summarize(reg) / Registered::make(...)`

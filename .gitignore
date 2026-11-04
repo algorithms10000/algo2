@@ -1,0 +1,12 @@
+# MoonBit 建置產物
+galois/_build/
+*.wasm
+*.wat
+# Python 快取
+__pycache__/
+*.pyc
+# 系統檔
+.DS_Store
+
+# MoonBit 全域 registry 快取（環境產物，非交付物）
+.moon/

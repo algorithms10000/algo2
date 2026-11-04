@@ -1,0 +1,107 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/galois"
+
+import {
+  "arena/b0001/bitset",
+  "arena/b0001/context",
+}
+
+// Values
+pub fn all_closed_bruteforce(@context.FormalContext, Side) -> Array[@bitset.BitSet]
+
+pub fn check_adjunction(@context.FormalContext) -> Check
+
+pub fn check_antitone(@context.FormalContext) -> Check
+
+pub fn check_closure_laws(@context.FormalContext) -> Check
+
+pub fn check_duality(@context.FormalContext) -> Check
+
+pub fn check_locality(@context.FormalContext) -> Check
+
+pub fn check_moore(@context.FormalContext) -> Check
+
+pub fn check_separation(@context.FormalContext) -> Check
+
+pub fn check_support(@context.FormalContext) -> Check
+
+pub fn closure_axioms(@context.FormalContext, @bitset.BitSet) -> @bitset.BitSet
+
+pub fn closure_axioms_iterated(@context.FormalContext, @bitset.BitSet) -> @bitset.BitSet
+
+pub fn closure_stmts(@context.FormalContext, @bitset.BitSet) -> @bitset.BitSet
+
+pub fn closure_stmts_iterated(@context.FormalContext, @bitset.BitSet) -> @bitset.BitSet
+
+pub fn closure_via_basis(Int32, Array[(@bitset.BitSet, @bitset.BitSet)], @bitset.BitSet) -> @bitset.BitSet
+
+pub fn decompose(@context.FormalContext) -> Decomposition
+
+pub fn is_closed_axioms(@context.FormalContext, @bitset.BitSet) -> Bool
+
+pub fn is_closed_stmts(@context.FormalContext, @bitset.BitSet) -> Bool
+
+pub fn local_closure(@context.FormalContext, Decomposition, @bitset.BitSet) -> LocalClosure
+
+pub fn naive_extent(@context.FormalContext, @bitset.BitSet) -> @bitset.BitSet
+
+pub fn naive_intent(@context.FormalContext, @bitset.BitSet) -> @bitset.BitSet
+
+pub fn redundant_axioms(@context.FormalContext) -> Array[Int32]
+
+pub fn singleton_closure(@context.FormalContext, Int32) -> @bitset.BitSet
+
+pub fn structural_report(@context.FormalContext) -> Report
+
+// Errors
+
+// Types and methods
+pub struct Check {
+  law : String
+  name : String
+  passed : Bool
+  detail : String
+}
+pub fn Check::detail(Self) -> String
+pub fn Check::law(Self) -> String
+pub fn Check::make(String, String, Bool, String) -> Self
+pub fn Check::name(Self) -> String
+pub fn Check::passed(Self) -> Bool
+
+pub struct Decomposition {
+  comps : Array[@context.Component]
+  subs : Array[@context.FormalContext]
+  comp_of_axiom : Array[Int32]
+}
+pub fn Decomposition::component(Self, Int32) -> @context.Component
+pub fn Decomposition::component_count(Self) -> Int32
+pub fn Decomposition::sub_context(Self, Int32) -> @context.FormalContext
+
+pub struct LocalClosure {
+  closure : @bitset.BitSet
+  collapsed : Bool
+  component : Int32
+}
+pub fn LocalClosure::closure(Self) -> @bitset.BitSet
+pub fn LocalClosure::collapsed(Self) -> Bool
+pub fn LocalClosure::component(Self) -> Int32
+
+pub struct Report {
+  checks : Array[Check]
+}
+pub fn Report::add(Self, Check) -> Unit
+pub fn Report::all_passed(Self) -> Bool
+pub fn Report::get(Self, Int32) -> Check
+pub fn Report::new() -> Self
+pub fn Report::passed_count(Self) -> Int32
+pub fn Report::render(Self) -> String
+pub fn Report::size(Self) -> Int32
+
+pub(all) enum Side {
+  AxiomSide
+  StmtSide
+}
+
+// Type aliases
+
+// Traits

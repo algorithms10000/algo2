@@ -1,0 +1,66 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/lattice"
+
+import {
+  "arena/b0001/bitset",
+  "arena/b0001/context",
+  "arena/b0001/galois",
+}
+
+// Values
+pub fn all_closed_stmts(@context.FormalContext) -> Array[@bitset.BitSet]
+
+pub fn all_concepts(@context.FormalContext) -> Array[Concept]
+
+pub fn basis_report(@context.FormalContext) -> @galois.Report
+
+pub fn basis_size(@context.FormalContext) -> Int32
+
+pub fn canonical_basis(@context.FormalContext) -> Array[Implication]
+
+pub fn check_basis_agreement(@context.FormalContext, Array[Implication]) -> @galois.Check
+
+pub fn check_basis_completeness(@context.FormalContext, Array[Implication]) -> @galois.Check
+
+pub fn check_basis_nonredundant(@context.FormalContext, Array[Implication]) -> @galois.Check
+
+pub fn check_covers(@context.FormalContext) -> @galois.Check
+
+pub fn check_nextclosure(@context.FormalContext) -> @galois.Check
+
+pub fn closed_stmt_count(@context.FormalContext) -> Int32
+
+pub fn concept_count(@context.FormalContext) -> Int32
+
+pub fn concept_of(@context.FormalContext, @bitset.BitSet) -> Concept
+
+pub fn hasse_edge_count(@context.FormalContext) -> Int32
+
+pub fn next_closed_stmts(@context.FormalContext, @bitset.BitSet) -> @bitset.BitSet?
+
+pub fn pseudo_intents(@context.FormalContext) -> Array[Implication]
+
+pub fn render_implication(@context.FormalContext, Implication) -> String
+
+pub fn upper_covers_stmts(@context.FormalContext, @bitset.BitSet) -> Array[@bitset.BitSet]
+
+// Errors
+
+// Types and methods
+pub struct Concept {
+  extent : @bitset.BitSet
+  intent : @bitset.BitSet
+}
+pub fn Concept::extent(Self) -> @bitset.BitSet
+pub fn Concept::intent(Self) -> @bitset.BitSet
+
+pub struct Implication {
+  premise : @bitset.BitSet
+  conclusion : @bitset.BitSet
+}
+pub fn Implication::conclusion(Self) -> @bitset.BitSet
+pub fn Implication::premise(Self) -> @bitset.BitSet
+
+// Type aliases
+
+// Traits
