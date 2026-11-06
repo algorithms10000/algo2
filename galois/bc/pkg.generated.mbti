@@ -1,0 +1,189 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/bc"
+
+import {
+  "arena/b0001/galois",
+}
+
+// Values
+pub fn a4_class_sizes() -> Array[Int64]
+
+pub fn a4_gram_is_scalar() -> Bool
+
+pub fn a4_mu_rank_modp() -> Int32
+
+pub fn a4_mu_rank_rat() -> Int32
+
+pub fn a4_rational_rank() -> Int32
+
+pub fn a4_table() -> Array[Array[OmegaVal]]
+
+pub fn bc_assembly_iso(FinGroup) -> Bool
+
+pub fn bc_cyclic_iso(Int32) -> Bool
+
+pub fn bc_items() -> Array[BcItem]
+
+pub fn bc_items_compliant() -> Bool
+
+pub fn bc_report() -> @galois.Report
+
+pub fn bc_table_render() -> String
+
+pub fn check_bc_a4() -> @galois.Check
+
+pub fn check_bc_boundary() -> @galois.Check
+
+pub fn check_bc_cyclic() -> @galois.Check
+
+pub fn check_bc_finite() -> @galois.Check
+
+pub fn check_bc_global_galois() -> @galois.Check
+
+pub fn check_bc_kadison() -> @galois.Check
+
+pub fn check_bc_local_axioms() -> @galois.Check
+
+pub fn check_bc_orthogonality() -> @galois.Check
+
+pub fn check_bc_seam_infinite_cyclic() -> @galois.Check
+
+pub fn check_bc_seam_sym() -> @galois.Check
+
+pub fn check_degree_argument(Int32) -> Bool
+
+pub fn check_dft_collapse_fails(Int32) -> Bool
+
+pub fn check_dft_orthogonality(Int32) -> Bool
+
+pub fn check_dimension_only_fails() -> Bool
+
+pub fn check_global_galois_correspondence(Int32) -> Bool
+
+pub fn check_no_laurent_idempotent(Int32) -> Bool
+
+pub fn check_torsion_idempotent() -> Bool
+
+pub fn class_size_total(FinGroup) -> Int64
+
+pub fn conjugacy_classes_sn(Int32) -> Int32
+
+pub fn cyclo_dft_sum(Int32, Int32) -> Array[Int64]
+
+pub fn decide_local(String) -> (Bool, String)
+
+pub fn fix_dim(Int32, Array[Int32]) -> Int32
+
+pub fn fix_included(Int32, Array[Int32], Array[Int32]) -> Bool
+
+pub fn fix_rows(Int32, Array[Int32]) -> Array[Array[Int64]]
+
+pub fn global_axioms() -> Array[AxiomRecord]
+
+pub fn gram_is_scalar(FinGroup) -> Bool
+
+pub fn gram_matrix(FinGroup) -> Array[Array[Int64]]
+
+pub fn gram_matrix_unweighted(FinGroup) -> Array[Array[Int64]]
+
+pub fn groups_int() -> Array[FinGroup]
+
+pub fn irrep_dims(FinGroup) -> Array[Int64]
+
+pub fn laurent_deg(Laurent) -> Int32
+
+pub fn laurent_eq(Laurent, Laurent) -> Bool
+
+pub fn laurent_is_trivial_idempotent(Laurent) -> Bool
+
+pub fn laurent_is_zero(Laurent) -> Bool
+
+pub fn laurent_mul(Laurent, Laurent) -> Laurent
+
+pub fn laurent_new(Int32, Array[Int64]) -> Laurent
+
+pub fn local_axioms() -> Array[AxiomRecord]
+
+pub fn local_axioms_verified() -> Bool
+
+pub fn mu_matrix(FinGroup) -> Array[Array[Int64]]
+
+pub fn mu_rank_modp(FinGroup) -> Int32
+
+pub fn mu_rank_rat(FinGroup) -> Int32
+
+pub fn n_classes(FinGroup) -> Int32
+
+pub fn n_irreps(FinGroup) -> Int32
+
+pub fn omega(Int64, Int64) -> OmegaVal
+
+pub fn omega_add(OmegaVal, OmegaVal) -> OmegaVal
+
+pub fn omega_conj(OmegaVal) -> OmegaVal
+
+pub fn omega_expand(Array[Array[OmegaVal]]) -> Array[Array[Int64]]
+
+pub fn omega_gen() -> OmegaVal
+
+pub fn omega_is_zero(OmegaVal) -> Bool
+
+pub fn omega_mul(OmegaVal, OmegaVal) -> OmegaVal
+
+pub fn omega_one() -> OmegaVal
+
+pub fn omega_zero() -> OmegaVal
+
+pub fn pow3(Int32) -> Int32
+
+pub fn set_subset(Array[Int32], Array[Int32]) -> Bool
+
+pub fn subgroups_of_units(Int32) -> Array[Array[Int32]]
+
+pub fn unweighted_gram_is_scalar(FinGroup) -> Bool
+
+pub fn wedderburn_sumsq(FinGroup) -> Int64
+
+// Errors
+
+// Types and methods
+pub struct AxiomRecord {
+  id : String
+  statement : String
+  global : Bool
+  procedure : String
+  verdict : Bool
+  witness : String
+}
+
+pub struct BcItem {
+  id : String
+  title : String
+  status : String
+  evidence : String
+  inside_part : String
+  decides : Bool
+  value_if_true : String
+  value_if_false : String
+}
+
+pub struct FinGroup {
+  name : String
+  order : Int64
+  class_sizes : Array[Int64]
+  table : Array[Array[Int64]]
+}
+
+pub struct Laurent {
+  lo : Int32
+  c : Array[Int64]
+}
+
+pub struct OmegaVal {
+  a : Int64
+  b : Int64
+}
+
+// Type aliases
+
+// Traits

@@ -683,3 +683,95 @@ Hom 與 Ext¹ 的整數線性代數。超出此界者一律回 kind = 0「只決
 - 內部張量積的下一批：把共端做成**雙模物件**（目前只算維度），才能驗結合律
   (M⊗_A N)⊗_A P ≅ M⊗_A P 的物件級同構。
 - 名詞群仍缺：規格化 Kasparov 積（界外已標）、正則圖邊置換群的 n = 5、橢圓曲線 n 等分點群的 CM 情形。
+
+■ 回合 R11（2026-11-07）：工程內容2 名詞結清（B0009）＋ Baum–Connes 論證（B0010）
+------------------------------------------------------------------
+[指示來源]
+  1. uploads/工程內容2.md（3 行）：(1) 全局公理伽羅瓦對應；(2) 局部公理由你決定；
+     (3) 16 個數學名詞：近似單位元、投射與非交換投影、自由同倫不變性、真 KK-理論、內部張量積、
+         漸新態射、循環同調、PSL₂(ℤ)、橢圓曲線 n 等分點群、Γ(n)/Γ₀(n)/Γ₁(n)、雅可比簇群、
+         圓體擴張伽羅華群、圓周群的所有單位根群、正則圖邊置換群、超立方體網絡群、拓撲辮群。
+  2. 本回合要求：先聯網搜查 Baum–Connes 最前沿，再「用已實作的定理及演算法對經典猜想進行論證」，
+     且界外必須明示「不決定」並給兩個可能值（沿用 B0006 A-K5）。
+
+[名詞盤點（開工前定案）]
+  - 16 個名詞中 13 個已有可執行實作（B0002–B0008）；尚欠 3 個：近似單位元、投射與非交換投影、
+    自由同倫不變性；1 個只做了一半：PSL₂(ℤ) 的模面（B0003 T13/T14＋B0005 T24，足以結案）。
+  - 「圓體擴張伽羅華群／圓周群的所有單位根群」原本只有 B0001 的一條樣本上下文 K_cyclotomic
+    （ℚ(ζ₈)/ℚ，5 物件 5 屬性），本回合升級為可算的分圓套件。
+
+[聯網搜查（2026-09 前沿快照）]\n  - arXiv:2610.01802《The Baum-Connes conjecture: a concise course》：**無係數版截至 2026-09 無已知反例**；
+    有係數版（Conjecture 7.18）**已被 HLS02 反例推翻**；有係數版對閉子群穩定、無係數版不知道。
+  - Lück《Assembly Maps》arXiv:1805.00226：BC 8.2 無反例；BGW 新表述（exact／Morita compatible crossed product）下反例消失。
+  - Lück–Reich 綜述：SL_n(ℤ), n ≥ 3 的 μ **單射已知**、**滿射仍開放**。
+  - Kitsios–Schick–Vigolo 2025，arXiv:2504.21811：unified warped cones 上**粗 Baum–Connes 奇度不滿射**（Theorem C）——
+    粗版與群版是**不同命題**，不可互相推出。
+  - 已證類別：a-T-menable（Higson–Kasparov）、雙曲群、almost connected（Connes–Kasparov、Chabert–Echterhoff–Nest）；
+    單射 ⇒ Novikov 高階簽名；滿射 + 無撓 ⇒ Kadison–Kaplansky。
+  - VibeMathed 條目（2026-09，review pending）宣稱 3 個反例：**未同儕審查，只登記為「宣稱」，不採用**。
+
+[本回合完成（三個新套件）]
+  1. galois/analytic/（B0009，T64–T72，9/9）：ℚ 精確分數與有理矩陣（rat.mbt：rank／det／inv／Frobenius）、
+     近似單位元 A1–A5（approx.mbt）、投影 P1–P7（projection.mbt）、同倫 H1–H4（homotopy.mbt）、檢核（checks.mbt）。
+     實算：N=5 時 ‖e_nS−S‖₂² = 4,3,2,1,0、‖(1−e_n)P₂‖₂² = 2,1,0,0,0、么代數 ‖e_n·1−1‖₂² = 5,4,3,2,1（全 > 0）；
+     p=E₁₁、q=[[9/25,12/25],[12/25,16/25]]：tr(pq)=9/25、‖pq−qp‖₂²=288/625；
+     冪等元族 [1 1;0 0] → [1 1/2;0 0] → [1 0;0 0] 秩恆 1；生成代數維度 2（{E₁₁,E₂₂}）與 4（{E₁₁,q}）。
+  2. galois/cyclotomic/（B0009，T73–T80，8/8）：整係數多項式與 Φ_n（poly.mbt）、
+     ℚ(ζ_n) 算術＋σ_k 矩陣＋跡＋伽羅華對應＋二次子體＋μ_n／ℚ/ℤ／Pontryagin（cyclotomic.mbt）、檢核（checks.mbt）。
+     實算：Φ₅=x⁴+x³+x²+x+1、Φ₈=x⁴+1、Φ₁₂=x⁴−x²+1；(ℤ/5)^× 階 4 且 Tr(ζ)=−1、Tr(1)=4；
+     n=8 的 Tr(ζ)=0；n=12 的階分佈 1,1,2,2,2,4；μ_n ≅ ℤ/n（n ≤ 16）；ℚ/ℤ 可除（m ≤ 6）；μ_n^ ≅ ℤ/n（n=2..12）；
+     Gal(ℚ(ζ_n)/ℚ) ≅ (ℤ/n)^×（n∈{3,4,5,7,8,9,10,12}，det σ_k=±1 與 F_p 滿秩交叉）；
+     Tr(ζ^j)=Ramanujan 和（n ≤ 20）；dim ℚ(ζ_n)^H = [G:H]（n∈{5,7,8,9,12} 全部循環子群）；
+     二次子體 ℚ(√((−1)^{(p−1)/2}p))（p=5,7,11,13）。
+  3. galois/bc/（B0010，T81–T90，10/10）：assembly.mbt（有限群組裝，5 樣本）、omega.mbt（ℤ[ω] 與 A₄）、
+     cyclicbc.mbt（ℤ/n 的 μ=DFT）、subgroup_lattice.mbt（全局公理伽羅華對應）、localaxioms.mbt（局部公理由代理決定）、
+     laurent.mbt（Kadison–Kaplansky 截面）、boundary.mbt（BC1–BC8）、checks.mbt。
+     實算：ℤ/2 2/2、V₄ 4/4、S₃ 3/3、D₈ 5/5、Q₈ 5/5（#irr=#cc、rank ℚ/F_p 一致、Σdim²=|G|）；
+     A₄ 的 ℤ[ω] 展開秩 8 = 2·4（只用 ℚ 得 6）；ℤ/n 的 DFT 正交 Σ_k ζ^{km}=nδ_{m0}（n=2..12）；
+     S_n（n≤5）的 #cc = p(n) = rank K₀(C*(S_n))；SL₂(𝔽₂) ≅ S₃（6 元素、3 共軛類）；
+     ℂ[ℤ] 無非平凡冪等元（次數論證＋支撐 [−2,2] 的 243 個窮舉）；ℂ[ℤ/2] 的 (1+g)/2 冪等；
+     ℤ 的組裝兩側 (ℤ,ℤ)（接 B0006 Toeplitz 六項正列＋指標）；H ⊆ H′ ⇔ Fix(H) ⊇ Fix(H′)（V₄ 維度負控制）。
+
+[需求文件另兩行]
+  - 第 1 行「全局公理伽羅華對應」：B0001 的 X0＋T1（GAGC）已是主體；本回合以 T89 在**數論層**再落地一次
+    （全體子群的反序一一對應、堆疊秩判子空間包含、維度判準降為負控制），故有兩個獨立見證。
+  - 第 2 行「局部公理由你決定」：B0001 的 X1–X4；本回合以 T90 的 `AxiomRecord` 落地：
+    8 條局部公理（每個可算樣本一條）由引擎**當場重算**裁決，8 條全局公理（BC1–BC8）decides=false 且附兩值。
+
+[實測（本回合跑出來的輸出）]
+  - moon run cmd/main -- analytic    → **9/9**；-- anatable → 收斂表與非交換投影數字。
+  - moon run cmd/main -- cyclo       → **8/8**；-- cyclotable → Φ_n 表（n ≤ 12）、(ℤ/n)^× 階與跡、μ_n 階分佈。
+  - moon run cmd/main -- bc          → **10/10**；-- bctable → 兩側算式並列表（8 樣本）＋界外清單 BC1–BC8（兩值）。
+  - bash ci/ci.sh → **20/20 全綠**（第 19 步新加：analytic 9／cyclo 8／bc 10 ＋ 三張結構表字串核對；
+    第 20 步 algorithm.xlsx **34 個工作表**一致）。
+
+[本回合的錯誤與修正（已入 docs 與登記表）]
+  - BUG-25：MoonBit 泛型必須方括號 `Array[Rat]`（`Array<Rat>` 引發 [4040]＋[3002] 連鎖錯誤）。
+  - BUG-26：Int32／Int64 不可直接比較，需 .to_int64()／.to_int()。
+  - BUG-27：冪等元路徑要求 A²=0；誤用 antisym_12（A²=−1）導致 H1 假紅 ⇒ 升格為 T71 負控制。
+  - BUG-28：reduce_mod_cyclo 輸入長度 < φ(n) 時回填越界（wasm unreachable）⇒ 先補零到 d。
+  - BUG-29：伽羅華對應把 dim 寫成 |H|（正解 [G:H]）⇒ 判準改指數並用兩端夾住。
+  - BUG-30：「把 ω 當 1」不是環同態，負控制失效 ⇒ 改用「只用 ℚ，合併 ω-共軛」，秩 8→6。
+  - BUG-31：omega_expand 首版只支援方陣 ⇒ 改 r×c → 2r×2c。
+  - CI 自我修正：bctable 的 A₄ 字串一度仍是舊文案（「ω↦1 後掉到」）⇒ 已同步為「只用 ℚ 後掉到 6」，第 19 步綠。
+
+[文件與登記]
+  - docs/B0009-定理體系.md（§0 16 名詞總表、§1–§9 定義／定理／成本／BUG-25..29）。
+  - docs/B0010-Baum-Connes-論證.md（§0 論證形狀、§1–§4 樣本與接縫、§5 界外 BC1–BC8、
+    §6 需求另兩行落地、§7 結論逐句可對照、§9 文獻快照、§10 BUG-30..31）。
+  - galois/{analytic,cyclotomic,bc}/README.md（四要素：定理／演算法／依賴圖／動線與接口＋陷阱）。
+  - galois/README.md（16 套件、B0009／B0010 追加段、CLI 追加）、README.md（B0009／B0010 章）、
+    docs/README.md（兩份新合約＋定理／演算法清單）、ci/README.md（20 步）。
+  - tools/make_registry.py：新增「B0009 分析」「B0009 圓體」「B0010 Baum–Connes」三表；
+    名詞對應頁更新 4 列（圓體／單位根、循環同調、內部張量積、三項待辦名詞）＋新增需求第 1、2 行兩列；
+    缺陷頁補 BUG-25..31；說明頁補 B0009／B0010 ⇒ algorithm.xlsx **34 個工作表**。
+  - ci/ci.sh 由 19 步擴為 **20 步**（第 19 步 B0009／B0010，第 20 步登記表）。
+  - cmd/main 新增 `analytic`／`anatable`／`cyclo`／`cyclotable`／`bc`／`bctable` 六個子命令。
+
+[未完成／下一步]
+  - Baum–Connes 的界內樣本目前止於「有限群＋循環群＋A₄＋ℤ」；下一個可算增量是
+    **無限群 torsion-free 的 torsion-free 情形**：可考慮 B0005 的圖雅可比簇所對應的群、或以
+    Pimsner–Voiculescu 的 C*_r(ℤⁿ) = C(Tⁿ) 把 K-群用 Bott 週期性算出來（需要 T^n 的 K-群機器）。
+  - B0009 的界外：無窮維 C*-代數的近似單位元、連續群 C*_r G、無么代數上的 K₁ 版本（需完整 Bott 機器）。
+  - B0008 留下的三項（ASIndex 與 K₀ 對接、HC⁻／HP 與 SBI 逐項秩、共端做成雙模物件）仍在待辦。
+  - 名詞群仍缺的細節：正則圖邊置換群的 n = 5、橢圓曲線 n 等分點群的 CM 情形。

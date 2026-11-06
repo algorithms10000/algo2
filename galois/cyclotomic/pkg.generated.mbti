@@ -1,0 +1,124 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/cyclotomic"
+
+import {
+  "arena/b0001/galois",
+}
+
+// Values
+pub fn check_cyclotomic_character(Int32) -> Bool
+
+pub fn check_cyclotomic_poly() -> @galois.Check
+
+pub fn check_galois_correspondence(Int32) -> Bool
+
+pub fn check_galois_correspondence_all() -> @galois.Check
+
+pub fn check_galois_group() -> @galois.Check
+
+pub fn check_galois_is_units(Int32) -> Bool
+
+pub fn check_mu_n(Int32) -> @galois.Check
+
+pub fn check_mu_n_structure(Int32) -> Bool
+
+pub fn check_non_unit_not_automorphism(Int32, Int32) -> Bool
+
+pub fn check_pontryagin(Int32) -> Bool
+
+pub fn check_pontryagin_dual() -> @galois.Check
+
+pub fn check_quadratic_and_character() -> @galois.Check
+
+pub fn check_quadratic_subfield(Int32) -> Bool
+
+pub fn check_quadratic_subfields() -> Bool
+
+pub fn check_qz() -> @galois.Check
+
+pub fn check_qz_divisible(Int32) -> Bool
+
+pub fn check_qz_torsion(Int32) -> Bool
+
+pub fn check_ramanujan(Int32) -> Bool
+
+pub fn check_trace_ramanujan() -> @galois.Check
+
+pub fn cyclic_order_of_unit(Int32, Int32) -> Int32
+
+pub fn cyclo_dim(Int32) -> Int32
+
+pub fn cyclo_mul(Int32, Array[Int64], Array[Int64]) -> Array[Int64]
+
+pub fn cyclo_multiply_basis(Int32, Int32, Int32) -> Array[Int64]
+
+pub fn cyclotomic_poly(Int32) -> Poly
+
+pub fn cyclotomic_report() -> @galois.Report
+
+pub fn cyclotomic_table_render() -> String
+
+pub fn divisors(Int32) -> Array[Int32]
+
+pub fn euler_phi(Int32) -> Int32
+
+pub fn fixed_subspace_dim(Int32, Array[Int32]) -> Int32
+
+pub fn gauss_period_quadratic(Int32) -> Array[Int64]
+
+pub fn mat_eq_i(Array[Array[Int64]], Array[Array[Int64]]) -> Bool
+
+pub fn mat_id_i(Int32) -> Array[Array[Int64]]
+
+pub fn mat_mul_i(Array[Array[Int64]], Array[Array[Int64]]) -> Array[Array[Int64]]
+
+pub fn mu_mult(Int32, Int32, Int32) -> Int32
+
+pub fn mu_order(Int32, Int32) -> Int32
+
+pub fn poly_deg(Poly) -> Int32
+
+pub fn poly_div_exact(Poly, Poly) -> Poly
+
+pub fn poly_divides(Poly, Poly) -> Bool
+
+pub fn poly_is_zero(Poly) -> Bool
+
+pub fn poly_lc(Poly) -> Int64
+
+pub fn poly_mul(Poly, Poly) -> Poly
+
+pub fn poly_new(Array[Int64]) -> Poly
+
+pub fn poly_xn_minus_1(Int32) -> Poly
+
+pub fn qz_add(Int64, Int64, Int64, Int64) -> (Int64, Int64)
+
+pub fn qz_order(Int64, Int64) -> Int64
+
+pub fn ramanujan_formula(Int32, Int32) -> Int64
+
+pub fn reduce_mod_cyclo(Int32, Array[Int64]) -> Array[Int64]
+
+pub fn sigma_matrix(Int32, Int32) -> Array[Array[Int64]]
+
+pub fn sigma_order(Int32, Int32) -> Int32
+
+pub fn sub_poly(Poly, Poly) -> Array[Int64]
+
+pub fn trace_of_basis(Int32, Int32) -> Int64
+
+pub fn units_mod(Int32) -> Array[Int32]
+
+pub fn x_power(Int32) -> Array[Int64]
+
+// Errors
+
+// Types and methods
+pub struct Poly {
+  c : Array[Int64]
+}
+
+// Type aliases
+
+// Traits

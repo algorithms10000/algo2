@@ -1,0 +1,9 @@
+import {
+  "arena/b0001/galois",
+  "arena/b0001/analytic",
+  "arena/b0001/cyclic",
+  "arena/b0001/cyclotomic",
+  "arena/b0001/kk",
+  "arena/b0001/braid",
+  "arena/b0001/modular",
+}

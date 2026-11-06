@@ -1,6 +1,6 @@
 # galois/ — B0001 MoonBit 模組（arena/b0001）
 
-本資料夾是 MoonBit 模組根（`moon.mod`）。下面 13 個套件構成 B0001–B0008 的全部實作。
+本資料夾是 MoonBit 模組根（`moon.mod`）。下面 16 個套件構成 B0001–B0010 的全部實作（`contexts/` 為文件性目錄、`tmp_lab/` 不進交付）。
 
 ## 資料夾視角的依賴關係
 
@@ -14,7 +14,10 @@ cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context
     │             ├──▶ kk       ──▶ braid, modular, context, lattice, galois（B0006：KK）
     │             │              └─ outside.mbt：界外清單 O1–O6（B0007：T48–T50）
     │             ├──▶ hyper    ──▶ kk, galois（B0007：超立方體網絡群 T41–T47）
-    │             └──▶ cyclic   ──▶ galois（B0008：循環同調 T51–T63／內部張量積／漸新態射）
+    │             ├──▶ cyclic   ──▶ galois（B0008：循環同調 T51–T63／內部張量積／漸新態射）
+    │             ├──▶ analytic ──▶ galois, cyclic（B0009：近似單位元／投影／自由同倫 T64–T72）
+    │             ├──▶ cyclotomic ─▶ galois, analytic, cyclic（B0009：分圓與單位根 T73–T80）
+    │             └──▶ bc       ──▶ analytic, cyclic, cyclotomic, kk, braid, modular（B0010：Baum–Connes T81–T90）
     └──────────────────────▶ lattice/galois/modular/elliptic（直接使用）
 ```
 
@@ -129,7 +132,32 @@ B0006 的 CLI 追加：`kk`、`kktable`、`kksix`、`kkctx`。
 
 B0007 的 CLI 追加：`hyper`（T41–T47，29 條）、`hypertable`（Q_n 群結構表）、`kkout`（T48–T50，6 條＋界外清單）。
 B0008 的 CLI 追加：`cyclic`（T51–T63，59 條）、`cyctable`（HH/HC 結構表）、`xprod`（內部／外部張量積表）。
+B0009 的 CLI 追加：`analytic`（T64–T72，9 條）、`anatable`（近似單位元與非交換投影表）、
+`cyclo`（T73–T80，8 條）、`cyclotable`（Φ_n／(ℤ/n)^× 結構表）。
+B0010 的 CLI 追加：`bc`（T81–T90，10 條）、`bctable`（Baum–Connes 兩側算式並列＋界外清單）。
 
 B0005 的 CLI 追加：`braid`、`jacobian`、`jtable`、`arf`。
 
 B0002 的 CLI 追加：`matroids`、`matroid <名稱>`、`mcheck <名稱>`、`mcircuits <名稱>`、`negctl`。
+
+## B0009 追加（16 名詞的最後三項＋分圓／單位根，見 `analytic/README.md`、`cyclotomic/README.md`）
+
+| 編號 | 名稱 | 落點 |
+|---|---|---|
+| T64–T65 | 近似單位元（閉式 N−1−n）＋么代數負控制 | `analytic/approx.mbt`、`check_approx_*` |
+| T66–T68 | 投影、Murray–von Neumann、非交換投影（cos²θ=9/25、‖[p,q]‖₂²=288/625） | `analytic/projection.mbt` |
+| T69–T71 | 冪等元同倫（A²=0）、自由同倫不變性（K₀ 秩／K₁ det）＋負控制 | `analytic/homotopy.mbt` |
+| T72 | 秩的兩套演算法（ℚ 高斯 × F_p 高斯）交叉 | `analytic/checks.mbt` |
+| T73–T75 | μ_n ≅ ℤ/n、ℚ/ℤ 撓＋可除、Pontryagin 對偶 | `cyclotomic/cyclotomic.mbt` |
+| T76–T77 | Φ_n（n ≤ 20）、Gal(ℚ(ζ_n)/ℚ) ≅ (ℤ/n)^× | `cyclotomic/{poly,cyclotomic}.mbt` |
+| T78–T80 | 跡＝Ramanujan 和、伽羅華對應 dim=[G:H]、二次子體＋分圓特徵 | `cyclotomic/cyclotomic.mbt` |
+
+## B0010 追加（Baum–Connes 論證，見 `bc/README.md`）
+
+| 編號 | 名稱 | 落點 |
+|---|---|---|
+| T81–T82 | 有限群 μ₀ : R(G) → K₀(ℂG) 同構（5 樣本）＋正交性負控制 | `bc/assembly.mbt` |
+| T83–T84 | ℤ/n 的 μ = DFT；A₄ 的 ℤ[ω] 展開秩 8 | `bc/{cyclicbc,omega}.mbt` |
+| T85–T87 | S_n／SL₂(𝔽₂) 接縫、ℂ[ℤ] 無冪等元、ℤ 的組裝兩側 (ℤ,ℤ) | `bc/{checks,laurent}.mbt` |
+| T88 | 界外清單 BC1–BC8（不決定，兩值並列） | `bc/boundary.mbt` |
+| T89–T90 | 全局公理伽羅華對應、局部公理由代理決定 | `bc/{subgroup_lattice,localaxioms}.mbt` |

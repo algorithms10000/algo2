@@ -1,6 +1,6 @@
 # B0001 全局公理伽羅瓦對應（Global Axiom–Galois Correspondence, GAGC）
 
-**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）＋ B0006（R8）＋ B0007（R9）＋ B0008（R10）**　　**狀態：R1–R10 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群／雅可比簇；R8 = B0006 真 KK-理論片段；R9 = B0007 超立方體網絡群完整刻劃＋KK 界外；R10 = B0008 循環同調＋內部張量積完整化＋漸新態射）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261104，2026-11-04）**
+**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）＋ B0006（R8）＋ B0007（R9）＋ B0008（R10）＋ B0009／B0010（R11）**　　**狀態：R1–R11 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群／雅可比簇；R8 = B0006 真 KK-理論片段；R9 = B0007 超立方體網絡群完整刻劃＋KK 界外；R10 = B0008 循環同調＋內部張量積完整化＋漸新態射；R11 = B0009 工程內容2 最後三項名詞＋分圓／單位根，B0010 Baum–Connes 論證）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261104，2026-11-04）**
 
 本專案把「公理系統 → 定理 → 演算法」做成**可執行**的鏈條：一條全局公理 + 四條局部公理，
 推出四條定理與 13 條等式，再由定理的構造性內容導出 7 條演算法，並附一套能**主動找出反例**的檢核器。
@@ -43,6 +43,9 @@ B0001（本目錄）
 │   │                        【B0007】界外清單（outside.mbt：O1–O6、自由積、Künneth，T48–T50）
 │   ├── hyper/               【B0007】超立方體網絡群 Aut(Q_n)：窮舉＋候選兩側、方向映射、邊置換、摺疊
 │   ├── cyclic/              【B0008】循環同調 HH/HC（混複體＋λ-複體兩路徑）、內部張量積、漸新態射
+│   ├── analytic/            【B0009】近似單位元、投影與非交換投影、自由同倫不變性（ℚ 精確算術）
+│   ├── cyclotomic/          【B0009】分圓多項式 Φ_n、Gal(ℚ(ζ_n)/ℚ) ≅ (ℤ/n)^×、μ_n／ℚ/ℤ、跡＝Ramanujan 和
+│   ├── bc/                  【B0010】Baum–Connes 組裝映射（T81–T90）＋界外清單 BC1–BC8
 │   ├── registry/            樣本上下文與擬陣樣本（含 ℚ(ζ₈)/ℚ、K₃/K₄ 圖擬陣、Fano）
 │   ├── cmd/main/            CLI（接入與輸出接口）
 │   └── contexts/*.ctx       文字格式樣本（dump/parse 互逆）
@@ -740,3 +743,39 @@ alg_polys, alg_cyclic_group, alg_matrix, alg_group, alg_direct_sum, alg_tensor, 
 hh_dim, hc_dim_bicomplex, hc_dim_lambda, hh0_by_commutators, bimod_make, bimod_regular,
 bimod_tensor_dim, bimod_hom_dim, hh0_by_coend, xprod_hh0_product, as_forget_ok,
 as_index_matches_classes, as_bott_periodic, as_assembly_even_rank}`。
+
+---
+
+# B0009／B0010：工程內容2 結清 ＋ Baum–Connes 論證（R11）
+
+## B0009：工程內容2 的最後三項名詞，與「圓體／單位根」的升級
+
+| 名詞 | 實作 | 檢核 |
+|---|---|---|
+| 近似單位元 | `galois/analytic/approx.mbt`（A1–A5，閉式 ‖e_nS−S‖₂² = N−1−n） | T64–T65（含么代數負控制） |
+| 投射與非交換投影 | `galois/analytic/projection.mbt`（P1–P7：正交和判準、MvN、主角度） | T66–T68（cos²θ=9/25、‖[p,q]‖²₂=288/625） |
+| 自由同倫不變性 | `galois/analytic/homotopy.mbt`（(1+tA)e(1−tA)，A²=0；Cayley 正交族） | T69–T72（含 A²≠0 負控制、秩兩演算法交叉） |
+| 圓體擴張伽羅華群 | `galois/cyclotomic/`（Φ_n、σ_k 矩陣、Gal ≅ (ℤ/n)^×） | T76–T77、T79–T80 |
+| 圓周群的所有單位根群 | `galois/cyclotomic/`（μ_n ≅ ℤ/n、ℚ/ℤ 撓＋可除、Pontryagin 對偶） | T73–T75 |
+
+16 個名詞至此**全部有可執行實作**（對照表見 `docs/B0009-定理體系.md` §0）。
+
+## B0010：Baum–Connes 猜想
+
+不是敘述，而是**兩側算式對撞**：
+
+* 有限群：μ₀ : R(G) → K₀(ℂG) 對 ℤ/2、V₄、S₃、D₈、Q₈ 判為同構（#irr=#cc、特徵表滿秩、Σdim²=|G|、加權正交）；
+* 循環群：μ 矩陣 = DFT，可逆性由 Σ_k ζ^{km} = nδ_{m0} 在 ℚ(ζ_n) 中精算（n = 2..12）；
+* A₄：ℤ[ω] 特徵表展開秩 8 = 2·4（只用 ℚ 會掉到 6）；
+* ℤ：C*_rℤ = C(S¹)，兩側 (ℤ,ℤ)，μ = id（接 B0006 的 Toeplitz 六項正列）；
+* **界外**：BC1–BC8 逐條登記，全部 `decides = false` 且附兩個可能值（無係數版開放／有係數版已被 HLS02 否證／
+  SL_n(ℤ) n≥3 開放／粗版奇度已被 arXiv:2504.21811 否證／2026-09 的 AI 反例宣稱未經同審查不採用）。
+* 需求文件另兩行：**全局公理伽羅華對應**（B0001 的 X0+T1；B0010 T89 在數論層再證一次）、
+  **局部公理由代理決定**（B0001 的 X1–X4；B0010 T90 用可重算的 `AxiomRecord` 落地）。
+
+```bash
+cd galois
+moon run cmd/main -- analytic     # 9/9    moon run cmd/main -- anatable
+moon run cmd/main -- cyclo        # 8/8    moon run cmd/main -- cyclotable
+moon run cmd/main -- bc           # 10/10  moon run cmd/main -- bctable
+```

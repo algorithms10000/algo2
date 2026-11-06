@@ -1,0 +1,189 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/analytic"
+
+import {
+  "arena/b0001/galois",
+}
+
+// Values
+pub fn analytic_report() -> @galois.Report
+
+pub fn analytic_table_render() -> String
+
+pub fn antisym_12() -> RMat
+
+pub fn approx_conv_shift_sq(Int32, Int32) -> Int64
+
+pub fn approx_increasing(Int32) -> Bool
+
+pub fn approx_negative_unital(Int32) -> Bool
+
+pub fn approx_rest_sq(Int32, Int32, Int32) -> Int64
+
+pub fn block_diag(RMat, RMat) -> RMat
+
+pub fn cayley_orth(RMat, Rat) -> RMat
+
+pub fn check_approx_compress(Int32) -> Bool
+
+pub fn check_approx_conv_projection(Int32, Int32) -> Bool
+
+pub fn check_approx_conv_shift(Int32) -> Bool
+
+pub fn check_approx_identity() -> @galois.Check
+
+pub fn check_approx_negative() -> @galois.Check
+
+pub fn check_approx_rest(Int32, Int32) -> Bool
+
+pub fn check_generated_algebra() -> Bool
+
+pub fn check_homotopy_negative() -> Bool
+
+pub fn check_homotopy_negative_controls() -> @galois.Check
+
+pub fn check_idem_path(RMat, RMat, Array[Rat]) -> Bool
+
+pub fn check_idem_path_negative() -> Bool
+
+pub fn check_idempotent_homotopy() -> @galois.Check
+
+pub fn check_k0_additivity() -> Bool
+
+pub fn check_k1_det_invariant() -> Bool
+
+pub fn check_murray_von_neumann() -> Bool
+
+pub fn check_mvn() -> @galois.Check
+
+pub fn check_noncommutative() -> @galois.Check
+
+pub fn check_noncommuting_projections() -> Bool
+
+pub fn check_product_projection_criterion() -> Bool
+
+pub fn check_projection_homotopy() -> @galois.Check
+
+pub fn check_projection_k0() -> @galois.Check
+
+pub fn check_projection_path(RMat, RMat, Array[Rat]) -> Bool
+
+pub fn check_projection_path_endpoints() -> Bool
+
+pub fn check_rank_cross() -> @galois.Check
+
+pub fn check_rank_equals_trace() -> Bool
+
+pub fn check_sum_of_projections() -> Bool
+
+pub fn diag_proj(Int32, Int32) -> RMat
+
+pub fn gcd_i64(Int64, Int64) -> Int64
+
+pub fn generated_dim(Array[RMat]) -> Int32
+
+pub fn idem_path(RMat, RMat, Rat) -> RMat
+
+pub fn idem_sample() -> RMat
+
+pub fn is_projection(RMat) -> Bool
+
+pub fn nilpotent_12() -> RMat
+
+pub fn proj_angled() -> RMat
+
+pub fn proj_e11() -> RMat
+
+pub fn rank_equals_trace(RMat) -> Bool
+
+pub fn rat_add(Rat, Rat) -> Rat
+
+pub fn rat_div(Rat, Rat) -> Rat
+
+pub fn rat_eq(Rat, Rat) -> Bool
+
+pub fn rat_get_div(Rat, Rat) -> Rat
+
+pub fn rat_is_zero(Rat) -> Bool
+
+pub fn rat_le(Rat, Rat) -> Bool
+
+pub fn rat_lt(Rat, Rat) -> Bool
+
+pub fn rat_mul(Rat, Rat) -> Rat
+
+pub fn rat_neg(Rat) -> Rat
+
+pub fn rat_new(Int64, Int64) -> Rat
+
+pub fn rat_of_int(Int64) -> Rat
+
+pub fn rat_sub(Rat, Rat) -> Rat
+
+pub fn rat_to_string(Rat) -> String
+
+pub fn rmat_add(RMat, RMat) -> RMat
+
+pub fn rmat_conj(RMat, RMat) -> RMat
+
+pub fn rmat_det(RMat) -> Rat
+
+pub fn rmat_eq(RMat, RMat) -> Bool
+
+pub fn rmat_get(RMat, Int32, Int32) -> Rat
+
+pub fn rmat_id(Int32) -> RMat
+
+pub fn rmat_inv(RMat) -> RMat
+
+pub fn rmat_is_zero(RMat) -> Bool
+
+pub fn rmat_mul(RMat, RMat) -> RMat
+
+pub fn rmat_norm2(RMat) -> Rat
+
+pub fn rmat_of_int(Array[Array[Int64]]) -> RMat
+
+pub fn rmat_rank(RMat) -> Int32
+
+pub fn rmat_scale(RMat, Rat) -> RMat
+
+pub fn rmat_scale_det(Rat, Int64) -> Rat
+
+pub fn rmat_set(RMat, Int32, Int32, Rat) -> Unit
+
+pub fn rmat_sub(RMat, RMat) -> RMat
+
+pub fn rmat_to_int(RMat) -> Array[Array[Int64]]
+
+pub fn rmat_to_string(RMat) -> String
+
+pub fn rmat_trace(RMat) -> Rat
+
+pub fn rmat_transpose(RMat) -> RMat
+
+pub fn rmat_zero(Int32, Int32) -> RMat
+
+pub fn shift_matrix(Int32) -> RMat
+
+pub fn span_dim_rmat(Array[RMat]) -> Int32
+
+pub fn square_zero(RMat) -> Bool
+
+// Errors
+
+// Types and methods
+pub struct RMat {
+  rows : Int32
+  cols : Int32
+  e : Array[Rat]
+}
+
+pub struct Rat {
+  num : Int64
+  den : Int64
+}
+
+// Type aliases
+
+// Traits

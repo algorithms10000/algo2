@@ -32,6 +32,12 @@
 ///   moon run cmd/main -- cyclic        【B0008】循環同調／漸新態射檢核（T51–T63）
 ///   moon run cmd/main -- cyctable      HH/HC 結構表（8 個樣本代數）
 ///   moon run cmd/main -- xprod         內部張量積與外部張量積的乘法性表
+///   moon run cmd/main -- analytic      【B0009】近似單位元／投影／自由同倫檢核（T64–T72）
+///   moon run cmd/main -- anatable      近似單位元與非交換投影的結構表
+///   moon run cmd/main -- cyclo         【B0009】圓體擴張伽羅華群與單位根群檢核（T73–T80）
+///   moon run cmd/main -- cyclotable    Φ_n／(ℤ/n)^× 的結構表
+///   moon run cmd/main -- bc            【B0010】Baum–Connes 組裝映射檢核（T81–T88）
+///   moon run cmd/main -- bctable       Baum–Connes 兩側算式並列表＋界外清單
 ///   moon run cmd/main -- mreg             擬陣登記期望值核對（含延伸樣本）
 ///   moon run cmd/main -- mextall          B0002 延伸的全域定理檢核（T9–T12）
 ///   moon run cmd/main -- mcensus <n>      小型擬陣普查（n ≤ 5）
@@ -573,6 +579,42 @@ fn main {
     println(@cyclic.xprod_render())
     println("外部張量積的乘法性")
     println(@cyclic.xprod_tensor_render())
+  } else if cmd == "analytic" {
+    let r = @analytic.analytic_report()
+    println(
+      "B0009 近似單位元／投影／自由同倫檢核（T64–T72）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "anatable" {
+    println(@analytic.analytic_table_render())
+  } else if cmd == "cyclo" {
+    let r = @cyclotomic.cyclotomic_report()
+    println(
+      "B0009 圓體擴張伽羅華群／單位根群檢核（T73–T80）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "cyclotable" {
+    println(@cyclotomic.cyclotomic_table_render())
+  } else if cmd == "bc" {
+    let r = @bc.bc_report()
+    println(
+      "B0010 Baum–Connes 組裝映射檢核（T81–T90）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "bctable" {
+    println(@bc.bc_table_render())
   } else if cmd == "hypertable" {
     println("Q_n 的自同構群結構表（T41–T47）")
     for n = 1; n <= 4; n = n + 1 {
