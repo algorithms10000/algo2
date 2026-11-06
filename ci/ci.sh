@@ -16,16 +16,16 @@ fi
 export PATH="$(dirname "$MOON"):$PATH"
 echo "工具鏈：$("$MOON" version)"
 
-step "1/16 moon check --target all"
+step "1/18 moon check --target all"
 ( cd "$ROOT/galois" && "$MOON" check --target all ); check $? "全目標型別檢查"
 
-step "2/16 moon build"
+step "2/18 moon build"
 ( cd "$ROOT/galois" && "$MOON" build ); check $? "建置 executable"
 
-step "3/16 moon fmt --check"
+step "3/18 moon fmt --check"
 ( cd "$ROOT/galois" && "$MOON" fmt --check ); check $? "格式一致"
 
-step "4/16 樣本上下文 A6 檢核（13 條 × 3 份）"
+step "4/18 樣本上下文 A6 檢核（13 條 × 3 份）"
 out="$( cd "$ROOT/galois" && "$MOON" run cmd/main 2>&1 )"
 echo "$out" | grep -E '上下文：|檢核（A6）|\|ℭ_A\|'
 pass_lines=$(echo "$out" | grep -c '^  \[PASS\]')
@@ -39,7 +39,7 @@ else
   echo "   ✗ P5：|ℭ_A| 與 |ℭ_S| 不一致"; FAILED=1
 fi
 
-step "5/16 B0002 擬陣樣本（A12 八條 × 4 份）與期望值核對"
+step "5/18 B0002 擬陣樣本（A12 八條 × 4 份）與期望值核對"
 m_all="$( cd "$ROOT/galois"; for mn in U24 'M(K3)' 'M(K4)' Fano; do "$MOON" run cmd/main -- matroid "$mn"; done 2>&1 )"
 echo "$m_all" | grep -E '擬陣：|期望值核對|擬陣檢核（A12）'
 m_pass=$(echo "$m_all" | grep -c '^  \[PASS\]')
@@ -52,7 +52,7 @@ else
   echo "   ✗ B0002 擬陣檢核異常"; FAILED=1
 fi
 
-step "6/16 負控制：區間凸包必須 FAIL 交換公理（T8：檢核器不得恆真）"
+step "6/18 負控制：區間凸包必須 FAIL 交換公理（T8：檢核器不得恆真）"
 neg="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- negctl 2>&1 )"
 echo "$neg" | grep -E '負控制|check_exchange 結果|\[FAIL\]'
 if echo "$neg" | grep -q 'FAIL（正確：非擬陣）' && echo "$neg" | grep -q '^  \[FAIL\] X5'; then
@@ -61,7 +61,7 @@ else
   echo "   ✗ 負控制未失敗：檢核器可能失效"; FAILED=1
 fi
 
-step "7/16 B0002 繼承：K_ℱ* 上跑 B0001 的 A6（M(K3) 13/13）"
+step "7/18 B0002 繼承：K_ℱ* 上跑 B0001 的 A6（M(K3) 13/13）"
 inh="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- mcheck 'M(K3)' 2>&1 )"
 echo "$inh" | grep -E '繼承檢核'
 if echo "$inh" | grep -q 'B0001 繼承檢核（K_ℱ 上的 A6）：13/13 通過'; then
@@ -70,7 +70,7 @@ else
   echo "   ✗ B0001 繼承檢核未全通"; FAILED=1
 fi
 
-step "8/16 A3′ 增量式典範基（與暴力版同族 × 3 份、n=24 靠 E16 判定）"
+step "8/18 A3′ 增量式典範基（與暴力版同族 × 3 份、n=24 靠 E16 判定）"
 dg_out="$( cd "$ROOT/galois"; for dn in divisors-12 divisors-180 divisors-240 divisors-420; do "$MOON" run cmd/main -- dg "$dn"; done 2>&1 )"
 echo "$dg_out" | grep -E '上下文：|A3′ 走訪|\[PASS\]|\[FAIL\]' | sed 's/^/  /'
 dg_pass=$(echo "$dg_out" | grep -c '\[PASS\]')
@@ -83,7 +83,7 @@ else
   echo "   ✗ A3′ 檢核異常"; FAILED=1
 fi
 
-step "9/16 B0002 延伸：T9–T12 全域檢核、7 份樣本、n=4 普查"
+step "9/18 B0002 延伸：T9–T12 全域檢核、7 份樣本、n=4 普查"
 ext_all="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- mextall 2>&1 )"
 echo "$ext_all" | sed 's/^/  /'
 ext_global_pass=$(echo "$ext_all" | grep -c '^  \[PASS\]')
@@ -109,7 +109,7 @@ else
   echo "   ✗ B0002 延伸檢核異常"; FAILED=1
 fi
 
-step "10/16 B0003 同餘子群（T13、T14）與樣本上下文 congruence-12"
+step "10/18 B0003 同餘子群（T13、T14）與樣本上下文 congruence-12"
 mod_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- modular 2>&1 )"
 echo "$mod_out" | sed 's/^/  /'
 mod_pass=$(echo "$mod_out" | grep -c '^  \[PASS\]')
@@ -130,7 +130,7 @@ else
   echo "   ✗ B0003 檢核異常"; FAILED=1
 fi
 
-step "11/16 B0004 撓群 E[n]（T15–T21）、Paley／Ramsey 與 paley-13 樣本"
+step "11/18 B0004 撓群 E[n]（T15–T21）、Paley／Ramsey 與 paley-13 樣本"
 ell_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- elliptic 2>&1 )"
 echo "$ell_out" | head -3 | sed 's/^/  /'
 ell_pass=$(echo "$ell_out" | grep -c '^  \[PASS\]')
@@ -153,7 +153,7 @@ else
   echo "   ✗ B0004 檢核異常"; FAILED=1
 fi
 
-step "12/16 B0005 拓撲辮群 B_n（T22–T24）：置換商、Burau、B_3 → PSL₂(ℤ)"
+step "12/18 B0005 拓撲辮群 B_n（T22–T24）：置換商、Burau、B_3 → PSL₂(ℤ)"
 br_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- braid 2>&1 )"
 echo "$br_out" | head -3 | sed 's/^/  /'
 br_pass=$(echo "$br_out" | grep -c '^  \[PASS\]')
@@ -167,7 +167,7 @@ else
   echo "   ✗ B0005 辮群檢核異常"; FAILED=1
 fi
 
-step "13/16 B0005 圖雅可比簇 J(G)（T25–T31）：τ 三路徑、SNF、RR、Arf、超立方體"
+step "13/18 B0005 圖雅可比簇 J(G)（T25–T31）：τ 三路徑、SNF、RR、Arf、超立方體"
 jb_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- jacobian 2>&1 )"
 echo "$jb_out" | head -3 | sed 's/^/  /'
 jb_pass=$(echo "$jb_out" | grep -c '^  \[PASS\]')
@@ -187,7 +187,7 @@ else
   echo "   ✗ B0005 雅可比簇檢核異常"; FAILED=1
 fi
 
-step "14/16 B0006 真 KK-理論片段（T32–T40）：UCT、六項正合列、指標—繞數"
+step "14/18 B0006 真 KK-理論片段（T32–T40）：UCT、六項正合列、指標—繞數"
 kk_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- kk 2>&1 )"
 echo "$kk_out" | head -3 | sed 's/^/  /'
 kk_pass=$(echo "$kk_out" | grep -c '^  \[PASS\]')
@@ -210,7 +210,7 @@ else
   echo "   ✗ B0006 檢核異常"; FAILED=1
 fi
 
-step "15/16 B0006 × B0001 公理層：理想格上下文（kk-ideal）"
+step "15/18 B0006 × B0001 公理層：理想格上下文（kk-ideal）"
 kkc_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- kkctx 2>&1 )"
 echo "$kkc_out" | head -6 | sed 's/^/  /'
 if echo "$kkc_out" | grep -q '|A|=7、|S|=3、|R|=12、閉集數=8' \
@@ -221,7 +221,51 @@ else
   echo "   ✗ kk-ideal 上下文檢核異常"; FAILED=1
 fi
 
-step "16/16 algorithm.xlsx 可重建且與提交版本一致"
+step "16/18 B0007 超立方體網絡群完整刻劃（T41–T47）：窮舉＝預測、方向映射、邊置換"
+hy_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- hyper 2>&1 )"
+echo "$hy_out" | head -3 | sed 's/^/  /'
+hy_pass=$(echo "$hy_out" | grep -c '^  \[PASS\]')
+hy_fail=$(echo "$hy_out" | grep -c '^  \[FAIL\]')
+ht_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- hypertable 2>&1 )"
+echo "$ht_out" | head -4 | sed 's/^/  /'
+echo "   PASS=$hy_pass 真失敗=$hy_fail（預期 29 / 0）"
+if [[ "$hy_pass" -eq 29 && "$hy_fail" -eq 0 ]] \
+  && echo "$hy_out" | grep -q '超立方體網絡群檢核（T41–T47）：29/29 通過' \
+  && echo "$hy_out" | grep -q 'T41 Q_4 的自同構 = 平移 ⋊ 座標置換' \
+  && echo "$hy_out" | grep -q 'T41 負控制：非仿射雙射被排除' \
+  && echo "$hy_out" | grep -q 'T43 Q_4 的方向映射' \
+  && echo "$hy_out" | grep -q 'T45(b) n ≤ 2 的退化邊界' \
+  && echo "$hy_out" | grep -q 'T47 Aut(Q_4) 的共軛類個數' \
+  && echo "$ht_out" | grep -q 'n=4	|V|=16 |E|=32 |Aut|=384 (=2ⁿ·n!=384)' \
+  && echo "$ht_out" | grep -q '階數分布：1^1 2^5 4^2' \
+  && echo "$ht_out" | grep -q 'n=4：窮舉 384 個、預測 384 個、集合相等=true' \
+  && echo "$ht_out" | grep -q '摺疊 Q_n → Q_{n−1}（T45）'; then
+  echo "   ✓ B0007 超立方體群全數通過（完整刻劃、2ⁿ·n!、方向映射核、邊置換、摺疊、共軛類）"
+else
+  echo "   ✗ B0007 超立方體群檢核異常"; FAILED=1
+fi
+
+step "17/18 B0007 KK 界外部份（T48–T50）：清單合規、自由積、Künneth"
+ko_out="$( cd "$ROOT/galois" && "$MOON" run cmd/main -- kkout 2>&1 )"
+echo "$ko_out" | head -3 | sed 's/^/  /'
+ko_pass=$(echo "$ko_out" | grep -c '^  \[PASS\]')
+ko_fail=$(echo "$ko_out" | grep -c '^  \[FAIL\]')
+echo "   PASS=$ko_pass 真失敗=$ko_fail（預期 6 / 0）"
+if [[ "$ko_pass" -eq 6 && "$ko_fail" -eq 0 ]] \
+  && echo "$ko_out" | grep -q 'KK 界外部份檢核（T48–T50）：6/6 通過' \
+  && echo "$ko_out" | grep -q 'T48 界外清單合規與 kind=0 的明示' \
+  && echo "$ko_out" | grep -q 'T48 負控制：缺見證／判定詞錯誤的記錄不合規' \
+  && echo "$ko_out" | grep -q 'T49 自由積：K₁ 可加（ℤ^4）、K₀ 不可加' \
+  && echo "$ko_out" | grep -q 'T50 Künneth 的界內截面與界外標記' \
+  && echo "$ko_out" | grep -q '\[O1\]\[界內截面\] 非 bootstrap 類的 KK' \
+  && echo "$ko_out" | grep -q '\[O3\]\[界外\] min／max 張量範疇' \
+  && echo "$ko_out" | grep -q '\[O6\]\[界內截面\] KK 的環結構'; then
+  echo "   ✓ B0007 界外部分全數通過（A-K5 清單合規、kind=0 兩值、K₁ 可加／K₀ 不可加、Künneth）"
+else
+  echo "   ✗ B0007 界外部分檢核異常"; FAILED=1
+fi
+
+step "18/18 algorithm.xlsx 可重建且與提交版本一致"
 tmp_xlsx="$(mktemp -d)"
 ( cd "$ROOT" && cp tools/make_registry.py "$tmp_xlsx/" && cd "$tmp_xlsx" && python3 make_registry.py >/dev/null ) \
   && python3 - "$ROOT/algorithm.xlsx" "$tmp_xlsx/algorithm.xlsx" <<'PY'

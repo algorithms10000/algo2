@@ -13,6 +13,8 @@ pub fn bit_of(Int32, Int32) -> Bool
 
 pub fn check_cuntz_ktheory(Int32) -> @galois.Check
 
+pub fn check_free_product_k(Int32) -> @galois.Check
+
 pub fn check_hilbert_module_k0() -> @galois.Check
 
 pub fn check_index_is_boundary() -> @galois.Check
@@ -26,6 +28,12 @@ pub fn check_kk_equivalence_cases() -> @galois.Check
 pub fn check_kk_product_assoc() -> @galois.Check
 
 pub fn check_kk_product_unit() -> @galois.Check
+
+pub fn check_kunneth_inside() -> @galois.Check
+
+pub fn check_outside_manifest() -> @galois.Check
+
+pub fn check_outside_negative_control() -> @galois.Check
 
 pub fn check_projection_algebra() -> @galois.Check
 
@@ -48,6 +56,8 @@ pub fn check_stability_bott() -> @galois.Check
 pub fn check_uct_case(String, KPair, KPair, FgAb) -> @galois.Check
 
 pub fn check_winding_general() -> @galois.Check
+
+pub fn circle_free_factors(Int32) -> Array[FgAb]
 
 pub fn coker_of(IntMat) -> FgAb
 
@@ -89,7 +99,17 @@ pub fn fga_make(Int32, Array[Int64]) -> FgAb
 
 pub fn fga_render(FgAb) -> String
 
+pub fn fga_tensor(FgAb, FgAb) -> FgAb
+
+pub fn fga_tor(FgAb, FgAb) -> FgAb
+
 pub fn fga_zero() -> FgAb
+
+pub fn free_group_cstar_kpair(Int32) -> KPair
+
+pub fn free_product_k0_naive(Array[FgAb]) -> FgAb
+
+pub fn free_product_k1(Array[FgAb]) -> FgAb
 
 pub fn hilbert_module_rank_vector(Array[Int32], Array[Int32]) -> Array[Int64]?
 
@@ -169,6 +189,8 @@ pub fn kpair_shift(KPair) -> KPair
 
 pub fn kpair_tensor_k(KPair) -> KPair
 
+pub fn kunneth_kpair(KPair, KPair) -> KPair
+
 pub fn laur_monomial(Int32) -> Laur
 
 pub fn laur_mul(Laur, Laur) -> Laur
@@ -180,6 +202,14 @@ pub fn laur_of_factors(Int32, Array[(Rat, Int32)], Array[(Rat, Int32)]) -> Laur
 pub fn laur_render(Laur) -> String
 
 pub fn normalized_rank(Array[Int32], Array[Int32]) -> Array[Rat]
+
+pub fn outside_count(Array[ScopeItem]) -> Int32
+
+pub fn outside_items() -> Array[ScopeItem]
+
+pub fn outside_render() -> String
+
+pub fn outside_report() -> @galois.Report
 
 pub fn partition_render(Array[Int32]) -> String
 
@@ -238,6 +268,8 @@ pub fn rat_vec_eq(Array[Rat], Array[Rat]) -> Bool
 pub fn rat_vec_render(Array[Rat]) -> String
 
 pub fn rat_zero() -> Rat
+
+pub fn scope_item_compliant(ScopeItem) -> Bool
 
 pub fn shift_truncation_index(Int32) -> Int32
 
@@ -312,6 +344,15 @@ pub struct QMat {
 pub struct Rat {
   n : Int64
   d : Int64
+}
+
+pub struct ScopeItem {
+  id : String
+  title : String
+  reason : String
+  inside_part : String
+  witness : String
+  verdict : String
 }
 
 pub struct SixCheck {

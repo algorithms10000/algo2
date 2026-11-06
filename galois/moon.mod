@@ -1,5 +1,5 @@
 // B0001 模組：全局公理伽羅瓦對應（Global Axiom–Galois Correspondence）
-// 工具鏈：moon 0.1.20261102（MoonBit 最新穩定版，2026-11-02）
+// 工具鏈：moon 0.1.20261104（MoonBit 最新穩定版，2026-11-04）
 name = "arena/b0001"
 
 version = "0.1.0"

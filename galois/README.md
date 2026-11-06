@@ -1,6 +1,6 @@
 # galois/ — B0001 MoonBit 模組（arena/b0001）
 
-本資料夾是 MoonBit 模組根（`moon.mod`）。下面 11 個套件構成 B0001–B0006 的全部實作。
+本資料夾是 MoonBit 模組根（`moon.mod`）。下面 12 個套件構成 B0001–B0007 的全部實作。
 
 ## 資料夾視角的依賴關係
 
@@ -11,7 +11,9 @@ cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context
     │             ├──▶ elliptic ──▶ modular, galois（B0004）
     │             ├──▶ braid    ──▶ modular, galois（B0005：辮群）
     │             ├──▶ jacobian ──▶ galois（B0005：圖雅可比簇）
-    │             └──▶ kk       ──▶ braid, modular, context, lattice, galois（B0006：KK）
+    │             ├──▶ kk       ──▶ braid, modular, context, lattice, galois（B0006：KK）
+    │             │              └─ outside.mbt：界外清單 O1–O6（B0007：T48–T50）
+    │             └──▶ hyper    ──▶ kk, galois（B0007：超立方體網絡群 T41–T47）
     └──────────────────────▶ lattice/galois/modular/elliptic（直接使用）
 ```
 
@@ -68,11 +70,26 @@ E[n] 上「階為 n 的點」「循環子群」「辛基」的**個數**——B0
 | T39 | index(T_f) = −wind(f)（精確有理＋幅角原理） | `kk/hilbert.mbt` |
 | T40 | 與 B0001（理想格 A6/A3′）、B0003（SL₂(ℤ/n) 共軛類）、B0005（S_n）的接縫 | `kk/sym.mbt`、`kk/checks.mbt` |
 
+## B0007 追加（超立方體網絡群＋KK 界外，見 `hyper/README.md`、`kk/README.md`）
+
+| 編號 | 名稱 | 落點 |
+|---|---|---|
+| T41 | **完整刻劃** Aut(Q_n) = { v ↦ π(v) ⊕ b }（窮舉集 = 預測集，n = 1..4；含負控制） | `hyper/hyper.mbt`、`hyper/checks.mbt` |
+| T42 | \|Aut(Q_n)\| = 2ⁿ·n! 與軌道—穩定子（頂點／邊） | `hyper/group.mbt` |
+| T43 | 方向映射 Aut → S_n 良定義、同態、核 = 𝔽₂ⁿ ⇒ Aut = 𝔽₂ⁿ ⋊ S_n | `hyper/group.mbt` |
+| T44 | Q_n ≅ Cayley(𝔽₂ⁿ, 標準基)、距離 = 漢明、n 正則、\|E\| = n·2^{n−1} | `hyper/hyper.mbt` |
+| T45 | 摺疊 Q_n → Q_{n−1} 與 n ≤ 2 退化（Q₁ = K₂、Q₂ = C₄ = D₈） | `hyper/group.mbt` |
+| T46 | 邊置換群 φ: Aut → Sym(E)（n = 1 時核 = ℤ₂ 的例外） | `hyper/hyper.mbt`、`hyper/group.mbt` |
+| T47 | 共軛類 = Σ p(k)p(n−k) = 2, 5, 10, 20（借 B0006 的 `partitions`） | `hyper/checks.mbt` |
+| T48–T50 | KK 界外：清單合規＋kind = 0 的兩個值、自由積 K₁ 可加／K₀ 不可加、Künneth 界內截面 | `kk/outside.mbt` |
+
 ## 本模組已實作的演算法
 
 A1 雙閉包（`galois`）、A2 NextClosure（`lattice`）、A3 DG 典範基（`lattice`）、
 A4 分量＋局部閉包（`context` ＋ `galois`）、A5 概念格＋上覆蓋（`lattice`）、A6 檢核器（`galois`/`lattice`）、
 A7 parse/dump（`context` ＋ `cmd/main`）。
+B0007：A44 超立方體圖引擎、A45 回溯自同構窮舉、A46 由上而下候選生成、A47 置換群工具箱、
+A48 方向映射與同態檢核、A49 邊索引表與邊置換、A50 摺疊與退化邊界、A51 界外清單引擎＋自由積／Künneth（`hyper/`、`kk/outside.mbt`）。
 
 ## 動線與接口
 
@@ -89,6 +106,8 @@ moon check --target all && moon build && moon fmt && moon info
 `pkg.generated.mbti` 為 `moon info` 產生的公開介面檔，應與原始碼一同提交。
 
 B0006 的 CLI 追加：`kk`、`kktable`、`kksix`、`kkctx`。
+
+B0007 的 CLI 追加：`hyper`（T41–T47，29 條）、`hypertable`（Q_n 群結構表）、`kkout`（T48–T50，6 條＋界外清單）。
 
 B0005 的 CLI 追加：`braid`、`jacobian`、`jtable`、`arf`。
 

@@ -1,7 +1,9 @@
 # galois/kk — 真 KK-理論的可計算片段（B0006）
 
-對應 `../../docs/B0006-定理體系.md`：**A-K1–A-K4、D-K1–D-K8、P-K1–P-K6、T32–T40、A36–A43**。
-檢核：`moon run cmd/main -- kk` ⇒ **46/46 通過**；另有三條輸出子命令 `kktable`／`kksix`／`kkctx`。
+對應 `../../docs/B0006-定理體系.md`：**A-K1–A-K4、D-K1–D-K8、P-K1–P-K6、T32–T40、A36–A43**，
+以及 `../../docs/B0007-定理體系.md` §9–§12 的**界外部份**：**A-K5、D-H9、T48–T50、A51**。
+檢核：`moon run cmd/main -- kk` ⇒ **46/46 通過**；`-- kkout` ⇒ **6/6 通過**；
+另有三條輸出子命令 `kktable`／`kksix`／`kkctx`。
 
 ## 這一輪的界（先劃界，再落地）
 
@@ -24,6 +26,10 @@ KK(A, B) 一般是 Hilbert 模上 Fredholm 模的算子同倫類，**不可判�
 | **T39** | **index(T_f) = −wind(f)**：算子側用非方截斷的精確秩、符號側用幅角原理；並明示界限（方截斷恆 0、一般符號的截斷不保指標） | `hilbert.mbt`、`check_index_winding`、`check_winding_general`、`check_index_is_boundary` |
 | **T40** | 接縫：(a) K₀(C*(S_n)) = ℤ^{p(n)} 且 Σd_λ² = n! = \\|im(B_n→S_n)\\|（B0005）(b) K₀(C*(SL₂(ℤ/n))) = ℤ^{#共軛類}（B0003）(c) 理想格的 A6 8/8、A3′ 4/4、閉集 = 2³（B0001 公理層） | `sym.mbt`、`check_seam_*` |
 
+| **T48** | **界外清單合規**（A-K5）：O1–O6 每項都有 reason／inside_part／witness 且 verdict 合法；並把「不決定」做成可檢核的斷言——kind = 0 的樣本 K₀ = ℤ、K₁ = ℤ/2 給出 **兩個都符合 UCT 的可能值** ℤ⊕ℤ/2⊕ℤ/2 與 ℤ⊕ℤ/4，程式斷言兩者不相等。負控制：缺 witness／verdict 非法 ⇒ 不合規 | `outside.mbt`（`check_outside_manifest`、`check_outside_negative_control`、`scope_item_compliant`） |
+| **T49** | **自由積 K-群**：K₁(A*B) = K₁(A) ⊕ K₁(B) **可加**（C*_r(𝔽_n) 給 ℤⁿ，與 Pimsner–Voiculescu 登記值一致）；K₀ **不可加**（可加性預測 ℤⁿ、登記值 ℤ）⇒ K₀ 的自由積計算明示界外 | `check_free_product_k`、`free_product_k1`、`free_group_cstar_kpair` |
+| **T50** | **Künneth 的界內截面**：K_n(A⊗B) = ⊕K_i(A)⊗K_j(B) ⊕ ⊕Tor(K_i,K_j)；M₂⊗M₃ = M₆（K₀ = ℤ）、M₂⊗C(S¹)（K₀ = ℤ、K₁ = ℤ）、Tor(ℤ/2,ℤ/2) = ℤ/2、Tor(ℤ/2,ℤ/3) = 0；非核情形（min/max 分歧）只登記不宣稱 | `check_kunneth_inside`、`fga_tensor`、`fga_tor`、`kunneth_kpair` |
+
 ## 已實作的演算法
 
 | 編號 | 名稱 | 複雜度 |
@@ -36,6 +42,7 @@ KK(A, B) 一般是 Hilbert 模上 Fredholm 模的算子同倫類，**不可判�
 | A41 | Hilbert 模秩向量、投影判準（ℚ 上精確） | O(n³) |
 | A42 | 精確有理線性代數 + Fredholm 指標 + 因式法繞數 | O(n³) |
 | A43 | 對稱群不可約維度（hook length）與有限群共軛類 | O(p(n)·n²) |
+| A51 | 界外清單引擎（A-K5 的可執行版）＋ 自由積截面 ＋ 張量／Tor／Künneth | O(k²) |
 
 ## 視角依賴關係圖
 
@@ -44,7 +51,8 @@ kk ──▶ galois（Check / Report）
 kk ──▶ context + lattice（把理想格做成形式上下文，跑 B0001 的 A6／A3′）
 kk ──▶ braid（T40a：|im(B_n→S_n)| = n! 對照 Σd_λ²）
 kk ──▶ modular（T40b：SL₂(ℤ/n) 的共軛類計數）
-cmd/main ──▶ kk（kk / kktable / kksix / kkctx）
+hyper ──▶ kk（T47 借用 `partitions`；反向不依賴）
+cmd/main ──▶ kk（kk / kktable / kksix / kkctx / kkout）
 docs/B0006-定理體系.md §2–§11 ──▶ 本套件
 ```
 
@@ -61,7 +69,9 @@ docs/B0006-定理體系.md §2–§11 ──▶ 本套件
   `Laur`、`laur_of/laur_mul/laur_render`、`wind_of_factors`、`laur_of_factors`、`rat_inside_unit`、`toeplitz_truncation`、`toeplitz_truncation_rect`、`toeplitz_truncation_linear`。
 - 群：`partitions`、`hook_product`、`irrep_dim`、`sum_dim_squares`、`k_of_symmetric_group`。
 - 公理層：`kk_ideal_context`、`kk_ideal_context_with_zero`、`quotient_label`。
-- 檢核：`kk_report()`（46 條）。
+- 界外（B0007）：`ScopeItem`、`outside_items`、`outside_count`、`scope_item_compliant`、`fga_tensor`、`fga_tor`、`kunneth_kpair`、
+  `free_product_k1`、`free_product_k0_naive`、`free_group_cstar_kpair`、`circle_free_factors`、`outside_render`。
+- 檢核：`kk_report()`（46 條）、`outside_report()`（6 條）。
 
 ## 已知修正（保留在程式碼註解）
 
@@ -70,3 +80,14 @@ docs/B0006-定理體系.md §2–§11 ──▶ 本套件
 - **BUG-14**：Laurent 多項式建構必須合併同指數項。
 - **BUG-15**：方矩陣截斷的指標恆為 0；指標必須用非方截斷 ℂ^N → ℂ^{N+k} 才看得見。
 - **BUG-16**：理想格上下文若含零商（支撐為空），B0001 的 X2 必失敗 ⇒ 主上下文只取非零商，零商另立邊界檢核。
+
+## 界外清單（B0007，`-- kkout` 可印全文）
+
+| 編號 | 項目 | 判定 | 界內截面 |
+|---|---|---|---|
+| O1 | 非 bootstrap 類的 KK | 界內截面 | 組裝圖 ∪ 有界同態（kind = 0 明示不決定） |
+| O2 | 無窮維 Fredholm 模 | 界內截面 | 有限截斷的指標（N = 1..4 全 −1，方截斷全 0） |
+| O3 | min／max 張量範疇 | **界外** | 有限維與 C(S¹) 皆核 ⇒ min = max |
+| O4 | 自由積 K-群 | 界內截面 | K₁ 可加（ℤⁿ）；K₀ 界外 |
+| O5 | 非有限生成的 K-群 | **界外** | 有限生成（秩 ≤ 8） |
+| O6 | KK 的環結構與撓部分乘積 | 界內截面 | 自由部分的合成與律（T36） |

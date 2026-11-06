@@ -6,6 +6,7 @@ import {
   "arena/b0001/elliptic",
   "arena/b0001/jacobian",
   "arena/b0001/kk",
+  "arena/b0001/hyper",
   "arena/b0001/modular",
   "arena/b0001/registry",
   "moonbitlang/core/env",

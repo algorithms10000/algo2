@@ -532,3 +532,70 @@ Hom 與 Ext¹ 的整數線性代數。超出此界者一律回 kind = 0「只決
 [未完成／下一步] 名詞群仍缺：循環同調（獨立主題）、漸新態射、正則圖邊置換群、
   超立方體網絡群的完整刻劃；KK 側的界外部分（非 bootstrap 類、無窮維 Fredholm 模的算子同倫、
   min/max 張量範疇、自由積的 K-群）留待後續，已在 A-K1 明示為界外。
+
+=== R9（2026-11-06）：B0007 超立方體網絡群的完整刻劃 ＋ KK 的界外部份 ===
+
+[任務]
+- 使用者指示（R9）：「進行超立方體網絡群的完整刻劃及 KK 的界外部份，及一如以往用 20 動詞及 14 範例得出定理及演算法」。
+- 新登記 B0007。兩件事共用一條原則：**宣稱的邊界必須可檢核**。
+
+[規劃（先紙上，再動手）]
+- 群刻劃不能只做「候選 ⊆ Aut」（那是玩具）。要三條路徑夾：
+  (i) 由上而下 Cand_n = { v ↦ π(v) ⊕ b }（2ⁿ·n! 個，不除重）；
+  (ii) 由下而上回溯窮舉 Aut_bfs（BFS 序 + 鄰接一致性剪枝）；
+  (iii) 方向映射 π: Aut → S_n，核 = 平移群 ⇒ Aut = 𝔽₂ⁿ ⋊ S_n。
+  (i) = (ii) 是 A-H1 的兩向刻劃；(iii) 給出結構。三者互指才算刻劃。
+- 退化邊界（A-H2）必須另立正面檢核：n = 1（Q₁ = K₂、摺疊塌成一點、ker φ = ℤ₂）、n = 2（Q₂ = C₄ = D₈）。
+- 界外（A-K5）：每一項都要 reason／inside_part／witness 三欄，且「不決定」要能寫出兩個都符合 UCT 的值。
+  最有代表性的一條是自由積：K₁ 可加（ℤⁿ，對上 Pimsner–Voiculescu）、K₀ 不可加（ℤ ≠ ℤⁿ）。
+
+[實作]
+- 新增套件 galois/hyper：hyper.mbt（圖引擎、兩側刻劃、方向映射、邊置換）、group.mbt（群公理、軌道、
+  穩定子、共軛類、摺疊）、checks.mbt（T41–T47，29 條）、README.md。
+- kk/outside.mbt：ScopeItem＋O1–O6 清單、fga_tensor／fga_tor／kunneth_kpair、自由積 K₁ 截面、
+  T48–T50 共 6 條檢核（A-K5 的可執行版）。
+- cmd/main 新增三條子命令：hyper、hypertable、kkout。
+- 工具鏈更新到 moon 0.1.20261104（沙盒重建後 /tmp/moon 消失，跑 ci/bootstrap_toolchain.sh 重裝）。
+
+[本輪抓到並修正的錯]
+- BUG-17：hyper.mbt 首版把型別寫成 Array<Int32>（C++ 風角括號）⇒ 70 個編譯錯誤。MoonBit 一律 Array[Int32]。
+- BUG-18：edge_key（32768 進位識別鍵）被拿去當 v×v 查表索引 ⇒ 執行期 Array::set 越界崩潰。
+  → 查表用 lo·v + hi，識別鍵與索引分開。
+- BUG-19：「邊穩定子」誤用 stabilizer_size(aut, edges[0].0)（固定頂點 0 的元素數）⇒ T42 在 n ≥ 3 全紅
+  （|E|·|Stab| = 72 ≠ 48）。→ 另立 edge_stabilizer_size，並立 A-H3「作用域公理」。
+- BUG-20：direction_hom 在雙迴圈內呼叫 direction_map（O(|V|·n²)）⇒ n = 4 要 15.7 秒；
+  edge_permutation 每次重建索引表 ⇒ 首版全報告 31 秒。→ π 先算一次、索引表提到迴圈外 ⇒ 1.5 秒。
+- BUG-21：conjugacy_class_sizes 殘留無用迴圈、conjugacy_representatives 用 O(|G|³) 線性掃描
+  → 刪廢碼、改字串鍵 Map 索引。
+
+[實測真數字]
+- moon run cmd/main -- hyper      → 29/29 通過（T41×5、T42×4、T43×4、T44×4、T45×4、T46×4、T47×4）。
+    n=1..4：|Aut| = 2、8、48、384 = 2ⁿ·n!；窮舉集 = 預測集（true ×4）；
+    負控制「交換 1↔2」：雙射 ✓、破壞鄰接 ✓、不在 Aut ✓；
+    Stab(0) = 1,2,6,24；邊穩定子 2,2,4,12；|ker π| = 2,4,8,16；|ker φ| = 2,1,1,1；
+    共軛類 = 2,5,10,20 = Σ p(k)p(n−k)；階數分布（n=4）1¹2⁷⁵3³²4¹³²6⁹⁶8⁴⁸。
+- moon run cmd/main -- hypertable → Q_n 結構表（|V|、|E|、|Aut|、Stab、兩個核、邊軌道、共軛類、階數分布）、
+    預測 vs 窮舉、摺疊（同態 true、纖維 2、每邊原像 2..2）。
+- moon run cmd/main -- kkout      → 6/6 通過；清單 6 項（純界外 2 項：O3 min/max、O5 非有限生成）；
+    kind=0 樣本 Hom = ℤ⊕ℤ/2、Ext¹ = ℤ/2 ⇒ 兩個可能值 ℤ⊕ℤ/2⊕ℤ/2 ≠ ℤ⊕ℤ/2⊕ℤ/4；
+    自由積 n = 2..4：K₁ 可加 = ℤ²/ℤ³/ℤ⁴ = 登記值，K₀ 可加性預測 ℤⁿ、實際 ℤ；
+    Künneth：M₂⊗M₃ = M₆（K₀=ℤ）、M₂⊗C(S¹) = (ℤ,ℤ)、Tor(ℤ/2,ℤ/2)=ℤ/2、Tor(ℤ/2,ℤ/3)=0。
+- bash ci/ci.sh                  → **18 步全綠**（第 16 步 hyper 29/29＋hypertable、第 17 步 kkout 6/6；
+    algorithm.xlsx 29 表可重建）。
+
+[文件與登記]
+- docs/B0007-定理體系.md（§1 公理 A-H1..H3／A-K5、§2 定義 D-H1..H9、§3 P-H1..P-H6、
+  §4 T41–T50 含證明要點與實測表、§5 A44–A51、§6 實測數字、§7 二十動詞落地表、
+  §8 十四式組合範例落點表、§9 界外清單、§10 BUG-17..21、§11 跨輪接線）。
+- galois/hyper/README.md（定理／演算法／依賴圖／動線與接口／規模上限）；galois/kk/README.md 補 T48–T50。
+- README.md（B0007 章）、docs/README.md（B0007 合約與箭頭）、galois/README.md（12 套件）、cmd/main/README.md。
+- tools/make_registry.py 新增「B0007 Hyper」「B0007 樣本」「B0007 KK 界外」三表；
+  名詞對應頁把「超立方體網絡群」改為已實作（完整刻劃）、「正則圖邊置換群」改為已實作（Q_n）；
+  缺陷頁補 BUG-17..21；說明頁工具鏈改 0.1.20261104 ⇒ algorithm.xlsx 現為 29 個工作表。
+- ci/ci.sh 由 16 步擴為 18 步；ci/README.md 改為 18 步表格。
+
+[未完成／下一步]
+- 名詞群仍缺：**循環同調**（獨立主題）、**漸新態射**（pro-species／Boardman–Vogt 的漸近結構）、
+  **內部張量積**的完整化（min/max 已列界外）、規格化（regularized）Kasparov 積。
+- 超立方體側可延伸：n = 5 的窮舉（|Aut| = 3840）與 𝔽₂ⁿ ⋊ S_n 的高階線性表示，
+  以及「同構於 ℤ₂≀S_n 的圖之唯一性」（Q_n 是唯一 2ⁿ 頂點、n 正則、Aut 最大者？）留待後續查證。

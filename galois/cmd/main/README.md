@@ -34,6 +34,9 @@
 | `kktable` | 【B0006】K-群與 UCT 的 KK 值表 |
 | `kksix` | 【B0006】Toeplitz／Cuntz 的六項正合列 |
 | `kkctx` | 【B0006】理想格上下文（B0001 A6＋A3′） |
+| `kkout` | 【B0006／B0007】KK 界外部份檢核（T48–T50，6 條）＋ O1–O6 界外清單全文 |
+| `hyper` | 【B0007】超立方體網絡群檢核（T41–T47，29 條） |
+| `hypertable` | 【B0007】Q_n 的群結構表（\|Aut\|、穩定子、核、邊軌道、共軛類、階數分布、摺疊） |
 | `genus` | 【B0003】X₀(N) 的 ψ/φ/ν₂/ν₃/ν_∞/g 並與古典表比對 |
 | `mext <名稱>` | 【B0002 延伸】二元性、正則性、Tutte、特徵多項式＋11 條檢核 |
 | `mextall` | 【B0002 延伸】全域定理檢核（13 條） |
@@ -50,7 +53,10 @@
 
 ```
 cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context ──▶ bitset
-        └──▶ context / galois / lattice（直接使用）
+        ├──▶ context / galois / lattice（直接使用）
+        ├──▶ braid / elliptic / jacobian / modular / kk
+        ├──▶ hyper（B0007：T41–T47）
+        └──▶ kk.outside（B0007：T48–T50）
 ```
 
 ## 動線

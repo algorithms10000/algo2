@@ -1,6 +1,6 @@
 # B0001 全局公理伽羅瓦對應（Global Axiom–Galois Correspondence, GAGC）
 
-**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）＋ B0006（R8）**　　**狀態：R1–R8 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群／雅可比簇；R8 = B0006 真 KK-理論片段）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261102，2026-11-02）**
+**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）＋ B0006（R8）＋ B0007（R9）**　　**狀態：R1–R9 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群／雅可比簇；R8 = B0006 真 KK-理論片段；R9 = B0007 超立方體網絡群完整刻劃＋KK 界外）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261104，2026-11-04）**
 
 本專案把「公理系統 → 定理 → 演算法」做成**可執行**的鏈條：一條全局公理 + 四條局部公理，
 推出四條定理與 13 條等式，再由定理的構造性內容導出 7 條演算法，並附一套能**主動找出反例**的檢核器。
@@ -40,6 +40,8 @@ B0001（本目錄）
 │   ├── braid/               【B0005】B_n、置換商、Burau 表示、B_3 → PSL₂(ℤ) 接縫
 │   ├── jacobian/            【B0005】圖雅可比簇 J(G)：不變因子、τ 三路徑、Riemann–Roch、Arf、超立方體
 │   ├── kk/                  【B0006】真 KK-理論片段：UCT、六項正合列、Kasparov 乘積、指標—繞數
+│   │                        【B0007】界外清單（outside.mbt：O1–O6、自由積、Künneth，T48–T50）
+│   ├── hyper/               【B0007】超立方體網絡群 Aut(Q_n)：窮舉＋候選兩側、方向映射、邊置換、摺疊
 │   ├── registry/            樣本上下文與擬陣樣本（含 ℚ(ζ₈)/ℚ、K₃/K₄ 圖擬陣、Fano）
 │   ├── cmd/main/            CLI（接入與輸出接口）
 │   └── contexts/*.ctx       文字格式樣本（dump/parse 互逆）
@@ -605,3 +607,75 @@ moon run cmd/main -- kkctx     # 理想格上下文（B0001 A6 8/8＋A3′ 4/4�
 toeplitz_circle_extension, cuntz_ktheory, SixTerm, six_term_check, kk_uct, uct_group,
 KKClass, kk_compose, kk_equivalent, Rat, QMat, qmat_fredholm_index, wind_of_factors,
 toeplitz_truncation_rect, partitions, irrep_dim, k_of_symmetric_group, kk_ideal_context, kk_report}`。
+
+---
+
+# B0007：超立方體網絡群的完整刻劃 ＋ KK 的界外（R9）
+
+## 兩件事，一條原則
+
+| 面向 | 內容 | 定理 |
+|---|---|---|
+| **超立方體網絡群** | **完整刻劃**（不是部分性質）：兩側夾、三路徑固定 | **T41–T47** |
+| **KK 的界外** | 把 B0006 的 A-K1（界外不得綠燈）做成**可執行**的清單與反例 | **T48–T50** |
+
+共同原則：**宣稱的邊界必須可檢核**。群刻劃的邊界是「窮舉集合 = 預測集合」；
+KK 的邊界是「`kind = 0` 時寫得出兩個都符合 UCT 的不同值」。
+
+## 定理（詳見 `docs/B0007-定理體系.md`）
+
+| 編號 | 內容 | 實測 |
+|---|---|---|
+| **T41** | **完整刻劃**：Aut(Q_n) = { v ↦ π(v) ⊕ b }（π ∈ S_n、b ∈ 𝔽₂ⁿ）；窮舉集 = 預測集，逐元素相等 | n = 1..4：2、8、48、384 個，集合相等 ✓；負控制（交換 1↔2）被排除 |
+| **T42** | \|Aut\| = 2ⁿ·n!，且 \|Aut\| = \|V\|·\|Stab(0)\| = \|E\|·\|Stab(邊)\| | Stab(0) = 1, 2, 6, 24；邊穩定子 2, 2, 4, 12 |
+| **T43** | 方向映射 π: Aut → S_n **良定義、同態、核 = 𝔽₂ⁿ**（\|ker\| = 2ⁿ）⇒ Aut = 𝔽₂ⁿ ⋊ S_n、Aut/T ≅ S_n | \|ker π\| = 2, 4, 8, 16；商群階 = 1, 2, 6, 24 = n! |
+| **T44** | Q_n ≅ Cayley(𝔽₂ⁿ, {e_i})；圖距離 = 漢明距離、n 正則、\|E\| = n·2^{n−1}、直徑 n、平移群正則 | 1/4/12/32 條邊，直徑 1/2/3/4 |
+| **T45** | 摺疊 Q_n → Q_{n−1}（滿同態、纖維 = 一條邊、每邊恰 2 原像）與 **n ≤ 2 退化**：Q₁ = K₂（ℤ₂）、Q₂ = C₄（D₈） | 原像數 2..2；D₈：5 個共軛類、階數分布 1¹2⁵4² |
+| **T46** | 邊置換 φ: Aut → Sym(E) 同態、邊可遷；\|ker φ\| = 1（n ≥ 2）、**= 2（n = 1 例外）** | 邊軌道 = \|E\| |
+| **T47** | 共軛類 ↔ 一對無序分割 ⇒ #Conj = **Σ p(k)p(n−k)**，各類大小之和 = 群階 | 2, 5, 10, 20 |
+| **T48** | 界外清單 O1–O6 合規（A-K5）；`kind = 0` 必須明示「不決定」並寫出兩個可能值 | ℤ⊕ℤ/2⊕ℤ/2 vs ℤ⊕ℤ/4 |
+| **T49** | 自由積：**K₁ 可加**（K₁(A*B) = K₁(A)⊕K₁(B)），**K₀ 不可加** | K₁ = ℤ²/ℤ³/ℤ⁴ = 登記值；K₀：預測 ℤⁿ、實際 ℤ |
+| **T50** | Künneth 的界內截面（含 Tor）＋ 界外標記 | M₂⊗M₃ = M₆；M₂⊗C(S¹)：ℤ、ℤ；Tor(ℤ/2,ℤ/2) = ℤ/2 |
+
+## 實測結構表（`-- hypertable`）
+
+| n | \|V\| | \|E\| | \|Aut\| | \|Stab(0)\| | \|ker π\| | \|ker φ\| | 共軛類 | 階數分布 |
+|---|---|---|---|---|---|---|---|
+| 1 | 2 | 1 | 2 | 1 | 2 | 2 | 2 | 1¹2¹ |
+| 2 | 4 | 4 | 8 | 2 | 4 | 1 | 5 | 1¹2⁵4² |
+| 3 | 8 | 12 | 48 | 6 | 8 | 1 | 10 | 1¹2¹⁹3⁸4¹²6⁸ |
+| 4 | 16 | 32 | 384 | 24 | 16 | 1 | 20 | 1¹2⁷⁵3³²4¹³²6⁹⁶8⁴⁸ |
+
+## 界外清單（`-- kkout`）
+
+| 編號 | 項目 | 判定 | 可計算見證 |
+|---|---|---|---|
+| O1 | 非 bootstrap 類的 KK | 界內截面 | kind = 0 的兩個可能值 |
+| O2 | 無窮維 Fredholm 模 | 界內截面 | 截斷 N = 1..4 指標全 −1（方截斷全 0） |
+| O3 | min／max 張量範疇 | **界外** | 有限維核性 ⇒ min = max；非核不宣稱 |
+| O4 | 自由積 K-群 | 界內截面 | K₁ = ℤⁿ ✓、K₀ = ℤ ≠ ℤⁿ |
+| O5 | 非有限生成的 K-群 | **界外** | 表示界寫在型別上（秩 ≤ 8） |
+| O6 | KK 環結構與撓部分乘積 | 界內截面 | 自由部分合成與律（T36） |
+
+## 這輪被抓到的五個錯（已修，記於 `algorithm.xlsx`）
+
+**BUG-17** 型別應用誤用角括號 `Array<Int32>`（70 個編譯錯誤）⇒ MoonBit 一律方括號；
+**BUG-18** 把識別鍵當 `v×v` 查表索引 ⇒ 執行期越界崩潰；
+**BUG-19** 「邊穩定子」誤用「固定頂點 0」⇒ T42 在 n ≥ 3 全紅（A-H3 作用域公理）；
+**BUG-20** `direction_map`／`edge_index_table` 在雙迴圈內重建 ⇒ 31 秒 → 1.5 秒；
+**BUG-21** 共軛類的 O(\|G\|³) 線性掃描 ⇒ 字串鍵 `Map` 索引。
+
+## 怎麼跑
+
+```bash
+cd galois
+moon run cmd/main -- hyper        # T41–T47：29 條檢核
+moon run cmd/main -- hypertable   # Q_n 的群結構表（含摺疊與共軛類）
+moon run cmd/main -- kkout        # T48–T50：6 條檢核 ＋ O1–O6 界外清單全文
+```
+
+介面：`@hyper.{pow2i, hamming, adj_qn, hyper_edges, bfs_order, automorphisms, predicted_automorphisms,
+perm_sets_equal, direction_map, direction_hom, direction_kernel, edge_permutation_tbl, edge_stabilizer_size,
+conjugacy_representatives, fold_is_hom, hyper_report}`；
+`@kk.{outside_items, outside_render, scope_item_compliant, fga_tensor, fga_tor, kunneth_kpair,
+free_product_k1, free_group_cstar_kpair, outside_report}`。

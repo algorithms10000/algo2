@@ -26,6 +26,9 @@
 ///   moon run cmd/main -- kktable        K-群與 UCT 的 KK 值表
 ///   moon run cmd/main -- kksix          Cuntz／Toeplitz 的六項正合列
 ///   moon run cmd/main -- kkctx          理想格樣本上下文（B0001 A6＋A3′）
+///   moon run cmd/main -- kkout          【B0006/B0007】KK 界外部份（T48–T50）＋界外清單
+///   moon run cmd/main -- hyper          【B0007】超立方體網絡群檢核（T41–T47）
+///   moon run cmd/main -- hypertable     Q_n 的自同構群結構表
 ///   moon run cmd/main -- mreg             擬陣登記期望值核對（含延伸樣本）
 ///   moon run cmd/main -- mextall          B0002 延伸的全域定理檢核（T9–T12）
 ///   moon run cmd/main -- mcensus <n>      小型擬陣普查（n ≤ 5）
@@ -527,6 +530,91 @@ fn main {
       " 通過",
     )
     println(dg.render())
+  } else if cmd == "kkout" {
+    let r = @kk.outside_report()
+    println(
+      "B0006/B0007 KK 界外部份檢核（T48–T50）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+    println("界外清單（O1–O6）：")
+    println(@kk.outside_render())
+  } else if cmd == "hyper" {
+    let r = @hyper.hyper_report()
+    println(
+      "B0007 超立方體網絡群檢核（T41–T47）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "hypertable" {
+    println("Q_n 的自同構群結構表（T41–T47）")
+    for n = 1; n <= 4; n = n + 1 {
+      let aut = @hyper.automorphisms(n)
+      let edges = @hyper.hyper_edges(n)
+      let ker_dir = @hyper.direction_kernel(aut, n).length()
+      let ker_edge = @hyper.edge_perm_kernel_size(n, aut, edges)
+      println(
+        "  n=" +
+        n.to_string() +
+        "\t|V|=" +
+        @hyper.pow2i(n).to_string() +
+        " |E|=" +
+        edges.length().to_string() +
+        " |Aut|=" +
+        aut.length().to_string() +
+        " (=2ⁿ·n!=" +
+        @hyper.predicted_order(n).to_string() +
+        ")" +
+        "\t|Stab(0)|=" +
+        @hyper.stabilizer_size(aut, 0).to_string() +
+        "\t|ker π|=" +
+        ker_dir.to_string() +
+        "\t|ker φ|=" +
+        ker_edge.to_string() +
+        "\t邊軌道=" +
+        @hyper.edge_orbit_size(n, aut, edges).length().to_string() +
+        "\t共軛類=" +
+        @hyper.conjugacy_representatives(aut).length().to_string(),
+      )
+      println("    階數分布：" + @hyper.order_histogram_render(aut))
+    }
+    println("  ── 預測 vs 窮舉（完整刻劃）")
+    for n = 1; n <= 4; n = n + 1 {
+      let aut = @hyper.automorphisms(n)
+      let pred = @hyper.predicted_automorphisms(n)
+      println(
+        "  n=" +
+        n.to_string() +
+        "：窮舉 " +
+        aut.length().to_string() +
+        " 個、預測 " +
+        pred.length().to_string() +
+        " 個、集合相等=" +
+        @hyper.perm_sets_equal(aut, pred).to_string(),
+      )
+    }
+    println("  ── 摺疊 Q_n → Q_{n−1}（T45）")
+    for n = 2; n <= 4; n = n + 1 {
+      let rg = @hyper.fold_fiber_edge_range(n)
+      println(
+        "  n=" +
+        n.to_string() +
+        "：同態=" +
+        @hyper.fold_is_hom(n).to_string() +
+        "、纖維大小=" +
+        @hyper.fold_fiber_size(n).to_string() +
+        "、每邊原像數=" +
+        rg.0.to_string() +
+        ".." +
+        rg.1.to_string(),
+      )
+    }
   } else if cmd == "jacobian" {
     let r = @jacobian.jacobian_report()
     println(
