@@ -76,8 +76,6 @@ pub fn fix_dim(Int32, Array[Int32]) -> Int32
 
 pub fn fix_included(Int32, Array[Int32], Array[Int32]) -> Bool
 
-pub fn fix_rows(Int32, Array[Int32]) -> Array[Array[Int64]]
-
 pub fn global_axioms() -> Array[AxiomRecord]
 
 pub fn gram_is_scalar(FinGroup) -> Bool
@@ -89,6 +87,8 @@ pub fn gram_matrix_unweighted(FinGroup) -> Array[Array[Int64]]
 pub fn groups_int() -> Array[FinGroup]
 
 pub fn irrep_dims(FinGroup) -> Array[Int64]
+
+pub fn is_scalar_times_identity(Array[Array[Int64]], Int64) -> Bool
 
 pub fn laurent_deg(Laurent) -> Int32
 
@@ -125,8 +125,6 @@ pub fn omega_conj(OmegaVal) -> OmegaVal
 pub fn omega_expand(Array[Array[OmegaVal]]) -> Array[Array[Int64]]
 
 pub fn omega_gen() -> OmegaVal
-
-pub fn omega_is_zero(OmegaVal) -> Bool
 
 pub fn omega_mul(OmegaVal, OmegaVal) -> OmegaVal
 

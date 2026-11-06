@@ -162,18 +162,6 @@ pub fn hc_dim_lambda_signed(a : FdAlg, n : Int32) -> Int32 {
   chain - bar0 - bar1
 }
 
-///|
-/// 兩條 HC 路徑（(b,B) 混複體／λ-複體）在 0..top 度數上是否一致。
-pub fn check_hc_paths_agree(a : FdAlg, top : Int32) -> Bool {
-  let mut ok = true
-  for n = 0; n <= top; n = n + 1 {
-    if hc_dim_bicomplex(a, n) != hc_dim_lambda(a, n) {
-      ok = false
-    }
-  }
-  ok
-}
-
 // ---------------------------------------------------------------- 結構性檢核
 
 ///|

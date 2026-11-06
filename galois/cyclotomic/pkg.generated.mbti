@@ -44,13 +44,11 @@ pub fn check_ramanujan(Int32) -> Bool
 
 pub fn check_trace_ramanujan() -> @galois.Check
 
-pub fn cyclic_order_of_unit(Int32, Int32) -> Int32
+pub fn cyclic_subgroup(Int32, Int32) -> Array[Int32]
 
 pub fn cyclo_dim(Int32) -> Int32
 
 pub fn cyclo_mul(Int32, Array[Int64], Array[Int64]) -> Array[Int64]
-
-pub fn cyclo_multiply_basis(Int32, Int32, Int32) -> Array[Int64]
 
 pub fn cyclotomic_poly(Int32) -> Poly
 
@@ -62,13 +60,13 @@ pub fn divisors(Int32) -> Array[Int32]
 
 pub fn euler_phi(Int32) -> Int32
 
+pub fn fix_rows(Int32, Array[Int32]) -> Array[Array[Int64]]
+
 pub fn fixed_subspace_dim(Int32, Array[Int32]) -> Int32
 
 pub fn gauss_period_quadratic(Int32) -> Array[Int64]
 
 pub fn mat_eq_i(Array[Array[Int64]], Array[Array[Int64]]) -> Bool
-
-pub fn mat_id_i(Int32) -> Array[Array[Int64]]
 
 pub fn mat_mul_i(Array[Array[Int64]], Array[Array[Int64]]) -> Array[Array[Int64]]
 
@@ -83,8 +81,6 @@ pub fn poly_div_exact(Poly, Poly) -> Poly
 pub fn poly_divides(Poly, Poly) -> Bool
 
 pub fn poly_is_zero(Poly) -> Bool
-
-pub fn poly_lc(Poly) -> Int64
 
 pub fn poly_mul(Poly, Poly) -> Poly
 
@@ -102,11 +98,11 @@ pub fn reduce_mod_cyclo(Int32, Array[Int64]) -> Array[Int64]
 
 pub fn sigma_matrix(Int32, Int32) -> Array[Array[Int64]]
 
-pub fn sigma_order(Int32, Int32) -> Int32
-
-pub fn sub_poly(Poly, Poly) -> Array[Int64]
+pub fn sigma_matrix_order(Int32, Int32) -> Int32
 
 pub fn trace_of_basis(Int32, Int32) -> Int64
+
+pub fn unit_order(Int32, Int32) -> Int32
 
 pub fn units_mod(Int32) -> Array[Int32]
 

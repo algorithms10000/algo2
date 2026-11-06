@@ -150,41 +150,6 @@ pub fn Matroid::cocircuits(self : Matroid) -> Array[@bitset.BitSet] {
 }
 
 ///|
-/// 全部排列（n ≤ 7；階乘級但只用在同構判定的小擬陣上）。
-fn permutations(n : Int32) -> Array[Array[Int32]] {
-  let out : Array[Array[Int32]] = []
-  let cur : Array[Int32] = []
-  let used : Array[Bool] = []
-  for i = 0; i < n; i = i + 1 {
-    used.push(false)
-  }
-  perm_helper(n, cur, used, out)
-  out
-}
-
-///|
-fn perm_helper(
-  n : Int32,
-  cur : Array[Int32],
-  used : Array[Bool],
-  out : Array[Array[Int32]],
-) -> Unit {
-  if cur.length() == n {
-    out.push(cur.copy())
-    return
-  }
-  for i = 0; i < n; i = i + 1 {
-    if !used[i] {
-      used[i] = true
-      cur.push(i)
-      perm_helper(n, cur, used, out)
-      cur.pop() |> ignore
-      used[i] = false
-    }
-  }
-}
-
-///|
 /// 把遮罩依排列重標號。
 fn relabel_mask(n : Int32, perm : Array[Int32], mask : Int32) -> Int32 {
   let mut out = 0
@@ -216,7 +181,7 @@ pub fn isomorphic(a : Matroid, b : Matroid) -> Bool {
   let n = a.ground_size()
   let ra = a.rank_table()
   let rb = b.rank_table()
-  let perms = permutations(n)
+  let perms = @braid.all_permutations(n)
   for p = 0; p < perms.length(); p = p + 1 {
     let perm = perms[p]
     let mut same = true

@@ -775,3 +775,78 @@ Hom 與 Ext¹ 的整數線性代數。超出此界者一律回 kind = 0「只決
   - B0009 的界外：無窮維 C*-代數的近似單位元、連續群 C*_r G、無么代數上的 K₁ 版本（需完整 Bott 機器）。
   - B0008 留下的三項（ASIndex 與 K₀ 對接、HC⁻／HP 與 SBI 逐項秩、共端做成雙模物件）仍在待辦。
   - 名詞群仍缺的細節：正則圖邊置換群的 n = 5、橢圓曲線 n 等分點群的 CM 情形。
+
+■ 回合 R11.1（2026-11-07）：全代碼健檢（除錯／去重／減債／清死碼）
+------------------------------------------------------------------
+[本回合指示]
+  全代碼健檢 → 除錯 → 去重 → 減債 → 清死碼；跑 CI 編譯測試；通過後推送到 GitHub。
+
+[健檢方法（可重跑）]
+  1. 全目標型別檢查：`moon check --target all`（wasm／wasm-gc／js／native），強制清 _build 後重跑 ⇒ **0 警告 0 錯誤**。
+  2. 死碼掃描：抽出全部 `pub fn`／`fn` 定義，對全庫（含 .mbt）做詞界計數，只出現 1 次（＝僅定義處）
+     者列為疑似死碼，再與 docs／README／ci 的文字對照，**文件有記載者視為公開介面保留**。
+  3. 重複實作掃描：把函式體正規化（去空白、識別字一律抹平）後分組，抓結構相同的實作。
+  4. 恆真／恆假掃描：找 `x != x`、`if ord <= n`、空迴圈體、`ignore(已算出的值)` 之類的無效分支。
+  5. 危險掃描：`abort(`／`unwrap()`／`panic`（皆為前置條件守衛，保留並確認訊息）；`Int64 → Int32` 轉型處。
+  6. 健檢後必跑 `bash ci/ci.sh`（20 步），逐條比對檢核數與結構表字串不變。
+
+[刪除的死碼（18 個；全部無文件記載、無呼叫者）]
+  analytic：rat_lt、rat_le
+  cyclotomic：cyclo_multiply_basis、mat_id_i、poly_lc、sigma_order（與 cyclic_order_of_unit 同一份）
+  bc：omega_is_zero
+  kk：intmat_transpose、intmat_apply、is_surjective、qmat_identity、shift_truncation_index、
+      partition_render、kk_equivalence_witness
+  cyclic：alg_render、bimod_left_vec、bimod_right_vec、check_hc_paths_agree
+  context：component_id_of_stmt（與 component_id_of_axiom 逐字相同）
+  elliptic：np_x、weil_legendre
+  registry：paley13_triangles
+  （另有 poly.sub_poly 由 pub 降為 fn，縮小公開介面。）
+
+[去重（同一件事只留一份實作）]
+  - 排列窮舉：bc.all_perms／perms_go、matroid.permutations／perm_helper 三份 → `@braid.all_permutations(n)`（新增於 braid）；
+    排列反元素 → `@braid.perm_inverse`（新增）。matroid 的 moon.pkg 因此 import braid。
+  - Hilbert 模秩向量：kk/checks.normalized_rank 與 kk/hilbert 的同名邏輯 → 只留 `hilbert.mbt` 的 `normalized_rank`，
+    `hilbert_module_rank_vector` 改為**建立在它之上**（原本兩份算法各自實作）。
+  - Euler φ：cyclotomic.euler_phi（O(n) 計數）→ 轉呼叫 `@modular.euler_phi`（B0003 的因數分解版）。
+  - 循環子群 ⟨g⟩：cyclotomic 內兩處 + bc 一處的手寫 while 迴圈 → `@cyclotomic.cyclic_subgroup(n, g)`（單一實作）。
+  - 伽羅華對應的線性條件 (σ_k − I)：cyclotomic.fixed_subspace_dim、cyclotomic.checks（T79）、bc.subgroup_lattice
+    三份 → `@cyclotomic.fix_rows(n, h)`（公開，兩套件共用）。
+  - Gram 判準：bc.gram_is_scalar 與 unweighted_gram_is_scalar 兩份同構 → `is_scalar_times_identity(m, order)`。
+  - 么正性秩函式：cyclotomic 的 sigma_order ≡ cyclic_order_of_unit → 合併為 `unit_order`。
+
+[除錯（健檢中發現並修掉的實際缺陷）]
+  - **BUG-32（新）**：`hilbert_module_rank_vector` 原本對「塊大小 0」回 None；重構時若直接改用
+    `normalized_rank`，`rat_make(r, 0)` 會靜默回 0/1 ⇒ 會回 Some(0)（錯誤地宣稱是 A-線性投影）。
+    已在重構時先擋 `blocks[i] == 0`，並把「不整除」「塊大小 0」兩條**升格為 T32 的常設負控制**（T32 檢核數不變、內容變強）。
+  - **BUG-33（新）**：`bc_cyclic_iso` 的 `&& @cyclotomic.cyclo_dim(n) <= n` 是恆真合取（φ(n) ≤ n 對所有 n 成立），
+    屬於「恆真永綠」債務 ⇒ 刪除，只留真正的 DFT 正交判準。
+  - **BUG-34（新）**：`check_dft_collapse_fails` 首個迴圈恆不觸發（`n == 0` 對 n ≥ 2 永不成立）⇒ 重寫為
+    「正確模型在 m ≠ 0 時和為 0」×「退化（ζ↦1）模型在該處為 n ≠ 0」，判準才有分辨力。
+  - **BUG-35（新）**：`check_qz_torsion` 的 `if ord <= n { count += 1 }` 恆真（階恆 ≤ n）⇒ count 形同虛設；
+    改為計「階整除 n」的元素個數並與 n 比對（真正的 μ_n = {x : nx = 0} 陳述）。
+  - **BUG-36（新）**：`check_qz_divisible` 內的 `qz_add(0/1, num/den)` 是 no-op 再歸一化，且每步重算 ⇒ 清除。
+  - **BUG-37（新）**：`kk_report` 用 `let samples = algebra_samples()` 之後 `ignore(samples)`（算完即丟）⇒ 刪除；
+    `algebra_samples` 保留並註明「供 CLI 的 kktable 印表，不是檢核的一部分」。
+  - 效能債：`check_galois_is_units` 在雙重迴圈內重算 `sigma_matrix(n, k)`（O(us·d²) 次）⇒ 提到迴圈外。
+  - 恆真合取再檢查：`check_cyclotomic_character` 原本比對「σ_k 的階 = k 的階」，合併實作後該比較會退化成
+    同函式的自我比較（恆真）⇒ 改為**矩陣階 vs 算術階**的兩套獨立計算對撞（新增 `sigma_matrix_order`）。
+
+[未動的部分（有理由）]
+  - `abort(...)` 前置條件守衛（bitset／context／matroid 等）：訊息明確、屬 A6 檢核器的防線，保留。
+  - 文件記載為公開介面但程式未使用的函式（如 kk 的 k_of_compact／k_of_toeplitz／fda_* ／is_injective、
+    lattice 的 concept_of、hyper 的 edge_permutation 等）：README／docs 明確列為**接入接口**，屬交付內容，不視為死碼。
+  - 三個 gcd（Int32／Int64／BigInt）：型別不同、分屬 modular／analytic／jacobian，合併會讓套件耦合惡化，暫不動。
+  - `intmat_rank` 與 `rank_q`（F_p 高斯）刻意並存：那是 B0006 T63／B0009 T72 的**交叉驗證**設計，不是重複。
+
+[實測]
+  - 刪除 + 合併後 `moon check --target all` 仍 0 警告 0 錯誤；`moon fmt --check` 通過。
+  - `bash ci/ci.sh` → **20/20 全綠**，且所有檢核數與結構表字串**與前一版逐字相同**
+    （B0001 39/39、B0002 32/32、A3′ 15+1、B0003 62、B0004、B0005 27+54、B0006 **46/46**、B0007 29+6、
+     B0008 59/59、B0009 9/9＋8/8、B0010 10/10、algorithm.xlsx 34 表）。
+  - 淨變化：34 個檔案、**+218 / −499 行**（淨減 281 行），公開介面縮小 19 個函式。
+
+[下一步]
+  - 推送 GitHub（https://github.com/algorithms10000/algo2，master）；token 只在推送命令中一次性使用，不寫入
+    .git/config、不寫入任何檔案（推送後另設 remote 為無 token 的 https 位址）。
+  - 待辦（承 R11）：ASIndex 與 K₀ 對接、HC⁻／HP 與 SBI 逐項秩、共端做成雙模物件；
+    Baum–Connes 的無窮群樣本擴充（C*_r(ℤⁿ) = C(Tⁿ) 的 K-群）。

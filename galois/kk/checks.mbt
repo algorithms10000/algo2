@@ -8,19 +8,6 @@
 // ---------------------------------------------------------------- T32：Hilbert 模 ↔ K₀
 
 ///|
-/// 一組分塊秩的**歸一化秩向量** (rank_i / n_i)。
-pub fn normalized_rank(
-  block_ranks : Array[Int32],
-  blocks : Array[Int32],
-) -> Array[Rat] {
-  let out : Array[Rat] = []
-  for i = 0; i < blocks.length(); i = i + 1 {
-    out.push(rat_make(block_ranks[i].to_int64(), blocks[i].to_int64()))
-  }
-  out
-}
-
-///|
 /// 兩組歸一化秩向量逐項相加（驗可加性用）。
 pub fn rat_vec_add(a : Array[Rat], b : Array[Rat]) -> Array[Rat] {
   let out : Array[Rat] = []
@@ -100,7 +87,23 @@ pub fn check_hilbert_module_k0() -> @galois.Check {
   // 與抽象 K₀ 比對：塊數 = 秩
   let k = fda_k(fda(blocks))
   let abs_ok = k.k0.rank == 2 && fga_eq(k.k1, fga_zero())
-  let ok = add_ok && gen_ok && abs_ok
+  // 秩向量的**整數性判準**（含兩個退化負控制）：
+  //   (i) 合法輸入 [4,3],[2,3] ⇒ Some([2,1])；
+  //  (ii) 3 不被 2 整除 ⇒ None（不是 A-線性投影）；
+  // (iii) 塊大小 0 ⇒ None（`rat_make` 會靜默回 0/1，必須擋）。
+  let rv_ok = match hilbert_module_rank_vector([4, 3], blocks) {
+    Some(v) => v.length() == 2 && v[0] == 2L && v[1] == 1L
+    None => false
+  }
+  let rv_neg_div = match hilbert_module_rank_vector([3, 0], blocks) {
+    None => true
+    Some(_) => false
+  }
+  let rv_neg_zero = match hilbert_module_rank_vector([2, 1], [2, 0]) {
+    None => true
+    Some(_) => false
+  }
+  let ok = add_ok && gen_ok && abs_ok && rv_ok && rv_neg_div && rv_neg_zero
   let detail = "v(2,3)=" +
     rat_vec_render(v1) +
     "、v(4,0)=" +
@@ -114,7 +117,14 @@ pub fn check_hilbert_module_k0() -> @galois.Check {
     "）；極小投影給 (1/2,0)、(0,1/3)（生成 " +
     gen_ok.to_string() +
     "）；K₀ = " +
-    fga_render(k.k0)
+    fga_render(k.k0) +
+    "；秩向量整數性 " +
+    rv_ok.to_string() +
+    "、負控制（不整除 " +
+    rv_neg_div.to_string() +
+    "、塊大小 0 " +
+    rv_neg_zero.to_string() +
+    "）"
   @galois.Check::make(
     "T32", "T32 Hilbert 模秩向量 ⇒ K₀(M₂ ⊕ M₃)", ok, detail,
   )
@@ -246,6 +256,7 @@ pub fn check_uct_case(
 
 ///|
 /// 標準樣本代數的 K-群。
+/// 樣本代數的 K-群表（供 CLI 的 `kktable` 印表；不是檢核的一部分）。
 pub fn algebra_samples() -> Array[(String, KPair)] {
   [
     ("ℂ", kpair(fga_free(1), fga_zero())),
@@ -770,8 +781,7 @@ pub fn kk_report() -> @galois.Report {
   for n = 2; n <= 8; n = n + 1 {
     r.add(check_cuntz_ktheory(n))
   }
-  // T35：UCT 值表（登記值 = 古典結果）
-  let samples = algebra_samples()
+  // T35：UCT 值表（登記值 = 古典結果；樣本清單由 CLI 的 `kktable` 使用）
   let c = kpair(fga_free(1), fga_zero())
   r.add(check_uct_case("KK(ℂ,ℂ)", c, c, fga_free(1)))
   r.add(
@@ -818,7 +828,6 @@ pub fn kk_report() -> @galois.Report {
       ),
     )
   }
-  ignore(samples)
   // T36–T39
   r.add(check_kk_product_unit())
   r.add(check_kk_product_assoc())

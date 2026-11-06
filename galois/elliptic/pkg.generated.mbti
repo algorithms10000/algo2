@@ -107,8 +107,6 @@ pub fn np_sub(NPoly, NPoly) -> NPoly
 
 pub fn np_terms(NPoly) -> Int32
 
-pub fn np_x() -> NPoly
-
 pub fn np_y() -> NPoly
 
 pub fn np_y_degrees(NPoly) -> Array[Int32]
@@ -144,8 +142,6 @@ pub fn torsion_vectors(Int32) -> Array[(Int32, Int32)]
 pub fn translation_invariant(Array[Array[Bool]], Int32) -> Bool
 
 pub fn weil_exp(EPt, EPt) -> Int32
-
-pub fn weil_legendre(EPt, EPt) -> Int32
 
 // Errors
 

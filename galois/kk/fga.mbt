@@ -286,32 +286,6 @@ pub fn intmat_mul(a : IntMat, b : IntMat) -> IntMat {
 }
 
 ///|
-/// 轉置。
-pub fn intmat_transpose(a : IntMat) -> IntMat {
-  let out = intmat_zero(a.cols, a.rows)
-  for i = 0; i < a.rows; i = i + 1 {
-    for j = 0; j < a.cols; j = j + 1 {
-      out.e[j][i] = a.e[i][j]
-    }
-  }
-  out
-}
-
-///|
-/// 矩陣乘法（單元素，供檢核／小工具使用）。
-pub fn intmat_apply(a : IntMat, v : Array[Int64]) -> Array[Int64] {
-  let out : Array[Int64] = []
-  for i = 0; i < a.rows; i = i + 1 {
-    let mut s = 0L
-    for j = 0; j < a.cols; j = j + 1 {
-      s = s + a.e[i][j] * v[j]
-    }
-    out.push(s)
-  }
-  out
-}
-
-///|
 /// 矩陣相等。
 pub fn intmat_eq(a : IntMat, b : IntMat) -> Bool {
   if a.rows != b.rows || a.cols != b.cols {
@@ -474,10 +448,4 @@ pub fn kernel_of(m : IntMat) -> FgAb {
 /// ℤ 上的線性映射是否單射（kernel = 0）。
 pub fn is_injective(m : IntMat) -> Bool {
   intmat_rank(m) == m.cols
-}
-
-///|
-/// ℤ 上的線性映射是否滿射（coker = 0）。
-pub fn is_surjective(m : IntMat) -> Bool {
-  intmat_rank(m) == m.rows
 }

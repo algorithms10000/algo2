@@ -7,6 +7,8 @@ import {
 }
 
 // Values
+pub fn all_permutations(Int32) -> Array[Array[Int32]]
+
 pub fn braid_report() -> @galois.Report
 
 pub fn burau_braid_relation(Int32, Int32) -> Bool
@@ -88,6 +90,8 @@ pub fn mat2_same_pm((Int64, Int64, Int64, Int64), (Int64, Int64, Int64, Int64)) 
 pub fn n_of(LMat) -> Int32
 
 pub fn perm_identity(Int32) -> Array[Int32]
+
+pub fn perm_inverse(Array[Int32]) -> Array[Int32]
 
 pub fn perm_key(Array[Int32]) -> String
 

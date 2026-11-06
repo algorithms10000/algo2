@@ -90,19 +90,24 @@ pub fn gram_matrix(g : FinGroup) -> Array[Array[Int64]] {
 }
 
 ///|
-/// Gram 矩陣是否等於 |G|·I。
-pub fn gram_is_scalar(g : FinGroup) -> Bool {
-  let m = gram_matrix(g)
+/// 矩陣是否等於 `order`·I（Gram 判準的唯一實作；帶權重與無權重版本共用）。
+pub fn is_scalar_times_identity(m : Array[Array[Int64]], order : Int64) -> Bool {
   let mut ok = true
   for i = 0; i < m.length(); i = i + 1 {
     for j = 0; j < m.length(); j = j + 1 {
-      let want = if i == j { g.order } else { 0L }
+      let want = if i == j { order } else { 0L }
       if m[i][j] != want {
         ok = false
       }
     }
   }
   ok
+}
+
+///|
+/// **帶類大小權重**的 Gram 是否等於 |G|·I（＝特徵正交性）。
+pub fn gram_is_scalar(g : FinGroup) -> Bool {
+  is_scalar_times_identity(gram_matrix(g), g.order)
 }
 
 ///|
@@ -126,17 +131,7 @@ pub fn gram_matrix_unweighted(g : FinGroup) -> Array[Array[Int64]] {
 ///|
 /// 無權重版本是否仍然「等於 |G|·I」——負控制：S₃、D₈、Q₈ 都必然失敗。
 pub fn unweighted_gram_is_scalar(g : FinGroup) -> Bool {
-  let m = gram_matrix_unweighted(g)
-  let mut ok = true
-  for i = 0; i < m.length(); i = i + 1 {
-    for j = 0; j < m.length(); j = j + 1 {
-      let want = if i == j { g.order } else { 0L }
-      if m[i][j] != want {
-        ok = false
-      }
-    }
-  }
-  ok
+  is_scalar_times_identity(gram_matrix_unweighted(g), g.order)
 }
 
 // ---------------------------------------------------------------- 組裝映射

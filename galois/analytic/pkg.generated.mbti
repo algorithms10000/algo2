@@ -106,10 +106,6 @@ pub fn rat_get_div(Rat, Rat) -> Rat
 
 pub fn rat_is_zero(Rat) -> Bool
 
-pub fn rat_le(Rat, Rat) -> Bool
-
-pub fn rat_lt(Rat, Rat) -> Bool
-
 pub fn rat_mul(Rat, Rat) -> Rat
 
 pub fn rat_neg(Rat) -> Rat

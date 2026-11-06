@@ -132,24 +132,6 @@ pub fn component_id_of_axiom(ctx : FormalContext) -> Array[Int32] {
 }
 
 ///|
-/// 每個陳述所屬的分量編號（長度 n）。
-pub fn component_id_of_stmt(ctx : FormalContext) -> Array[Int32] {
-  let n = ctx.num_stmts()
-  let id_of : Array[Int32] = []
-  for j = 0; j < n; j = j + 1 {
-    id_of.push(-1)
-  }
-  let comps = components_of(ctx)
-  for c = 0; c < comps.length(); c = c + 1 {
-    let st = comps[c].stmts
-    for k = 0; k < st.length(); k = k + 1 {
-      id_of[st[k]] = comps[c].id
-    }
-  }
-  id_of
-}
-
-///|
 /// 由某個分量切出子上下文 K_C = (A_C, S_C, R|_{A_C×S_C})（索引重新編號，名稱保留）。
 pub fn sub_context(ctx : FormalContext, comp : Component) -> FormalContext {
   let ax = comp.axioms

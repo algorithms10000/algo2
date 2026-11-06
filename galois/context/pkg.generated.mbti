@@ -8,8 +8,6 @@ import {
 // Values
 pub fn component_id_of_axiom(FormalContext) -> Array[Int32]
 
-pub fn component_id_of_stmt(FormalContext) -> Array[Int32]
-
 pub fn components_of(FormalContext) -> Array[Component]
 
 pub fn parse_context(String) -> ParsedContext raise ParseError

@@ -148,9 +148,3 @@ pub fn kpair_bott_periodic(a : KPair) -> Bool {
 pub fn kk_equivalent(a : KPair, b : KPair) -> Bool {
   kpair_eq(a, b)
 }
-
-///|
-/// KK-等價的**見證**：若 K-群同構，則 Hom 中有單位矩陣，故 KK 中有可逆類。
-pub fn kk_equivalence_witness(a : KPair, b : KPair) -> Bool {
-  kk_class_invertible(kk_identity(a)) && kpair_eq(a, b)
-}

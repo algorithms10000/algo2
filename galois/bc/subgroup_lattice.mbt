@@ -23,15 +23,8 @@ pub fn subgroups_of_units(n : Int32) -> Array[Array[Int32]] {
   let out : Array[Array[Int32]] = []
   let keys : Array[String] = []
   for g in @cyclotomic.units_mod(n) {
-    let h : Array[Int32] = []
-    let mut p = g % n
-    h.push(p)
-    while p != 1 {
-      p = p * g % n
-      h.push(p)
-    }
     // 排序成規範形式後去重
-    let sorted = sort_ints(h)
+    let sorted = sort_ints(@cyclotomic.cyclic_subgroup(n, g))
     let key = ints_key(sorted)
     let mut seen = false
     for k in keys {
@@ -77,36 +70,18 @@ fn ints_key(a : Array[Int32]) -> String {
 }
 
 ///|
-/// H 對應的線性條件：(σ_k − I) 的所有行（k ∈ H）。
-pub fn fix_rows(n : Int32, h : Array[Int32]) -> Array[Array[Int64]] {
-  let d = @cyclotomic.cyclo_dim(n)
-  let rows : Array[Array[Int64]] = []
-  for k in h {
-    let sk = @cyclotomic.sigma_matrix(n, k)
-    for r = 0; r < d; r = r + 1 {
-      let row : Array[Int64] = []
-      for c = 0; c < d; c = c + 1 {
-        row.push(sk[r][c] - (if r == c { 1L } else { 0L }))
-      }
-      rows.push(row)
-    }
-  }
-  rows
-}
-
-///|
 /// Fix(H) 的維度 = φ(n) − rank(rows)。
 pub fn fix_dim(n : Int32, h : Array[Int32]) -> Int32 {
   @cyclotomic.cyclo_dim(n) -
-  @analytic.rmat_rank(@analytic.rmat_of_int(fix_rows(n, h)))
+  @analytic.rmat_rank(@analytic.rmat_of_int(@cyclotomic.fix_rows(n, h)))
 }
 
 ///|
 /// 子空間包含判定：由 rowsA 定義的空間 ⊆ 由 rowsB 定義的空間
 /// ⟺ rank([rowsA; rowsB]) = rank(rowsA)。
 pub fn fix_included(n : Int32, h_a : Array[Int32], h_b : Array[Int32]) -> Bool {
-  let ra = fix_rows(n, h_a)
-  let rb = fix_rows(n, h_b)
+  let ra = @cyclotomic.fix_rows(n, h_a)
+  let rb = @cyclotomic.fix_rows(n, h_b)
   let stacked : Array[Array[Int64]] = []
   for r in ra {
     stacked.push(r)

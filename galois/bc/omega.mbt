@@ -56,12 +56,6 @@ pub fn omega_conj(x : OmegaVal) -> OmegaVal {
   { a: x.a - x.b, b: -x.b, }
 }
 
-///|
-/// 是否為零。
-pub fn omega_is_zero(x : OmegaVal) -> Bool {
-  x.a == 0L && x.b == 0L
-}
-
 // ---------------------------------------------------------------- A₄
 
 ///|

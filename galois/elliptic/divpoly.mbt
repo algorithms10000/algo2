@@ -76,12 +76,6 @@ pub fn np_y() -> NPoly {
 }
 
 ///|
-/// x（曲線方程用）。
-pub fn np_x() -> NPoly {
-  np_norm([(1, 0, BigInt::from_int(1))])
-}
-
-///|
 pub fn np_scale(p : NPoly, c : Int32) -> NPoly {
   let out : Array[(Int32, Int32, BigInt)] = []
   let bc = BigInt::from_int(c)

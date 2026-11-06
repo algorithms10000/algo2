@@ -56,26 +56,6 @@ pub fn bimod_make(
 }
 
 ///|
-/// 左作用的第 (k, i) 個像向量：e_k · m_i。
-pub fn bimod_left_vec(m : Bimod, k : Int32, i : Int32) -> Array[Int64] {
-  let out : Array[Int64] = []
-  for p = 0; p < m.dim; p = p + 1 {
-    out.push(m.left[k * m.dim + i][p])
-  }
-  out
-}
-
-///|
-/// 右作用的第 (k, i) 個像向量：m_i · e_k。
-pub fn bimod_right_vec(m : Bimod, k : Int32, i : Int32) -> Array[Int64] {
-  let out : Array[Int64] = []
-  for p = 0; p < m.dim; p = p + 1 {
-    out.push(m.right[k * m.dim + i][p])
-  }
-  out
-}
-
-///|
 /// **正則雙模** A_A_A：左作用 = 左乘、右作用 = 右乘。
 pub fn bimod_regular(a : FdAlg) -> Bimod {
   let d = a.dim

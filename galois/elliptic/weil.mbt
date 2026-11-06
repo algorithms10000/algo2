@@ -234,9 +234,3 @@ pub fn legendre(x : Int32, q : Int32) -> Int32 {
     -1
   }
 }
-
-///|
-/// 配對值的二次特徵（μ_n 上取 χ；用於 A26 的 Ramsey 段落，n 必須是質數 q）。
-pub fn weil_legendre(t : EPt, s : EPt) -> Int32 {
-  legendre(weil_exp(t, s), t.n)
-}

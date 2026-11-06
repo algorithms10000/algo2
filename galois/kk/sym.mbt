@@ -96,18 +96,3 @@ pub fn sum_dim_squares(n : Int32) -> Int64 {
 pub fn k_of_symmetric_group(n : Int32) -> KPair {
   { k0: fga_free(partitions(n).length()), k1: fga_zero(), }
 }
-
-///|
-/// 顯示分割。
-pub fn partition_render(lambda : Array[Int32]) -> String {
-  let sb = StringBuilder()
-  sb.write_string("(")
-  for i = 0; i < lambda.length(); i = i + 1 {
-    if i > 0 {
-      sb.write_string(",")
-    }
-    sb.write_string(lambda[i].to_string())
-  }
-  sb.write_string(")")
-  sb.to_string()
-}

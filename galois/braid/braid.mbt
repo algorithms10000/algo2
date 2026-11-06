@@ -127,6 +127,61 @@ pub fn perm_key(p : Array[Int32]) -> String {
 }
 
 ///|
+/// 排列的反元素（p 的逆；S_n 中唯一滿足 p∘q = id 的 q）。
+pub fn perm_inverse(p : Array[Int32]) -> Array[Int32] {
+  let n = p.length()
+  let q : Array[Int32] = []
+  for i = 0; i < n; i = i + 1 {
+    q.push(0)
+  }
+  for i = 0; i < n; i = i + 1 {
+    q[p[i]] = i
+  }
+  q
+}
+
+///|
+/// **S_n 的全體排列**（回溯窮舉；回傳 n! 個，順序為字典序）。
+/// 這是各套件共用的唯一一份排列窮舉（bc 的 S_n 共軛類、matroid 的同構判定都用它）。
+pub fn all_permutations(n : Int32) -> Array[Array[Int32]] {
+  let out : Array[Array[Int32]] = []
+  let cur : Array[Int32] = []
+  let used : Array[Bool] = []
+  for i = 0; i < n; i = i + 1 {
+    used.push(false)
+  }
+  all_perms_go(n, cur, used, out)
+  out
+}
+
+///|
+/// 回溯主體（`all_permutations` 的內部）。
+fn all_perms_go(
+  n : Int32,
+  cur : Array[Int32],
+  used : Array[Bool],
+  out : Array[Array[Int32]],
+) -> Unit {
+  if cur.length() == n {
+    let c : Array[Int32] = []
+    for x in cur {
+      c.push(x)
+    }
+    out.push(c)
+    return
+  }
+  for i = 0; i < n; i = i + 1 {
+    if !used[i] {
+      used[i] = true
+      cur.push(i)
+      all_perms_go(n, cur, used, out)
+      ignore(cur.pop())
+      used[i] = false
+    }
+  }
+}
+
+///|
 /// 以換位為生成元生成整個 S_n，回傳元素個數（應為 n!）。
 /// 這是 T22「B_n ↠ S_n 滿射」的可計算部分：換位生成 S_n。
 pub fn generated_permutation_count(n : Int32) -> Int32 {

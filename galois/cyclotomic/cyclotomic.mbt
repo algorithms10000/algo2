@@ -75,13 +75,11 @@ pub fn qz_order(a : Int64, b : Int64) -> Int64 {
 pub fn check_qz_torsion(top : Int32) -> Bool {
   let mut ok = true
   for n = 1; n <= top; n = n + 1 {
+    // 階整除 n 的元素恰為 μ_n（共 n 個），且每個元素的階有限
     let mut count = 0
     for k = 0; k < n; k = k + 1 {
       let ord = qz_order(k.to_int64(), n.to_int64())
-      if n % ord.to_int() != 0 {
-        ok = false
-      }
-      if ord.to_int() <= n {
+      if n % ord.to_int() == 0 {
         count = count + 1
       }
     }
@@ -99,19 +97,17 @@ pub fn check_qz_divisible(top : Int32) -> Bool {
   for n = 1; n <= top; n = n + 1 {
     for k = 0; k < n; k = k + 1 {
       for m = 1; m <= 6; m = m + 1 {
-        // 解 y = k/(n·m)
-        let (num, den) = qz_add(0L, 1L, k.to_int64(), (n * m).to_int64())
-        let (sum_num, sum_den) = qz_add(0L, 1L, num, den)
-        // m·y：用重複加法
+        // 取 y = k/(n·m)（候選解），驗 m·y = k/n（mod 1）
+        let y = (k.to_int64(), (n * m).to_int64())
         let mut acc = (0L, 1L)
         for step = 0; step < m; step = step + 1 {
-          acc = qz_add(acc.0, acc.1, sum_num, sum_den)
+          acc = qz_add(acc.0, acc.1, y.0, y.1)
         }
-        let (want_num, want_den) = qz_add(0L, 1L, k.to_int64(), n.to_int64())
-        // 化簡後比較
-        let x = @analytic.rat_new(acc.0, acc.1)
-        let y = @analytic.rat_new(want_num, want_den)
-        if !@analytic.rat_eq(x, y) {
+        let want = qz_add(0L, 1L, k.to_int64(), n.to_int64())
+        if !@analytic.rat_eq(
+            @analytic.rat_new(acc.0, acc.1),
+            @analytic.rat_new(want.0, want.1),
+          ) {
           ok = false
         }
       }
@@ -188,17 +184,6 @@ pub fn reduce_mod_cyclo(n : Int32, c : Array[Int64]) -> Array[Int64] {
     out.push(rem[i])
   }
   out
-}
-
-///|
-/// 基底元素的乘法：ζ^a · ζ^b = ζ^{(a+b) mod n}，化成基底座標。
-pub fn cyclo_multiply_basis(n : Int32, a : Int32, b : Int32) -> Array[Int64] {
-  let raw : Array[Int64] = []
-  for i = 0; i <= (a + b) % n; i = i + 1 {
-    raw.push(0L)
-  }
-  raw[(a + b) % n] = 1L
-  reduce_mod_cyclo(n, raw)
 }
 
 ///|
@@ -299,29 +284,22 @@ pub fn mat_eq_i(a : Array[Array[Int64]], b : Array[Array[Int64]]) -> Bool {
 }
 
 ///|
-/// 單位矩陣（整數）。
-pub fn mat_id_i(n : Int32) -> Array[Array[Int64]] {
-  let out : Array[Array[Int64]] = []
-  for i = 0; i < n; i = i + 1 {
-    let row : Array[Int64] = []
-    for j = 0; j < n; j = j + 1 {
-      row.push(if i == j { 1L } else { 0L })
-    }
-    out.push(row)
+/// 由 g 生成的**循環子群** ⟨g⟩ ≤ (ℤ/n)^×（升序，含 g 的連乘直到回到 1）。
+pub fn cyclic_subgroup(n : Int32, g : Int32) -> Array[Int32] {
+  let h : Array[Int32] = []
+  let mut p = g % n
+  h.push(p)
+  while p != 1 {
+    p = p * g % n
+    h.push(p)
   }
-  out
+  h
 }
 
 ///|
-/// σ_k 的階（在 Gal 中的元素階 = k 在 (ℤ/n)^× 中的階）。
-pub fn sigma_order(n : Int32, k : Int32) -> Int32 {
-  let mut p = k % n
-  let mut cnt = 1
-  while p != 1 {
-    p = p * k % n
-    cnt = cnt + 1
-  }
-  cnt
+/// k 在 (ℤ/n)^× 中的階（= σ_k 在 Gal 中的階；單一實作，勿另寫第二份）。
+pub fn unit_order(n : Int32, k : Int32) -> Int32 {
+  cyclic_subgroup(n, k).length()
 }
 
 ///|
@@ -454,11 +432,11 @@ pub fn check_ramanujan(top : Int32) -> Bool {
 }
 
 ///|
-/// **G3（伽羅華對應）**：H ≤ (ℤ/n)^× 的不動子空間維度 = [G : H]（G = (ℤ/n)^×）。
-/// 這是基本定理「[ℚ(ζ_n)^H : ℚ] = [(ℤ/n)^× : H]」的線性代數版本。
-pub fn fixed_subspace_dim(n : Int32, h : Array[Int32]) -> Int32 {
+/// H 對應的**線性條件**：(σ_k − I) 的所有行（k ∈ H）。
+/// Fix(H) 就是這組行的核——這是「全局公理伽羅華對應」在數論層的可算形式，
+/// 也是 bc 套件（B0010 T89）與本套件（T79）**共用的唯一實作**。
+pub fn fix_rows(n : Int32, h : Array[Int32]) -> Array[Array[Int64]] {
   let d = cyclo_dim(n)
-  // 每個 σ_k 給出 (σ_k − I) 的列；固定空間 = 全體核的交
   let rows : Array[Array[Int64]] = []
   for k in h {
     let sk = sigma_matrix(n, k)
@@ -470,7 +448,14 @@ pub fn fixed_subspace_dim(n : Int32, h : Array[Int32]) -> Int32 {
       rows.push(row)
     }
   }
-  d - @cyclic.rank_q(rows)
+  rows
+}
+
+///|
+/// **G3（伽羅華對應）**：H ≤ (ℤ/n)^× 的不動子空間維度 = [G : H]（G = (ℤ/n)^×）。
+/// 這是基本定理「[ℚ(ζ_n)^H : ℚ] = [(ℤ/n)^× : H]」的線性代數版本。
+pub fn fixed_subspace_dim(n : Int32, h : Array[Int32]) -> Int32 {
+  cyclo_dim(n) - @cyclic.rank_q(fix_rows(n, h))
 }
 
 ///|
@@ -481,14 +466,7 @@ pub fn check_galois_correspondence(n : Int32) -> Bool {
   let us = units_mod(n)
   let mut ok = true
   for g in us {
-    // 由 g 生成的子群
-    let h : Array[Int32] = []
-    let mut p = g % n
-    h.push(p)
-    while p != 1 {
-      p = p * g % n
-      h.push(p)
-    }
+    let h = cyclic_subgroup(n, g)
     if fixed_subspace_dim(n, h) != us.length() / h.length() {
       ok = false
     }
@@ -594,9 +572,10 @@ pub fn check_cyclotomic_character(n : Int32) -> Bool {
       }
     }
   }
-  // 兩個群同階，且 σ_k 的階 = k 在 (ℤ/n)^× 的階
+  // **矩陣階 = 算術階**：σ_k 的矩陣階（反覆自乘到 I）必須等於 k 在 (ℤ/n)^× 的階。
+  // 這是兩套獨立計算的對撞（矩陣乘法 vs 模算術），不是同一個函式呼叫兩次。
   for k in us {
-    if sigma_order(n, k) != cyclic_order_of_unit(n, k) {
+    if sigma_matrix_order(n, k) != unit_order(n, k) {
       ok = false
     }
   }
@@ -604,13 +583,30 @@ pub fn check_cyclotomic_character(n : Int32) -> Bool {
 }
 
 ///|
-/// k 在 (ℤ/n)^× 中的階。
-pub fn cyclic_order_of_unit(n : Int32, k : Int32) -> Int32 {
-  let mut p = k % n
-  let mut cnt = 1
-  while p != 1 {
-    p = p * k % n
-    cnt = cnt + 1
+/// σ_k 的**矩陣階**：最小的 t ≥ 1 使 σ_k^t = I（整數矩陣連乘）。
+pub fn sigma_matrix_order(n : Int32, k : Int32) -> Int32 {
+  let d = cyclo_dim(n)
+  let mut acc = sigma_matrix(n, k)
+  let id = mat_id_of(n)
+  let mut t = 1
+  while !mat_eq_i(acc, id) && t <= d * d + 1 {
+    acc = mat_mul_i(acc, sigma_matrix(n, k))
+    t = t + 1
   }
-  cnt
+  t
+}
+
+///|
+/// 單位矩陣（整數，φ(n)×φ(n)）。
+fn mat_id_of(n : Int32) -> Array[Array[Int64]] {
+  let d = cyclo_dim(n)
+  let out : Array[Array[Int64]] = []
+  for i = 0; i < d; i = i + 1 {
+    let row : Array[Int64] = []
+    for j = 0; j < d; j = j + 1 {
+      row.push(if i == j { 1L } else { 0L })
+    }
+    out.push(row)
+  }
+  out
 }

@@ -121,8 +121,6 @@ pub fn ilcm(Int64, Int64) -> Int64
 
 pub fn imod(Int64, Int64) -> Int64
 
-pub fn intmat_apply(IntMat, Array[Int64]) -> Array[Int64]
-
 pub fn intmat_eq(IntMat, IntMat) -> Bool
 
 pub fn intmat_identity(Int32, Int64) -> IntMat
@@ -133,8 +131,6 @@ pub fn intmat_of(Array[Array[Int64]]) -> IntMat
 
 pub fn intmat_rank(IntMat) -> Int32
 
-pub fn intmat_transpose(IntMat) -> IntMat
-
 pub fn intmat_zero(Int32, Int32) -> IntMat
 
 pub fn irrep_dim(Array[Int32]) -> Int64
@@ -142,8 +138,6 @@ pub fn irrep_dim(Array[Int32]) -> Int64
 pub fn is_injective(IntMat) -> Bool
 
 pub fn is_projection(QMat) -> Bool
-
-pub fn is_surjective(IntMat) -> Bool
 
 pub fn k_of_circle() -> KPair
 
@@ -162,8 +156,6 @@ pub fn kk_class_eq(KKClass, KKClass) -> Bool
 pub fn kk_class_invertible(KKClass) -> Bool
 
 pub fn kk_compose(KKClass, KKClass) -> KKClass
-
-pub fn kk_equivalence_witness(KPair, KPair) -> Bool
 
 pub fn kk_equivalent(KPair, KPair) -> Bool
 
@@ -211,8 +203,6 @@ pub fn outside_render() -> String
 
 pub fn outside_report() -> @galois.Report
 
-pub fn partition_render(Array[Int32]) -> String
-
 pub fn partition_size(Array[Int32]) -> Int32
 
 pub fn partitions(Int32) -> Array[Array[Int32]]
@@ -220,8 +210,6 @@ pub fn partitions(Int32) -> Array[Array[Int32]]
 pub fn pow2(Int32) -> Int32
 
 pub fn qmat_fredholm_index(QMat) -> Int32
-
-pub fn qmat_identity(Int32, Rat) -> QMat
 
 pub fn qmat_mul(QMat, QMat) -> QMat
 
@@ -270,8 +258,6 @@ pub fn rat_vec_render(Array[Rat]) -> String
 pub fn rat_zero() -> Rat
 
 pub fn scope_item_compliant(ScopeItem) -> Bool
-
-pub fn shift_truncation_index(Int32) -> Int32
 
 pub fn six_term(FgAb, FgAb, FgAb, FgAb, FgAb, FgAb, IntMat, IntMat, IntMat, IntMat, IntMat, IntMat) -> SixTerm
 

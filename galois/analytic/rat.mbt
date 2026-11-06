@@ -97,18 +97,6 @@ pub fn rat_eq(a : Rat, b : Rat) -> Bool {
 }
 
 ///|
-/// 小於。
-pub fn rat_lt(a : Rat, b : Rat) -> Bool {
-  a.num * b.den < b.num * a.den
-}
-
-///|
-/// 不大於。
-pub fn rat_le(a : Rat, b : Rat) -> Bool {
-  a.num * b.den <= b.num * a.den
-}
-
-///|
 /// 轉成字串（既約分數）。
 pub fn rat_to_string(a : Rat) -> String {
   if a.den == 1L {

@@ -33,12 +33,6 @@ pub fn poly_deg(p : Poly) -> Int32 {
 }
 
 ///|
-/// 首項係數。
-pub fn poly_lc(p : Poly) -> Int64 {
-  p.c[p.c.length() - 1]
-}
-
-///|
 /// 是否為零。
 pub fn poly_is_zero(p : Poly) -> Bool {
   p.c.length() == 1 && p.c[0] == 0L
@@ -93,12 +87,12 @@ pub fn poly_divides(b : Poly, a : Poly) -> Bool {
     return false
   }
   let q = poly_div_exact(a, b)
-  poly_is_zero(poly_new([0L] + sub_poly(poly_mul(q, b), a)))
+  poly_is_zero(poly_new(sub_poly(poly_mul(q, b), a)))
 }
 
 ///|
 /// 輔助：多項式差（此處僅用於整除判定）。
-pub fn sub_poly(a : Poly, b : Poly) -> Array[Int64] {
+fn sub_poly(a : Poly, b : Poly) -> Array[Int64] {
   let n = if a.c.length() > b.c.length() { a.c.length() } else { b.c.length() }
   let out : Array[Int64] = []
   for i = 0; i < n; i = i + 1 {
@@ -123,15 +117,9 @@ pub fn poly_xn_minus_1(n : Int32) -> Poly {
 }
 
 ///|
-/// Euler φ 函數（以計數互質數計算）。
+/// Euler φ：直接轉呼叫 `@modular.euler_phi`（B0003 的唯一實作；本套件不再另寫一份）。
 pub fn euler_phi(n : Int32) -> Int32 {
-  let mut c = 0
-  for k = 1; k <= n; k = k + 1 {
-    if @analytic.gcd_i64(n.to_int64(), k.to_int64()) == 1L {
-      c = c + 1
-    }
-  }
-  c
+  @modular.euler_phi(n)
 }
 
 ///|

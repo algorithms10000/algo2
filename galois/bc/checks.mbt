@@ -160,69 +160,15 @@ pub fn check_bc_a4() -> @galois.Check {
 // ---------------------------------------------------------------- T85
 
 ///|
-/// 排列的乘法與反元素（用 `@braid` 的 perm_mul）。
-fn perm_inverse(p : Array[Int32]) -> Array[Int32] {
-  let n = p.length()
-  let q : Array[Int32] = []
-  for i = 0; i < n; i = i + 1 {
-    q.push(0)
-  }
-  for i = 0; i < n; i = i + 1 {
-    q[p[i]] = i
-  }
-  q
-}
-
-///|
-/// 產生 S_n 的所有排列（回溯）。
-fn all_perms(n : Int32) -> Array[Array[Int32]] {
-  let out : Array[Array[Int32]] = []
-  let cur : Array[Int32] = []
-  let used : Array[Bool] = []
-  for i = 0; i < n; i = i + 1 {
-    used.push(false)
-  }
-  perms_go(n, cur, used, out)
-  out
-}
-
-///|
-/// 回溯主體。
-fn perms_go(
-  n : Int32,
-  cur : Array[Int32],
-  used : Array[Bool],
-  out : Array[Array[Int32]],
-) -> Unit {
-  if cur.length() == n {
-    let c : Array[Int32] = []
-    for x in cur {
-      c.push(x)
-    }
-    out.push(c)
-    return
-  }
-  for i = 0; i < n; i = i + 1 {
-    if !used[i] {
-      used[i] = true
-      cur.push(i)
-      perms_go(n, cur, used, out)
-      ignore(cur.pop())
-      used[i] = false
-    }
-  }
-}
-
-///|
 /// S_n 的共軛類個數（暴力：對每個 x，把 g x g⁻¹ 全算出來取最小鍵做代表）。
 pub fn conjugacy_classes_sn(n : Int32) -> Int32 {
-  let g = all_perms(n)
+  let g = @braid.all_permutations(n)
   let keys : Array[String] = []
   for x in g {
     let mut best = ""
     let mut first = true
     for h in g {
-      let c = @braid.perm_mul(@braid.perm_mul(h, x), perm_inverse(h))
+      let c = @braid.perm_mul(@braid.perm_mul(h, x), @braid.perm_inverse(h))
       let k = @braid.perm_key(c)
       if first || k < best {
         best = k

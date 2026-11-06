@@ -154,16 +154,6 @@ pub fn qmat_zero(rows : Int32, cols : Int32) -> QMat {
 }
 
 ///|
-/// 單位矩陣。
-pub fn qmat_identity(n : Int32, scale : Rat) -> QMat {
-  let m = qmat_zero(n, n)
-  for i = 0; i < n; i = i + 1 {
-    m.e[i][i] = scale
-  }
-  m
-}
-
-///|
 /// 秩（高斯消去，精確有理運算）。
 pub fn qmat_rank(m : QMat) -> Int32 {
   let a : Array[Array[Rat]] = []
@@ -261,6 +251,19 @@ pub fn is_projection(p : QMat) -> Bool {
 }
 
 ///|
+/// 一組分塊秩的**歸一化秩向量** (rank_i / n_i)——Hilbert A-模秩向量的唯一實作。
+pub fn normalized_rank(
+  block_ranks : Array[Int32],
+  blocks : Array[Int32],
+) -> Array[Rat] {
+  let out : Array[Rat] = []
+  for i = 0; i < blocks.length(); i = i + 1 {
+    out.push(rat_make(block_ranks[i].to_int64(), blocks[i].to_int64()))
+  }
+  out
+}
+
+///|
 /// 分塊投影（Hilbert A-模的投影）：`blocks` 給每個簡單塊的大小 n_i，
 /// `sizes` 給每個塊的重數 N_i。回傳每個塊的秩（除以 n_i 之前的整數）。
 /// 回傳 `None` 若某塊的秩不被 n_i 整除（即不是 A-線性投影）。
@@ -268,15 +271,20 @@ pub fn hilbert_module_rank_vector(
   block_ranks : Array[Int32],
   blocks : Array[Int32],
 ) -> Array[Int64]? {
+  let v = normalized_rank(block_ranks, blocks)
   let out : Array[Int64] = []
   let mut ok = true
   for i = 0; i < blocks.length(); i = i + 1 {
-    let n = blocks[i].to_int64()
-    let r = block_ranks[i].to_int64()
-    if n == 0L || r % n != 0L {
+    // 塊大小 0 無意義（`rat_make` 會靜默回 0/1，故必須在這裡先擋）
+    if blocks[i] == 0 {
+      ok = false
+      continue
+    }
+    // 整數性判定：分母必須是 1（否則不是 A-線性投影）
+    if v[i].d != 1L {
       ok = false
     } else {
-      out.push(r / n)
+      out.push(v[i].n)
     }
   }
   if ok {
@@ -460,10 +468,4 @@ pub fn toeplitz_truncation_linear(n : Int32, a : Rat, b : Rat) -> QMat {
 /// Toeplitz 指標的**符號公式**：index(T_f) = −wind(f)。
 pub fn toeplitz_index_of_symbol(wind : Int32) -> Int32 {
   -wind
-}
-
-///|
-/// 移位算子（乘 t）壓縮到 N 維的指標：dim ker − dim coker = 0 − 1 = −1。
-pub fn shift_truncation_index(n : Int32) -> Int32 {
-  qmat_fredholm_index(toeplitz_truncation(n, 1))
 }

@@ -404,9 +404,3 @@ fn mul3_right(a : FdAlg, i : Int32, j : Int32, k : Int32, s : Int32) -> Int64 {
   }
   acc
 }
-
-///|
-/// 顯示。
-pub fn alg_render(a : FdAlg) -> String {
-  a.name + "（dim = " + a.dim.to_string() + "）"
-}

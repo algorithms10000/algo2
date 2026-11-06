@@ -27,8 +27,6 @@ pub fn alg_op(FdAlg) -> FdAlg
 
 pub fn alg_polys(Int32) -> FdAlg
 
-pub fn alg_render(FdAlg) -> String
-
 pub fn alg_symmetric_group3() -> FdAlg
 
 pub fn alg_tensor(FdAlg, FdAlg) -> FdAlg
@@ -61,15 +59,11 @@ pub fn bimod_hom_dim(Bimod, Bimod) -> Int32
 
 pub fn bimod_invariant_dim(Bimod) -> Int32
 
-pub fn bimod_left_vec(Bimod, Int32, Int32) -> Array[Int64]
-
 pub fn bimod_make(String, FdAlg, Int32, Array[Array[Int64]], Array[Array[Int64]]) -> Bimod
 
 pub fn bimod_ok(Bimod) -> Bool
 
 pub fn bimod_regular(FdAlg) -> Bimod
-
-pub fn bimod_right_vec(Bimod, Int32, Int32) -> Array[Int64]
 
 pub fn bimod_tensor_dim(Bimod, Bimod) -> Int32
 
@@ -96,8 +90,6 @@ pub fn check_complex_axioms(FdAlg) -> @galois.Check
 pub fn check_group_algebra(String, Int32, Array[Int32], Int32) -> @galois.Check
 
 pub fn check_hc_paths(FdAlg, Int32) -> @galois.Check
-
-pub fn check_hc_paths_agree(FdAlg, Int32) -> Bool
 
 pub fn check_hh0_paths(FdAlg) -> @galois.Check
 

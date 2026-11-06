@@ -197,27 +197,15 @@ pub fn check_galois_correspondence_all() -> @galois.Check {
     }
     // 兩套秩演算法交叉
     for g in units_mod(n) {
-      let h : Array[Int32] = []
-      let mut p = g % n
-      h.push(p)
-      while p != 1 {
-        p = p * g % n
-        h.push(p)
-      }
+      let h = cyclic_subgroup(n, g)
+      // 兩套秩演算法：F_p 高斯（fixed_subspace_dim）與 ℚ 高斯（rmat_rank）
       let d = cyclo_dim(n)
-      let rows : Array[Array[Int64]] = []
-      for k in h {
-        let sk = sigma_matrix(n, k)
-        for r = 0; r < d; r = r + 1 {
-          let row : Array[Int64] = []
-          for c = 0; c < d; c = c + 1 {
-            row.push(sk[r][c] - (if r == c { 1L } else { 0L }))
-          }
-          rows.push(row)
-        }
+      if fixed_subspace_dim(n, h) !=
+        d - @analytic.rmat_rank(@analytic.rmat_of_int(fix_rows(n, h))) {
+        ok = false
       }
-      let rk_q = @analytic.rmat_rank(@analytic.rmat_of_int(rows))
-      if d - rk_q != units_mod(n).length() / h.length() {
+      if d - @analytic.rmat_rank(@analytic.rmat_of_int(fix_rows(n, h))) !=
+        units_mod(n).length() / h.length() {
         ok = false
       }
     }

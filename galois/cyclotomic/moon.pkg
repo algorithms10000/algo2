@@ -2,4 +2,5 @@ import {
   "arena/b0001/galois",
   "arena/b0001/analytic",
   "arena/b0001/cyclic",
+  "arena/b0001/modular",
 }

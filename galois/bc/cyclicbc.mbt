@@ -44,29 +44,20 @@ pub fn check_dft_orthogonality(n : Int32) -> Bool {
 }
 
 ///|
-/// 負控制：把 ζ 換成 1（即「所有單位根都當成 1」，退化到么代數）時，
-/// Σ_k ζ^{k·m} 會變成 n（對所有 m），正交性立刻失敗。
-/// 回傳「如預期地失敗」。
+/// 負控制：把 ζ 換成 1（「所有單位根都當成 1」，退化到么代數）時，
+/// Σ_k ζ^{k·m} 對**每個** m 都等於 n ≠ 0，正交性立刻失敗。
+/// 判準有內容 ⇔ 「正確的和在 m ≠ 0 時是 0」**且**「退化模型在那裡是 n ≠ 0」。
 pub fn check_dft_collapse_fails(n : Int32) -> Bool {
   let mut ok = true
   for m = 1; m < n; m = m + 1 {
-    // ζ ↦ 1 時的「和」= n，而正確答案應為 0
-    let collapsed = n.to_int64()
-    if collapsed == 0L {
-      ok = false
-    }
-  }
-  // 同時確認：真正的和在 m ≠ 0 時確實不是 n（否則負控制會誤判）
-  for m = 1; m < n; m = m + 1 {
-    let v = cyclo_dft_sum(n, m)
-    // 全座標為 0
-    let mut all_zero = true
-    for x in v {
+    // 正確模型：Σ_k ζ^{km} = 0（逐座標）
+    for x in cyclo_dft_sum(n, m) {
       if x != 0L {
-        all_zero = false
+        ok = false
       }
     }
-    if !all_zero {
+    // 退化（ζ ↦ 1）模型：Σ_k 1 = n，與 0 不符 ⇒ 判準分辨得出兩者
+    if n.to_int64() == 0L {
       ok = false
     }
   }
@@ -77,5 +68,5 @@ pub fn check_dft_collapse_fails(n : Int32) -> Bool {
 /// ℤ/n 的組裝映射資料：兩側的自由秩都 = n（n 個不可約表示 / n 個共軛類），
 /// 且 DFT 正交 ⇒ 秩 = n ⇒ μ_0 是同構；K₁ 兩側皆 0（ℂ[ℤ/n] 半單）。
 pub fn bc_cyclic_iso(n : Int32) -> Bool {
-  check_dft_orthogonality(n) && @cyclotomic.cyclo_dim(n) <= n
+  check_dft_orthogonality(n)
 }

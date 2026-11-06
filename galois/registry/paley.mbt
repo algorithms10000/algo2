@@ -14,24 +14,6 @@
 /// 完整 ℙ¹(𝔽₁₃) 是 14 個點（多一個無窮遠點），它在 T18 的檢核裡有單獨處理。
 
 ///|
-/// P(13) 的全部三角形（頂點索引遞增的三元組）——供同調與文件引用，樣本上下文本身用閉鄰域。
-pub fn paley13_triangles() -> Array[(Int32, Int32, Int32)] {
-  let q = 13
-  let adj = @elliptic.paley_adjacency(q)
-  let out : Array[(Int32, Int32, Int32)] = []
-  for i = 0; i < q; i = i + 1 {
-    for j = i + 1; j < q; j = j + 1 {
-      for k = j + 1; k < q; k = k + 1 {
-        if adj[i][j] && adj[i][k] && adj[j][k] {
-          out.push((i, j, k))
-        }
-      }
-    }
-  }
-  out
-}
-
-///|
 /// 樣本上下文：13 個點 × 三角形（關係 = 屬於）。
 pub fn paley_context() -> @context.FormalContext {
   let q = 13
