@@ -1,6 +1,6 @@
 # galois/ — B0001 MoonBit 模組（arena/b0001）
 
-本資料夾是 MoonBit 模組根（`moon.mod`）。下面 12 個套件構成 B0001–B0007 的全部實作。
+本資料夾是 MoonBit 模組根（`moon.mod`）。下面 13 個套件構成 B0001–B0008 的全部實作。
 
 ## 資料夾視角的依賴關係
 
@@ -13,7 +13,8 @@ cmd/main ──▶ registry ──▶ lattice ──▶ galois ──▶ context
     │             ├──▶ jacobian ──▶ galois（B0005：圖雅可比簇）
     │             ├──▶ kk       ──▶ braid, modular, context, lattice, galois（B0006：KK）
     │             │              └─ outside.mbt：界外清單 O1–O6（B0007：T48–T50）
-    │             └──▶ hyper    ──▶ kk, galois（B0007：超立方體網絡群 T41–T47）
+    │             ├──▶ hyper    ──▶ kk, galois（B0007：超立方體網絡群 T41–T47）
+    │             └──▶ cyclic   ──▶ galois（B0008：循環同調 T51–T63／內部張量積／漸新態射）
     └──────────────────────▶ lattice/galois/modular/elliptic（直接使用）
 ```
 
@@ -70,6 +71,25 @@ E[n] 上「階為 n 的點」「循環子群」「辛基」的**個數**——B0
 | T39 | index(T_f) = −wind(f)（精確有理＋幅角原理） | `kk/hilbert.mbt` |
 | T40 | 與 B0001（理想格 A6/A3′）、B0003（SL₂(ℤ/n) 共軛類）、B0005（S_n）的接縫 | `kk/sym.mbt`、`kk/checks.mbt` |
 
+## B0008 追加（循環同調、內部張量積、漸新態射，見 `cyclic/README.md`）
+
+| 編號 | 名稱 | 落點 |
+|---|---|---|
+| T51／T51b | 8 個樣本代數的單位與結合律 ＋ 負控制（破壞 x·x²=0） | `cyclic/alg.mbt`、`cyclic/checks.mbt` |
+| T52 | HH₀ 的兩條算式相等（A/[A,A] 的餘維 = 混複體度 0 同調） | `cyclic/homology.mbt` |
+| T53 | b² = 0、bB + Bb = 0、D² = 0（逐度） | `cyclic/homology.mbt` |
+| T54 | **HC 兩條路徑**：混複體總同調 = λ-複體 C_n/im(1−τ_n) 的同調 | `cyclic/homology.mbt` |
+| T55 | **負控制**：有符號 λ_n = (−1)^n t_n 的 HC 公式失效 | `cyclic/homology.mbt` |
+| T56–T59 | 半單（HC_{2k} = 單模個數）、Morita、直和加法性、群代數 HH₀ = 共軛類 | `cyclic/checks.mbt` |
+| T60 | 外部張量積乘法性：HH₀(A⊗B)、HC_{2k}(A⊗B) | `cyclic/xprod.mbt` |
+| T61／T61b | 內部張量積：單位、**共端 = HH₀**、Hom(A,A) = Z(A) ＋ 么性負控制 | `cyclic/xprod.mbt` |
+| T62 | 漸新態射：ASForget／ASIndex／ASBott／ASAssembly | `cyclic/assembly.mbt` |
+| T63 | `rank_q`（F_p）與 `rank_exact`（BigInt）交叉一致 | `cyclic/linalg.mbt` |
+| A52–A56 | 精確秩、桶複體／Connes 算子、HH-HC 引擎、雙模共端與內部 Hom、群表與裝配映射 | `cyclic/*.mbt` |
+
+**關鍵接縫**：內部張量積對 Aᵉ 的共端維度 = HH₀（X2），外部張量積與 HC 的乘法性（T60），
+裝配映射的秩 = 共軛類個數 = HC 的偶度數（T62b、T62d）——三處都是「兩個獨立算式對撞」。
+
 ## B0007 追加（超立方體網絡群＋KK 界外，見 `hyper/README.md`、`kk/README.md`）
 
 | 編號 | 名稱 | 落點 |
@@ -108,6 +128,7 @@ moon check --target all && moon build && moon fmt && moon info
 B0006 的 CLI 追加：`kk`、`kktable`、`kksix`、`kkctx`。
 
 B0007 的 CLI 追加：`hyper`（T41–T47，29 條）、`hypertable`（Q_n 群結構表）、`kkout`（T48–T50，6 條＋界外清單）。
+B0008 的 CLI 追加：`cyclic`（T51–T63，59 條）、`cyctable`（HH/HC 結構表）、`xprod`（內部／外部張量積表）。
 
 B0005 的 CLI 追加：`braid`、`jacobian`、`jtable`、`arf`。
 

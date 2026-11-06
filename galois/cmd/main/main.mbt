@@ -29,6 +29,9 @@
 ///   moon run cmd/main -- kkout          【B0006/B0007】KK 界外部份（T48–T50）＋界外清單
 ///   moon run cmd/main -- hyper          【B0007】超立方體網絡群檢核（T41–T47）
 ///   moon run cmd/main -- hypertable     Q_n 的自同構群結構表
+///   moon run cmd/main -- cyclic        【B0008】循環同調／漸新態射檢核（T51–T63）
+///   moon run cmd/main -- cyctable      HH/HC 結構表（8 個樣本代數）
+///   moon run cmd/main -- xprod         內部張量積與外部張量積的乘法性表
 ///   moon run cmd/main -- mreg             擬陣登記期望值核對（含延伸樣本）
 ///   moon run cmd/main -- mextall          B0002 延伸的全域定理檢核（T9–T12）
 ///   moon run cmd/main -- mcensus <n>      小型擬陣普查（n ≤ 5）
@@ -552,6 +555,24 @@ fn main {
       " 通過",
     )
     println(r.render())
+  } else if cmd == "cyclic" {
+    let r = @cyclic.cyclic_report()
+    println(
+      "B0008 循環同調／內部張量積／漸新態射檢核（T51–T63）：" +
+      r.passed_count().to_string() +
+      "/" +
+      r.size().to_string() +
+      " 通過",
+    )
+    println(r.render())
+  } else if cmd == "cyctable" {
+    println("HH/HC 結構表（格式 n:HH_n/HC_n）")
+    println(@cyclic.cyc_table_render())
+  } else if cmd == "xprod" {
+    println("內部張量積（A-雙模的共端與 Hom）")
+    println(@cyclic.xprod_render())
+    println("外部張量積的乘法性")
+    println(@cyclic.xprod_tensor_render())
   } else if cmd == "hypertable" {
     println("Q_n 的自同構群結構表（T41–T47）")
     for n = 1; n <= 4; n = n + 1 {

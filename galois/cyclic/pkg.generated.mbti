@@ -1,0 +1,259 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "arena/b0001/cyclic"
+
+import {
+  "arena/b0001/galois",
+  "moonbitlang/core/bigint",
+}
+
+// Values
+pub fn alg_assoc_ok(FdAlg) -> Bool
+
+pub fn alg_aug(FdAlg) -> Array[Int64]
+
+pub fn alg_aug_ok(FdAlg) -> Bool
+
+pub fn alg_cyclic_group(Int32) -> FdAlg
+
+pub fn alg_dihedral8() -> FdAlg
+
+pub fn alg_direct_sum(FdAlg, FdAlg) -> FdAlg
+
+pub fn alg_group(String, Int32, Array[Int32]) -> FdAlg
+
+pub fn alg_matrix(Int32) -> FdAlg
+
+pub fn alg_op(FdAlg) -> FdAlg
+
+pub fn alg_polys(Int32) -> FdAlg
+
+pub fn alg_render(FdAlg) -> String
+
+pub fn alg_symmetric_group3() -> FdAlg
+
+pub fn alg_tensor(FdAlg, FdAlg) -> FdAlg
+
+pub fn alg_unit_ok(FdAlg) -> Bool
+
+pub fn as_assembly_even_rank(Int32, Array[Int32], Int32) -> Bool
+
+pub fn as_assembly_odd_vanishes(Int32, Array[Int32], Int32) -> Bool
+
+pub fn as_assembly_vanishing(FdAlg, Int32) -> Bool
+
+pub fn as_bott_periodic(FdAlg, Int32) -> Bool
+
+pub fn as_forget_ok(FdAlg) -> Bool
+
+pub fn as_index_matches_classes(Int32, Array[Int32]) -> Bool
+
+pub fn axiom_bounds(Int32) -> Array[Int32]
+
+pub fn bar_matrix(FdAlg, Int32) -> Array[Array[Int64]]
+
+pub fn big_gcd(@bigint.BigInt, @bigint.BigInt) -> @bigint.BigInt
+
+pub fn bimod_aug(FdAlg) -> Bimod
+
+pub fn bimod_hh_pair(FdAlg) -> Array[Bimod]
+
+pub fn bimod_hom_dim(Bimod, Bimod) -> Int32
+
+pub fn bimod_invariant_dim(Bimod) -> Int32
+
+pub fn bimod_left_vec(Bimod, Int32, Int32) -> Array[Int64]
+
+pub fn bimod_make(String, FdAlg, Int32, Array[Array[Int64]], Array[Array[Int64]]) -> Bimod
+
+pub fn bimod_ok(Bimod) -> Bool
+
+pub fn bimod_regular(FdAlg) -> Bimod
+
+pub fn bimod_right_vec(Bimod, Int32, Int32) -> Array[Int64]
+
+pub fn bimod_tensor_dim(Bimod, Bimod) -> Int32
+
+pub fn bimod_tensor_rel(Bimod, Bimod) -> Array[Array[Int64]]
+
+pub fn bimod_zero_act(FdAlg) -> Bimod
+
+pub fn chain_size(FdAlg, Int32) -> Int32
+
+pub fn check_additivity(Int32) -> @galois.Check
+
+pub fn check_assembly() -> Array[@galois.Check]
+
+pub fn check_axioms(FdAlg) -> @galois.Check
+
+pub fn check_axioms_negative() -> @galois.Check
+
+pub fn check_bB_anticommute(FdAlg, Int32) -> Bool
+
+pub fn check_b_squared_zero(FdAlg, Int32) -> Bool
+
+pub fn check_complex_axioms(FdAlg) -> @galois.Check
+
+pub fn check_group_algebra(String, Int32, Array[Int32], Int32) -> @galois.Check
+
+pub fn check_hc_paths(FdAlg, Int32) -> @galois.Check
+
+pub fn check_hc_paths_agree(FdAlg, Int32) -> Bool
+
+pub fn check_hh0_paths(FdAlg) -> @galois.Check
+
+pub fn check_internal_tensor(FdAlg) -> @galois.Check
+
+pub fn check_internal_tensor_negative() -> @galois.Check
+
+pub fn check_lambda_signed_negative() -> @galois.Check
+
+pub fn check_morita(Int32) -> @galois.Check
+
+pub fn check_rank_cross() -> @galois.Check
+
+pub fn check_semisimple(String, FdAlg, Int32, Int32) -> @galois.Check
+
+pub fn check_tau_order(FdAlg) -> Bool
+
+pub fn check_tensor_multiplicative(FdAlg, FdAlg, Int32) -> @galois.Check
+
+pub fn check_total_squared_zero(FdAlg, Int32) -> Bool
+
+pub fn connes_B(FdAlg, Int32) -> Array[Array[Int64]]
+
+pub fn cyc_table_render() -> String
+
+pub fn cyclic_group_table(Int32) -> Array[Int32]
+
+pub fn cyclic_report() -> @galois.Report
+
+pub fn cyclic_samples() -> Array[(FdAlg, Int32)]
+
+pub fn dihedral8_table() -> Array[Int32]
+
+pub fn fd_alg(String, Int32, Array[Int64], Array[Int64], Array[Int64]) -> FdAlg
+
+pub fn fd_coeff(FdAlg, Int32, Int32, Int32) -> Int64
+
+pub fn fd_mult_zero(Int32) -> Array[Int64]
+
+pub fn fd_set(Array[Int64], Int32, Int32, Int32, Int32, Int64) -> Unit
+
+pub fn group_conjugacy_classes(Int32, Array[Int32]) -> Int32
+
+pub fn group_identity(Int32, Array[Int32]) -> Int32
+
+pub fn group_inverse(Int32, Array[Int32], Int32) -> Int32
+
+pub fn group_table_ok(Int32, Array[Int32]) -> Bool
+
+pub fn hc_dim_bicomplex(FdAlg, Int32) -> Int32
+
+pub fn hc_dim_lambda(FdAlg, Int32) -> Int32
+
+pub fn hc_dim_lambda_signed(FdAlg, Int32) -> Int32
+
+pub fn hh0_by_coend(FdAlg) -> Int32
+
+pub fn hh0_by_commutators(FdAlg) -> Int32
+
+pub fn hh_dim(FdAlg, Int32) -> Int32
+
+pub fn id_minus_lambda(FdAlg, Int32) -> Array[Array[Int64]]
+
+pub fn id_minus_tau(FdAlg, Int32) -> Array[Array[Int64]]
+
+pub fn lambda_bar_rank(FdAlg, Int32) -> Int32
+
+pub fn lambda_chain_dim(FdAlg, Int32) -> Int32
+
+pub fn lambda_matrix(FdAlg, Int32) -> Array[Array[Int64]]
+
+pub fn mat_add(Array[Array[Int64]], Array[Array[Int64]]) -> Array[Array[Int64]]
+
+pub fn mat_cols(Array[Array[Int64]]) -> Int32
+
+pub fn mat_eq(Array[Array[Int64]], Array[Array[Int64]]) -> Bool
+
+pub fn mat_hcat(Array[Array[Int64]], Array[Array[Int64]]) -> Array[Array[Int64]]
+
+pub fn mat_identity(Int32) -> Array[Array[Int64]]
+
+pub fn mat_is_zero(Array[Array[Int64]]) -> Bool
+
+pub fn mat_mul(Array[Array[Int64]], Array[Array[Int64]]) -> Array[Array[Int64]]
+
+pub fn mat_rows(Array[Array[Int64]]) -> Int32
+
+pub fn mat_scale(Array[Array[Int64]], Int64) -> Array[Array[Int64]]
+
+pub fn mat_transpose(Array[Array[Int64]]) -> Array[Array[Int64]]
+
+pub fn mat_zero(Int32, Int32) -> Array[Array[Int64]]
+
+pub fn mod_inv(Int64, Int64) -> Int64
+
+pub fn mod_p(Int64, Int64) -> Int64
+
+pub fn ones_vec(Int32) -> Array[Int64]
+
+pub fn pow_int(Int32, Int32) -> Int32
+
+pub fn rank_exact(Array[Array[Int64]]) -> Int32
+
+pub fn rank_modp(Array[Array[Int64]], Int64) -> Int32
+
+pub fn rank_primes() -> Array[Int64]
+
+pub fn rank_q(Array[Array[Int64]]) -> Int32
+
+pub fn span_dim(Array[Array[Int64]]) -> Int32
+
+pub fn symmetric_group3_table() -> Array[Int32]
+
+pub fn tau_matrix(FdAlg, Int32) -> Array[Array[Int64]]
+
+pub fn total_diff(FdAlg, Int32) -> Array[Array[Int64]]
+
+pub fn total_dim(FdAlg, Int32) -> Int32
+
+pub fn total_offset(FdAlg, Int32, Int32) -> Int32
+
+pub fn tuple_index(Int32, Array[Int32]) -> Int32
+
+pub fn tuple_of(Int32, Int32, Int32) -> Array[Int32]
+
+pub fn unit_basis(Int32, Int32) -> Array[Int64]
+
+pub fn xprod_hc_even(FdAlg, FdAlg, Int32) -> Int32
+
+pub fn xprod_hh0_product(FdAlg, FdAlg) -> Int32
+
+pub fn xprod_render() -> String
+
+pub fn xprod_tensor_render() -> String
+
+pub fn zero_vec(Int32) -> Array[Int64]
+
+// Errors
+
+// Types and methods
+pub struct Bimod {
+  name : String
+  alg : FdAlg
+  dim : Int32
+  left : Array[Array[Int64]]
+  right : Array[Array[Int64]]
+}
+
+pub struct FdAlg {
+  name : String
+  dim : Int32
+  unit_vec : Array[Int64]
+  aug : Array[Int64]
+  mult : Array[Int64]
+}
+
+// Type aliases
+
+// Traits

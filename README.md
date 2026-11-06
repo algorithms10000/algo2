@@ -1,6 +1,6 @@
 # B0001 全局公理伽羅瓦對應（Global Axiom–Galois Correspondence, GAGC）
 
-**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）＋ B0006（R8）＋ B0007（R9）**　　**狀態：R1–R9 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群／雅可比簇；R8 = B0006 真 KK-理論片段；R9 = B0007 超立方體網絡群完整刻劃＋KK 界外）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261104，2026-11-04）**
+**登記編號：B0001（R1）＋ B0002（R2、R4）＋ B0003（R5）＋ B0004（R6）＋ B0005（R7）＋ B0006（R8）＋ B0007（R9）＋ B0008（R10）**　　**狀態：R1–R10 完成（R3 = A3′；R4 = B0002 延伸；R5 = B0003 同餘子群；R6 = B0004 撓群 E[n]；R7 = B0005 辮群／雅可比簇；R8 = B0006 真 KK-理論片段；R9 = B0007 超立方體網絡群完整刻劃＋KK 界外；R10 = B0008 循環同調＋內部張量積完整化＋漸新態射）**　　**語言：MoonBit（最新穩定版 moon 0.1.20261104，2026-11-04）**
 
 本專案把「公理系統 → 定理 → 演算法」做成**可執行**的鏈條：一條全局公理 + 四條局部公理，
 推出四條定理與 13 條等式，再由定理的構造性內容導出 7 條演算法，並附一套能**主動找出反例**的檢核器。
@@ -42,6 +42,7 @@ B0001（本目錄）
 │   ├── kk/                  【B0006】真 KK-理論片段：UCT、六項正合列、Kasparov 乘積、指標—繞數
 │   │                        【B0007】界外清單（outside.mbt：O1–O6、自由積、Künneth，T48–T50）
 │   ├── hyper/               【B0007】超立方體網絡群 Aut(Q_n)：窮舉＋候選兩側、方向映射、邊置換、摺疊
+│   ├── cyclic/              【B0008】循環同調 HH/HC（混複體＋λ-複體兩路徑）、內部張量積、漸新態射
 │   ├── registry/            樣本上下文與擬陣樣本（含 ℚ(ζ₈)/ℚ、K₃/K₄ 圖擬陣、Fano）
 │   ├── cmd/main/            CLI（接入與輸出接口）
 │   └── contexts/*.ctx       文字格式樣本（dump/parse 互逆）
@@ -679,3 +680,63 @@ perm_sets_equal, direction_map, direction_hom, direction_kernel, edge_permutatio
 conjugacy_representatives, fold_is_hom, hyper_report}`；
 `@kk.{outside_items, outside_render, scope_item_compliant, fga_tensor, fga_tor, kunneth_kpair,
 free_product_k1, free_group_cstar_kpair, outside_report}`。
+
+---
+
+# B0008：循環同調 ＋ 內部張量積完整化 ＋ 漸新態射（R10）
+
+## 三項交付與一條原則
+
+| 面向 | 內容 | 定理 |
+|---|---|---|
+| **循環同調** | 桶複體、(b,B) 混複體、λ-複體；HC 的**兩條獨立路徑**必須對撞 | T52–T56、T59 |
+| **內部張量積完整化** | `Bimod`、共端 M₁⊗_A M₂、內部 Hom；**共端 = HH₀** | T61／T61b |
+| **漸新態射** | ASForget／ASIndex／ASBott／ASAssembly 四支可執行映射 | T62 |
+
+原則：**同一件事必須有兩條獨立算式**，且**負控制留在程式裡**。
+本輪的「相互作用」全都是這種對撞（不是敘述）：
+
+* 內部張量積對 Aᵉ 的共端維度 = dim A/[A,A] = HH₀（X2）；
+* 外部張量積的乘法性：HH₀(A⊗B) = HH₀(A)·HH₀(B)、HC_{2k}(A⊗B) = HC_{2k}(A)·HC_{2k}(B)（T60）；
+* 裝配映射的秩 = 共軛類個數 = HC 的偶度數（T62b、T62d）。
+
+## 定理（詳見 `docs/B0008-定理體系.md`）
+
+| 編號 | 內容 | 實測 |
+|---|---|---|
+| **T51／T51b** | 8 個樣本代數是么結合代數（單位、增廣皆為**向量**）；負控制：破壞 x·x² = 0 ⇒ 結合律必失效 | 8/8 ＋ 1 |
+| **T52** | HH₀ 兩條算式：dim A/[A,A]（交換子餘維）= dim H₀(混複體) | 1, 2, 2, 3, 1, 3, 3, 5 |
+| **T53** | b² = 0、bB + Bb = 0、D² = 0（逐度，上限見成本表） | 8/8 |
+| **T54** | **HC 兩條路徑**：混複體總同調 = λ-複體 C_n/im(1−τ_n) 的同調 | k：1,0,1,0；k[x]/x²：2,0,2,0；M₂(ℂ)：1,0,1,0；ℂ[ℤ/3]：3,0,3,0；ℂ[S₃]：3,0,3；ℂ[D₈]：5,0,5 |
+| **T55** | **負控制**：有符號 λ_n = (−1)^n t_n 的「商掉 1−λ」公式在 k 的 n=2 給 0（真值 1），在 k⊕k 的 n=3 給 −1 | 1 |
+| **T56** | 半單 A ≅ ⊕M_{d_i}(ℂ) ⇒ HH_n = 0（n ≥ 1）、HC_{2k} = 單模個數 | M₂(1)、ℂ[ℤ/3](3)、ℂ[S₃](3)、ℂ[D₈](5) |
+| **T57／T58** | Morita 不變性；HH/HC 對直和的加法性 | n = 0..3／0..4 |
+| **T59** | dim HH₀(ℂ[G]) = 共軛類個數（Cayley 表暴力 × 代數），HH_n = 0 | 3、3、5 |
+| **T60** | 外部張量積乘法性（HH₀、HC_{2k}） | k²⊗k²：4 = 2·2；M₂⊗k：1；ℂ[ℤ/3]⊗ℂ[ℤ/2]：6 = 3·2 |
+| **T61／T61b** | 內部張量積：X1 單位 dim(A⊗_A A) = dim A、dim(A⊗_A k_ε) = 1；X2 **共端 = HH₀**；X3 Hom_{A,A}(A,A) = Z(A)；負控制：么性不可省 | 8/8 ＋ 1（M₂ 的 Z(A) = 1、ℂ[S₃] 的 = 3） |
+| **T62** | 漸新態射四支（ASForget／ASIndex／ASBott／ASAssembly） | 4 條 |
+| **T63** | `rank_q`（F_p 高斯，三質數取最大）× `rank_exact`（BigInt 整數消去）逐個一致 | 全部樣本條邊矩陣 |
+
+## 這一輪被抓到的三個錯（已修，記於 `algorithm.xlsx`）
+
+**BUG-22** 循環算子用了**有符號** λ_n = (−1)^n t_n ⇒ λ-複體的誘導微分連 b̄² = 0 都不成立
+（k⊕k 的 n = 3 給出負維度）；改成無符號 τ_n 後兩條路徑全同，有符號版降級為負控制 T55。
+**BUG-23** Bareiss 分數自由消去在「跳過零欄」後整除性失效（81×243 的 b₄ 有 231 次非整除），
+算出 rank 64 而真值 63 ⇒ 負維度；改成 F_p 上高斯（三質數取最大）＋ BigInt 版交叉驗證。
+**BUG-24** 前插單位寫死成基底元素 0（M_n(ℂ) 的單位是 ΣE_ii、k⊕k 的是 e₀+e₁）⇒ bB + Bb ≠ 0；
+單位與增廣改成**向量**欄位後在 8 個樣本上成立。
+
+## 怎麼跑
+
+```bash
+cd galois
+moon run cmd/main -- cyclic      # T51–T63：59 條檢核
+moon run cmd/main -- cyctable    # HH/HC 結構表（8 個樣本、逐度）
+moon run cmd/main -- xprod       # 內部張量積（共端／Hom）＋外部張量積乘法性
+```
+
+介面：`@cyclic.{cyclic_samples, cyclic_report, cyc_table_render, xprod_render, xprod_tensor_render,
+alg_polys, alg_cyclic_group, alg_matrix, alg_group, alg_direct_sum, alg_tensor, alg_op,
+hh_dim, hc_dim_bicomplex, hc_dim_lambda, hh0_by_commutators, bimod_make, bimod_regular,
+bimod_tensor_dim, bimod_hom_dim, hh0_by_coend, xprod_hh0_product, as_forget_ok,
+as_index_matches_classes, as_bott_periodic, as_assembly_even_rank}`。
